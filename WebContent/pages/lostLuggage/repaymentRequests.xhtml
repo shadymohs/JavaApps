@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">repayment requests</ui:define>
+   	<ui:define name="content">
+	
+	<!-- 	<h:form id="complaintForm">
+		  <h:panelGrid columns="4" styleClass="customTB95" cellpadding="1" border="1"
+				 style="margin: 0 auto;" cellspacing="1" >
+					<h:outputText value="#{msgs['Complaint.complaintId']}"/>
+		             <h:inputText value="#{complaintBB.complaintDto.complaintObj.luggageComplaintId}"/>
+		     </h:panelGrid>  
+            <h:outputText value=""/> 
+         	<h:commandButton styleClass="buttonStyle" action="#{complaintBB.getComplaintById}" value="#{msgs['complaint.search']}"/>
+		</h:form> -->
+		
+		<h:form id="complaintForm">
+		 
+		  <h:panelGrid columns="4" styleClass="customTB95" cellpadding="1" border="1"
+				 style="margin: 0 auto;" cellspacing="1" >
+				<h:outputText value="#{msgs['complaint.dateFrom']}"/>
+				<rich:calendar id="fromDateInput" datePattern="dd-MM-yyyy"
+		        	enableManualInput="true" showWeeksBar="false" value="#{complaintBB.complaintDto.complaintObj.fromDate}">
+		        </rich:calendar>
+		        <h:outputText value="#{msgs['complaint.dateTo']}"/>
+				<rich:calendar id="toDateInput" datePattern="dd-MM-yyyy"
+		        	enableManualInput="true" showWeeksBar="false" value="#{complaintBB.complaintDto.complaintObj.toDate}">
+		        </rich:calendar>
+				<h:outputText value="#{msgs['Complaint.complaintId']}"/>
+		       <h:inputText value="#{complaintBB.complaintDto.complaintObj.luggageComplaintId}"/>
+            </h:panelGrid>  
+            <h:outputText value=""/> 
+         	<h:commandButton styleClass="buttonStyle" action="#{complaintBB.showRequestsOfRepayment}" value="#{msgs['complaint.search']}"/>
+			
+		</h:form>
+		
+		
+		<h:form id="matchedComplaintsForm"  rendered="#{!empty complaintBB.complaintsList}">
+			<rich:dataTable value="#{complaintBB.complaintsList}" var="cm" id="table" rows="20" styleClass="newTable" style="width:100%;text-align:center;">
+				<f:facet name="noData">
+	                #{err['Complaint.no_data']}
+	            </f:facet>
+	           
+	            <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['Complaint.complaintId']}
+	                </f:facet>
+	                <h:outputText value="#{cm.luggageComplaintId}" />
+	            </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['Complaint.customerName']}
+	                </f:facet>
+	                <h:outputText value="#{cm.customerName}" />
+	            </rich:column>
+	             <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['Complaint.contactNumber']}
+	                </f:facet>
+	                <h:outputText value="#{cm.contacteNumber}" />
+	            </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['complaint.status']}
+	                </f:facet>
+	                <h:outputText value="#{cm.currentStatus.localeName}" />
+	            </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['Complaint.TripCode']}
+	                </f:facet>
+	                <h:outputText value="#{cm.tripCode}" />
+	            </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['Complaint.TripDate']}
+	                </f:facet>
+	                <h:outputText value="#{cm.tripDateAsString}" />
+	            </rich:column>
+	           <rich:column>
+	            	<f:facet name="header">
+	            		#{msgs['foundLostLuggage.details']}
+	            	</f:facet>
+	            	
+	              <h:commandLink styleClass="no-decor"  action="#{complaintBB.showComplaint}"    immediate="true">
+	                    <h:graphicImage library="images" name="edit2.gif" alt="#{msgs['Action.edit']}" style="border:none" />
+	              </h:commandLink>
+	             
+	            </rich:column>
+	          <f:facet name="footer">
+		                <h:panelGrid id="addGrid" columns="2" styleClass="searchactionTB_Bg" cellspacing="0" cellpadding="0" border="0">
+		                	<rich:dataScroller for="table"/>
+				        </h:panelGrid>
+		         </f:facet>
+	        </rich:dataTable>
+		</h:form>
+		
+		<h:form id="complaintDetailForm"  rendered="#{!empty complaintBB.selectedComp.luggageComplaintId and !empty complaintBB.complaintsList}">
+		  <h:panelGrid columns="4" styleClass="customTB95" cellpadding="1" border="1"
+				 style="margin: 0 auto;" cellspacing="1" >
+			   <h:outputText value="#{msgs['Complaint.customerName']}"/>
+		       <h:inputText value="#{complaintBB.selectedComp.customerName}"/>  
+			   <h:outputText value="#{msgs['Complaint.contactNumber']}"/>
+			   <h:inputText  value="#{complaintBB.selectedComp.contacteNumber}"/>
+			   <h:outputText value="#{msgs['complaint.status']}"/>
+			   <h:inputText  value="#{complaintBB.selectedComp.currentStatus.localeName}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.tripNumber']}"/>
+		       <h:inputText  value="#{complaintBB.selectedComp.tripCode}"/>
+		       <h:outputText value="#{msgs['Complaint.TripDate']}"/>
+		       <h:inputText  value="#{complaintBB.selectedComp.tripDateAsString}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.station']}"/>
+               <h:inputText value="#{complaintBB.selectedComp.registeredInStation}"  />
+			   <h:outputText value="#{msgs['foundLostLuggage.ticketNumber']}"/>
+		       <h:inputText value="#{complaintBB.selectedComp.ticketNumber}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.luggageContent']}"/>
+		       <h:inputText  value="#{complaintBB.selectedComp.luggageContent}"/>
+		       
+		       <h:outputText value="#{msgs['Complaint.receiptNum']}"/>
+		       <h:inputText  value="#{complaintBB.selectedComp.receiptNumber}"/>
+		       <h:outputText value="#{msgs['Complaint.repaymentValue']}"/>
+		       <h:inputText  value="#{complaintBB.selectedComp.repaymentValue}"/>
+            </h:panelGrid> 
+            <h:outputText value=""/> 
+            <br /> 
+             <br /> 
+             <h:outputText value="#{msgs['foundLostLuggage.remarks']}"/>
+		     <h:inputTextarea  value="#{complaintBB.selectedComp.remarks}"/>
+		     
+            <h:commandButton styleClass="bigButtonStyle" action="#{complaintBB.repaymentAndClose}" rendered="#{complaintBB.selectedComp.currentStatus.id==7}" value="#{msgs['Action.save']}"/>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">User Branches</ui:define>
+   	<ui:define name="content">
+   		<h:form id="branchesForm">
+				<rich:dataTable value="#{usersBB.usersBranchesTable}" var="ub" id="table" rows="20" styleClass="newTable" style="width:100%;text-align:center;">
+					<f:facet name="noData">
+		                #{err['Messages.no_data']}
+		            </f:facet>
+		            <rich:column>
+		                <f:facet name="header">
+		                	#{msgs['Messages.date_from']}
+		                </f:facet>
+		                <h:outputText value="#{ub.fromDateString}" />
+		            </rich:column>
+		            <rich:column>
+		                <f:facet name="header">
+		                	#{msgs['Messages.date_to']}
+		                </f:facet>
+		                <h:outputText value="#{ub.toDateString}" />
+		            </rich:column>
+		            <rich:column>
+		                <f:facet name="header">
+		                	#{msgs['Branches.branch']}
+		                </f:facet>
+		                <h:outputText value="#{ub.branchId.label}" />
+		            </rich:column>
+		            <rich:column>
+		                <f:facet name="header">
+		                	#{msgs['ProgramGroup.program']}
+		                </f:facet>
+		                <h:outputText value="#{ub.programId.label}" />
+		            </rich:column>
+		            <rich:column>
+		                <h:commandLink styleClass="no-decor" action="#{usersBB.editUserBranch}">
+		                    <h:graphicImage library="images" name="edit2.gif" alt="#{msgs['Action.edit']}" style="border:none" />
+		                </h:commandLink>
+		            </rich:column>
+		            <f:facet name="footer">
+		                <h:panelGrid id="addGrid" columns="4" styleClass="searchactionTB_Bg" cellspacing="0" cellpadding="0" border="0">
+		                	<h:panelGroup>
+			                	<h:outputText value="#{msgs['Login.userName']} "/>
+		               	 		<h:outputText value="#{usersBB.usersDto.userObj.userInf.userFullName}"/>
+		               	 	</h:panelGroup>
+		                	<h:commandButton styleClass="buttonStyle" value="#{msgs['Action.cancel']}"
+		            			immediate="true" action="users.xhtml"/>
+		                	<rich:dataScroller for="table"/>
+							<h:commandButton styleClass="buttonStyle" value="#{msgs['Action.add']}" action="#{usersBB.addUserBranch}"/>
+				        </h:panelGrid>
+		            </f:facet>
+		        </rich:dataTable>
+			</h:form>
+			<h:form id="manageUserBranchForm">
+	            <h:panelGrid columns="4" id="editGrid" styleClass="customTB95" cellspacing="0" cellpadding="0" border="0" rendered="#{usersBB.manageMode}" style="width:100%;text-align:center;">
+	                <h:panelGroup>
+	                	<h:outputText value="#{msgs['Branches.branch']}"/>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <h:panelGroup>
+		                <h:selectOneMenu value="#{usersBB.usersDto.userBranchObj.branchId.id}" styleClass="dropDownStyle"
+		                	disabled="#{!empty usersBB.usersDto.userBranchObj.id}" required="true" requiredMessage="err['UserBranch.required_branch']">
+		                	<f:selectItem itemLabel="#{msgs['Messages.selectList']}" itemValue=""/>
+		                	<f:selectItems value="#{usersBB.branchList}"/>
+		                </h:selectOneMenu>
+	                </h:panelGroup>
+	                <h:panelGroup>
+	                	<h:outputText value="#{msgs['UserBranch.program_group']}"/>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <h:selectOneMenu value="#{usersBB.usersDto.userBranchObj.programId.id}" styleClass="dropDownStyle" required="true" requiredMessage="err['UserBranch.required_program_group']">
+	                	<f:selectItem itemLabel="#{msgs['Messages.selectList']}" itemValue=""/>
+	                	<f:selectItems value="#{usersBB.programGroupsList}"/>
+	                </h:selectOneMenu>
+	                <h:panelGroup>
+	                	<h:outputText value="#{msgs['Messages.date_from']}" />
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <rich:calendar id="fromDateInput" datePattern="dd-MM-yyyy" value="#{usersBB.usersDto.userBranchObj.fromDate}"
+	                	enableManualInput="true" showWeeksBar="false" disabled="#{!empty usersBB.usersDto.userBranchObj.id}" required="true" requiredMessage="err['UserBranch.required_from_date']"/>
+	                <h:outputText value="#{msgs['Messages.date_to']}" />
+	                <rich:calendar id="toDateInput" datePattern="dd-MM-yyyy" value="#{usersBB.usersDto.userBranchObj.toDate}"
+	                	enableManualInput="true" showWeeksBar="false"/>
+	            	<h:outputText value="#{msgs['Messages.active']}"/>
+	                <h:selectBooleanCheckbox id="activeInput" value="#{usersBB.usersDto.userBranchObj.isActive}"/>
+	            </h:panelGrid>
+                <h:panelGrid id="addEditButtonGrid" columns="3" styleClass="searchactionTB_Bg" cellspacing="0" cellpadding="0" border="0" rendered="#{usersBB.manageMode}" style="width:100%;text-align:center;">
+		            <h:commandButton styleClass="buttonStyle" value="#{msgs['Action.save']}" action="#{usersBB.saveBranchListner}"/>
+		            <h:commandButton styleClass="buttonStyle" value="#{msgs['Action.cancel']}" action="#{usersBB.saveBranchListner}"/>
+		        </h:panelGrid>
+			</h:form>
+	</ui:define>
+</ui:composition>

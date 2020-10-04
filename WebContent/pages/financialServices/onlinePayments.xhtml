@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">Online payments</ui:define>
+   	<ui:define name="content">
+		<h:form id="intgReportForm">
+	    	<h:panelGrid columns="4" cellspacing="0" cellpadding="0" border="0" id="searchGrid"
+	    		style="width:100%;text-align:center;">
+				
+				<h:outputText value="#{msgs['Messages.date_from']}"/>
+				<rich:calendar id="fromDateInput" datePattern="yyyy-MM-dd" requiredMessage="#{err['Messages.required_fromDate']}"
+		        	required="true" enableManualInput="true" showWeeksBar="false"
+		        	value="#{onlinePaymentsBB.fromDate}">
+		        	<f:converter converterId="CalDateStrConveter2"/>
+		        </rich:calendar>
+				
+				<h:outputText value="#{msgs['Messages.date_to']}"/>
+				<rich:calendar id="toDateInput" datePattern="yyyy-MM-dd" requiredMessage="#{err['Messages.required_toDate']}"
+		        	required="true" enableManualInput="true" showWeeksBar="false"
+		        	value="#{onlinePaymentsBB.toDate}">
+		        	<f:converter converterId="CalDateStrConveter2"/>
+		        </rich:calendar>
+				
+				<h:outputLabel value="#{msgs['Messages.paymentMethod']}" for="paymentMethod"/>
+				<h:selectOneRadio id="paymentMethod" value="#{onlinePaymentsBB.paymentMethodId}">
+					<f:selectItem itemLabel="#{msgs['Messages.selectList']}" itemValue=""/>
+					<f:selectItem itemLabel="#{msgs['Messages.creditCard']}" itemValue="1"/>
+					<f:selectItem itemLabel="#{msgs['Messages.sadad']}" itemValue="2"/>
+				</h:selectOneRadio>
+				
+				<h:outputLabel value="#{msgs['system']}" for="system"/>
+				<h:selectOneRadio id="system" required="true" requiredMessage="#{err['systemRequired']}"
+					value="#{onlinePaymentsBB.systemId}">
+					<f:selectItem itemLabel="#{msgs['Messages.limo']}" itemValue="1"/>
+					<f:selectItem itemLabel="#{msgs['Messages.kentakart']}" itemValue="2"/>
+					<f:selectItem itemLabel="#{msgs['Messages.cnc']}" itemValue="3"/>
+					<f:selectItem itemLabel="#{msgs['Messages.tr']}" itemValue="4"/>
+				</h:selectOneRadio>
+			</h:panelGrid> 
+			<h:panelGrid id="printGrid" columns="2" cellspacing="0" cellpadding="0" border="0" style="width:100%;text-align:center;">
+				<h:commandLink styleClass="no-decor" action="#{onlinePaymentsBB.viewReport}" title="#{msgs['Action.print']}" >  <!-- rendered="#{baseBB.authorizePrint}" -->
+                    <h:graphicImage library="images" name="pdf.png" style="border:none" width="40" height="40"/>
+                </h:commandLink>
+                <h:commandLink styleClass="no-decor" action="#{onlinePaymentsBB.viewReportExcel}" title="#{msgs['Action.print']}" >  <!-- rendered="#{baseBB.authorizePrint}" -->
+                    <h:graphicImage library="images" name="ex.png" style="border:none" width="40" height="40"/>
+                </h:commandLink>
+			</h:panelGrid>	
+		</h:form>
+	</ui:define>
+</ui:composition>

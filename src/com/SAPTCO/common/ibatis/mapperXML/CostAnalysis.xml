@@ -1,0 +1,335 @@
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="CostAnalysis">
+
+<resultMap id="BusTypeResult" class="com.SAPTCO.common.ibatis.mapperBeans.BusTypeBean">
+    <result property="id" column="BUS_TYPE_ID"/>
+    <result property="code" column="CODE"/>
+    <result property="foreignName" column="FOREIGN_NAME"/>
+    <result property="localeName" column="LOCALE_NAME"/>
+   
+  </resultMap> 
+  
+<resultMap id="BusTypeCostResult" class="com.SAPTCO.common.ibatis.mapperBeans.BusTypeCostBean">
+    <result property="busTypeCostId" column="BUS_TYPE_COST_ID"/>
+    <result property="busType.id" column="BUS_TYPE_ID"/>
+    <result property="startDate" column="START_DATE"/>
+    <result property="endDate" column="END_DATE"/>
+    <result property="busTypeCostAmount" column="BUS_COST_AMOUNT"/>
+    <result property="busType.code" column="CODE"/>
+    <result property="busType.localeName" column="LOCALE_NAME"/>
+    <result property="busType.foreignName" column="FOREIGN_NAME"/>
+  </resultMap> 
+	
+	<select id="findAllBusTypes" resultMap="BusTypeResult">
+		 SELECT  
+			BT.BUS_TYPE_ID,
+			BT.CODE,
+			BT.FOREIGN_NAME,
+			BT.LOCALE_NAME
+		FROM
+			tr_prod.BUS_TYPE BT
+		order by LOCALE_NAME
+	</select>
+	
+	<select id="findAllBusTypeCost" resultMap="BusTypeCostResult">
+	SELECT  BC.BUS_TYPE_COST_ID,
+	BC.START_DATE,
+      BC.END_DATE,
+      BC.BUS_TYPE_ID,
+      BC.BUS_COST_AMOUNT,
+			BT.CODE,
+			BT.FOREIGN_NAME,
+			BT.LOCALE_NAME
+		FROM
+			tr_prod.BUS_TYPE BT, BUS_TYPE_COST BC WHERE BT.BUS_TYPE_ID = BC.BUS_TYPE_ID
+			
+	</select>
+
+  <insert id="insertBusTypeCost" parameterClass="com.SAPTCO.common.ibatis.mapperBeans.BusTypeCostBean">
+  
+   <selectKey resultClass="long" keyProperty="busTypeCostId">
+		SELECT BUS_TYPE_COST_SEQ.NEXTVAL AS ID FROM DUAL
+	</selectKey>
+  
+    INSERT INTO BUS_TYPE_COST (BUS_TYPE_COST_ID,
+							START_DATE,
+							END_DATE,
+							BUS_TYPE_ID,
+							BUS_COST_AMOUNT,
+							CREATED_BY,
+							CREATED_DATE)
+    VALUES (#busTypeCostId#,#startDate#,#endDate#,#busType.id#,#busTypeCostAmount#,#createdBy#,sysdate)
+
+  </insert>
+  
+  <update id="updateBusTypeCost" parameterClass="com.SAPTCO.common.ibatis.mapperBeans.BusTypeCostBean">
+     UPDATE BUS_TYPE_COST SET 
+            START_DATE = #startDate#,
+			END_DATE = #endDate#,
+			BUS_TYPE_ID = #busType.id#,
+			BUS_COST_AMOUNT = #busTypeCostAmount#,
+			UPDATED_BY = #createdBy#,
+            UPDATED_DATE = sysdate
+     WHERE BUS_TYPE_COST_ID = #busTypeCostId# 
+     </update>
+
+  <select id="checkOverlapPeriod" parameterClass="com.SAPTCO.common.ibatis.mapperBeans.BusTypeCostBean" resultClass="long">
+      select count (*) cnt
+      from BUS_TYPE_COST bc where
+         ( bc.BUS_TYPE_ID = #busType.id# and bc.START_DATE = #startDate# )
+      or ( bc.BUS_TYPE_ID = #busType.id# and #endDate# &gt; BC.END_DATE and #startDate# &lt;  BC.END_DATE )
+      or ( bc.BUS_TYPE_ID = #busType.id# and bc.START_DATE &lt; #endDate# and bc.START_DATE &gt; #startDate# )
+      or ( bc.BUS_TYPE_ID = #busType.id# and bc.START_DATE &lt; #startDate# and BC.END_DATE &gt; #endDate#)
+   </select>
+	
+	<!-- &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& -->
+	
+	<resultMap id="sdpResult" class="com.SAPTCO.common.ibatis.mapperBeans.SDPBean">
+    <result property="id" column="SDP_ID"/>
+    <result property="code" column="CODE"/>
+    <result property="foreignName" column="FOREIGN_NAME"/>
+    <result property="localeName" column="LOCALE_NAME"/>
+  </resultMap> 
+  
+	<resultMap id="DailySDPTargetResult" class="com.SAPTCO.common.ibatis.mapperBeans.DailySDPTargetBean">
+    <result property="targetId" column="TARGET_ID"/>
+    <result property="mainSDP.id" column="MAIN_SDP_ID"/>
+    <result property="targetDate" column="TARGET_DATE"/>
+    <result property="mainSDPAmount" column="MAIN_SDP_AMOUNT"/>
+    <result property="agentsAmount" column="AGENTS_AMOUNT"/>
+    <result property="mainSDP.code" column="CODE"/>
+    <result property="mainSDP.localeName" column="LOCALE_NAME"/>
+    <result property="mainSDP.foreignName" column="FOREIGN_NAME"/>
+  </resultMap> 
+  
+	<select id="findSDPs" resultMap="sdpResult">
+		 SELECT  
+			SDP_ID,
+			CODE,
+			FOREIGN_NAME,
+			LOCALE_NAME
+		FROM
+			tr_prod.SDP 
+			where IS_MAIN_SDP = 1
+		order by LOCALE_NAME
+	</select>
+	
+	<select id="findDailySDPTarget" resultMap="DailySDPTargetResult">
+	SELECT d.TARGET_ID,
+      d.TARGET_DATE,
+      d.MAIN_SDP_ID,
+      d.MAIN_SDP_AMOUNT,
+      d.AGENTS_AMOUNT,
+      s.CODE,
+      s.LOCALE_NAME,
+      s.FOREIGN_NAME
+
+		from DAILY_SDP_TARGET d, tr_prod.SDP s where d.MAIN_SDP_ID = s.SDP_ID
+		and s.MAIN_SDP_ID = s.SDP_ID and s.IS_MAIN_SDP = 1
+			
+	</select>
+	
+	 <insert id="insertDailySDPTarget" parameterClass="com.SAPTCO.common.ibatis.mapperBeans.DailySDPTargetBean">
+  
+   <selectKey resultClass="long" keyProperty="targetId">
+		SELECT DAILY_SDP_TARGET_SEQ.NEXTVAL AS ID FROM DUAL
+	</selectKey>
+  
+    INSERT INTO  DAILY_SDP_TARGET (TARGET_ID,
+						      TARGET_DATE,
+						      MAIN_SDP_ID,
+						      MAIN_SDP_AMOUNT,
+						      AGENTS_AMOUNT,
+							CREATED_BY,
+							CREATED_DATE)
+    VALUES (#targetId#,#targetDate#,#mainSDP.id#,#mainSDPAmount#,#agentsAmount#,#createdBy#,sysdate)
+
+  </insert>
+  
+  <update id="updateDailySDPTarget" parameterClass="com.SAPTCO.common.ibatis.mapperBeans.DailySDPTargetBean">
+     UPDATE DAILY_SDP_TARGET SET 
+            TARGET_DATE = #targetDate#,
+			MAIN_SDP_ID = #mainSDP.id#,
+			MAIN_SDP_AMOUNT = #mainSDPAmount#,
+			AGENTS_AMOUNT = #agentsAmount#,
+			UPDATED_BY = #createdBy#,
+            UPDATED_DATE = sysdate
+     WHERE TARGET_ID = #targetId# 
+   </update>
+     
+   <select id="checkUniqueSDPTargetDate" parameterClass="com.SAPTCO.common.ibatis.mapperBeans.DailySDPTargetBean" resultClass="long">
+      select count (*) cnt
+      from DAILY_SDP_TARGET  where
+            TARGET_DATE = #targetDate#  and
+			MAIN_SDP_ID = #mainSDP.id#
+   </select>
+   <!-- ******************************************************************************************* -->
+   
+   <resultMap id="LineResult" class="com.SAPTCO.common.ibatis.mapperBeans.LineBean">
+    <result property="id" column="LINE_ID"/>
+    <result property="code" column="CODE"/>
+    <result property="foreignName" column="FOREIGN_NAME"/>
+    <result property="localeName" column="LOCALE_NAME"/>
+   
+  </resultMap> 
+  
+<resultMap id="LineCostResult" class="com.SAPTCO.common.ibatis.mapperBeans.LineCostBean">
+    <result property="lineCostId" column="LCH_ID"/>
+    <result property="line.id" column="LINE_ID"/>
+    <result property="startDate" column="START_DATE"/>
+    <result property="endDate" column="END_DATE"/>
+    <result property="perHourCost" column="PER_HOUR_COST"/>
+    <result property="perKMCost" column="PER_KM_COST"/>
+    <result property="line.code" column="CODE"/>
+    <result property="line.localeName" column="LOCALE_NAME"/>
+    <result property="line.foreignName" column="FOREIGN_NAME"/>
+  </resultMap> 
+	
+	<select id="findAllLines" resultMap="LineResult">
+		 SELECT  
+			BT.LINE_ID,
+			BT.CODE,
+			BT.FOREIGN_NAME,
+			BT.LOCALE_NAME
+		FROM
+			tr_prod.LINE BT
+		order by LOCALE_NAME
+	</select>
+	
+	<select id="findAllLinesCost" resultMap="LineCostResult">
+	SELECT  LC.LCH_ID,
+			LC.START_DATE,
+			LC.END_DATE,
+			LC.LINE_ID,
+			LC.PER_HOUR_COST,
+			LC.PER_KM_COST,
+			L.CODE,
+			L.FOREIGN_NAME,
+			L.LOCALE_NAME
+		FROM
+			LINE_COST_HD  LC, tr_prod.LINE  L
+		 WHERE LC.LINE_ID = L.LINE_ID
+			
+	</select>
+	
+	<insert id="insertLineCost" parameterClass="com.SAPTCO.common.ibatis.mapperBeans.LineCostBean">
+  
+   <selectKey resultClass="long" keyProperty="lineCostId">
+		SELECT LINE_COST_HD_SEQ.NEXTVAL AS ID FROM DUAL
+	</selectKey>
+  
+    INSERT INTO LINE_COST_HD (LCH_ID,
+							START_DATE,
+							END_DATE,
+							LINE_ID,
+							PER_HOUR_COST,
+			                PER_KM_COST,
+							CREATED_BY,
+							CREATED_DATE)
+    VALUES (#lineCostId#,#startDate#,#endDate#,#line.id#,#perHourCost#, #perKMCost#, #createdBy#,sysdate)
+
+  </insert>
+  
+  <update id="updateLineCost" parameterClass="com.SAPTCO.common.ibatis.mapperBeans.LineCostBean">
+     UPDATE LINE_COST_HD SET 
+            START_DATE = #startDate#,
+			END_DATE = #endDate#,
+			LINE_ID = #line.id#,
+			PER_HOUR_COST = #perHourCost#,
+			PER_KM_COST = #perKMCost#,
+			UPDATED_BY = #createdBy#,
+            UPDATED_DATE = sysdate
+     WHERE LCH_ID = #lineCostId# 
+     </update>
+
+  <select id="checkLineCostOverlappPeriod" parameterClass="com.SAPTCO.common.ibatis.mapperBeans.LineCostBean" resultClass="long">
+      select count (*) cnt
+      from LINE_COST_HD bc where
+         ( bc.LINE_ID = #line.id# and bc.START_DATE = #startDate# )
+      or ( bc.LINE_ID = #line.id# and #endDate# &gt; BC.END_DATE and #startDate# &lt;  BC.END_DATE )
+      or ( bc.LINE_ID = #line.id# and bc.START_DATE &lt; #endDate# and bc.START_DATE &gt; #startDate# )
+      or ( bc.LINE_ID = #line.id# and bc.START_DATE &lt; #startDate# and BC.END_DATE &gt; #endDate#)
+   </select>
+   <!-- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->
+   
+   <resultMap id="LineCostDetailResult" class="com.SAPTCO.common.ibatis.mapperBeans.LineCostBean">
+    <result property="lineCostDtlId" column="LCD_ID"/>
+    <result property="lineCostId" column="LCH_ID"/>
+    <result property="tripCode" column="TRIP_CODE"/>
+    <result property="startDate" column="START_DATE"/>
+    <result property="endDate" column="END_DATE"/>
+    <result property="perHourCost" column="PER_HOUR_COST"/>
+    <result property="perKMCost" column="PER_KM_COST"/>
+   
+  </resultMap> 
+	
+	<select id="findAllLinesCostDetail" parameterClass="long" resultMap="LineCostDetailResult">
+	SELECT  L.LCH_ID,
+	        L.LCD_ID,
+			L.START_DATE,
+			L.END_DATE,
+			L.TRIP_CODE,
+			L.PER_HOUR_COST,
+			L.PER_KM_COST
+		FROM
+			LINE_COST_DTL  L
+		 WHERE  L.LCH_ID = #lineCostDtlId#
+	</select>
+	
+	<insert id="insertLineCostDetail" parameterClass="com.SAPTCO.common.ibatis.mapperBeans.LineCostBean">
+	   <selectKey resultClass="long" keyProperty="lineCostDtlId">
+			SELECT LINE_COST_DTL_SEQ.NEXTVAL AS ID FROM DUAL
+		</selectKey>
+	  
+    INSERT INTO LINE_COST_DTL (LCD_ID,
+                            LCH_ID,
+							START_DATE,
+							END_DATE,
+							TRIP_CODE,
+							PER_HOUR_COST,
+			                PER_KM_COST,
+							CREATED_BY,
+							CREATED_DATE)
+    VALUES (#lineCostDtlId#, #lineCostId#,#startDate#,#endDate#,#tripCode#,#perHourCost#, #perKMCost#, #createdBy#,sysdate)
+  </insert>
+  
+  <update id="updateLineCostDetail" parameterClass="com.SAPTCO.common.ibatis.mapperBeans.LineCostBean">
+     UPDATE LINE_COST_DTL SET 
+            START_DATE = #startDate#,
+			END_DATE = #endDate#,
+			TRIP_CODE = #tripCode#,
+			PER_HOUR_COST = #perHourCost#,
+			PER_KM_COST = #perKMCost#,
+			UPDATED_BY = #createdBy#,
+            UPDATED_DATE = sysdate
+     WHERE LCD_ID = #lineCostDtlId# 
+     </update>
+
+  <select id="checkLineCostDetailOverlappPeriod" parameterClass="com.SAPTCO.common.ibatis.mapperBeans.LineCostBean" resultClass="long">
+      select count (*) cnt
+      from LINE_COST_DTL bc where
+         ( bc.TRIP_CODE = #tripCode# and bc.START_DATE = #startDate# )
+      or ( bc.TRIP_CODE = #tripCode# and #endDate# &gt; BC.END_DATE and #startDate# &lt;  BC.END_DATE )
+      or ( bc.TRIP_CODE = #tripCode# and bc.START_DATE &lt; #endDate# and bc.START_DATE &gt; #startDate# )
+      or ( bc.TRIP_CODE = #tripCode# and bc.START_DATE &lt; #startDate# and BC.END_DATE &gt; #endDate#)
+   </select>
+   
+ 
+   <resultMap id="getStationListResult" class="com.SAPTCO.common.ibatis.mapperBeans.StationBean">
+    <result property="id" column="station_id"/>
+    <result property="code" column="CODE"/>
+    <result property="foreignName" column="FOREIGN_NAME"/>
+    <result property="localeName" column="LOCALE_NAME"/>
+   
+  </resultMap> 
+  
+	<select id="getStationList" resultMap="getStationListResult">
+		select s.station_id, s.CODE, s.LOCALE_NAME, s.FOREIGN_NAME
+			from tr_prod.station s 
+			order by s.CODE
+	</select>
+	
+</sqlMap>

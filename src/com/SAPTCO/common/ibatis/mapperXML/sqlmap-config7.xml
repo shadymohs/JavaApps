@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMapConfig      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+
+	<!-- cache is disabled for fast QA data changes -->
+	 <settings cacheModelsEnabled="false"
+		lazyLoadingEnabled="false" />  
+
+  
+   <!-- DTO -->	
+	<typeAlias alias="BaseDto" type="com.SAPTCO.common.dto.BaseDto" />
+	<typeAlias alias="UserMapperBean" type="com.SAPTCO.common.ibatis.mapperBeans.UserBean" />
+	<typeAlias alias="LimoHajBean" type="com.SAPTCO.common.ibatis.mapperBeans.LimoHajBean" />
+	
+    <sqlMap resource="com/SAPTCO/common/ibatis/mapperXML/HajLimo.xml"/>
+	
+</sqlMapConfig>

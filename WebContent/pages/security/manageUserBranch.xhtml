@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">User Branches</ui:define>
+   	<ui:define name="content">
+   		<h:form id="manageUserBranchForm">
+	            <h:panelGrid columns="4" id="editGrid" styleClass="customTB95" cellspacing="0" cellpadding="0" border="0" binding="#{usersBB.addEditPanel}">
+	            	<f:facet name="header">
+	                	#{msgs.addEditForm}
+	                </f:facet>
+	                <h:outputText value="#{msgs['Login.userName']}"/>
+	                <h:panelGroup>
+	                	<h:outputText value="#{usersBB.usersDto.userObj.userName}"/>
+	                	<h:inputHidden value="#{usersBB.usersDto.userObj.userName}"/>
+		        		<h:inputHidden value="#{usersBB.usersDto.userObj.userId}"/>
+	                </h:panelGroup>
+	                <h:panelGroup>
+	                	<h:outputText value="#{msgs['Branches.branch']}"/>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <h:panelGroup>
+		                <h:selectOneMenu value="#{usersBB.usersDto.userBranchObj.branchId.branchId}" styleClass="dropDownStyle"
+		                	rendered="#{empty usersBB.usersDto.userBranchObj.userBranchBean}">
+		                	<f:selectItem itemLabel="#{msgs['Messages.selectList']}" itemValue=""/>
+		                	<f:selectItems binding="#{usersBB.branchList}"/>
+		                	<a4j:ajax event="change" render="userBranchHidden" execute="@this"/>
+		                </h:selectOneMenu>
+		                <h:outputText value="#{usersBB.usersDto.userBranchObj.branchId.label}"/>
+		                <h:inputHidden id="userBranchHidden" value="#{usersBB.usersDto.userBranchObj.branchId.branchId}"
+		                	 required="true" requiredMessage="#{err['Branches.required_branch']}"/>
+	                </h:panelGroup>
+	                <h:panelGroup>
+	                	<h:outputText value="#{msgs['UserBranch.program_group']}"/>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <h:panelGroup>
+		                <h:selectOneMenu value="#{usersBB.usersDto.userBranchObj.programId.programId}" styleClass="dropDownStyle"
+		                	rendered="#{empty usersBB.usersDto.userBranchObj.userBranchBean}">
+		                	<f:selectItem itemLabel="#{msgs['Messages.selectList']}" itemValue=""/>
+		                	<f:selectItems value="#{usersBB.programGroupsList}"/>
+		                	<a4j:ajax event="change" render="userProgramGroupHidden" execute="@this"/>
+		                </h:selectOneMenu>
+		                <h:outputText value="#{usersBB.usersDto.userBranchObj.programId.label}"/>
+		                <h:inputHidden id="userProgramGroupHidden" value="#{usersBB.usersDto.userBranchObj.programId.programId}"
+		                	 required="true" requiredMessage="#{err['UserBranch.required_program_group']}"/>
+	                </h:panelGroup>
+	                <h:panelGroup>
+	                	<h:outputText value="#{msgs['Messages.date_from']}" />
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <h:panelGroup id="fromDateGroup">
+		                <rich:calendar id="fromDateInput" datePattern="dd-MM-yyyy" value="#{usersBB.usersDto.fromDate}"
+		                	enableManualInput="true" showWeeksBar="false" rendered="#{empty usersBB.usersDto.userBranchObj.userBranchBean}">
+		                	<a4j:ajax event="change" render="fromDateGroup" execute="@this" listener="#{usersBB.fromDateListner}"/>
+		                </rich:calendar>
+		                <h:outputText value="#{usersBB.usersDto.userBranchObj.fromDate}"/>
+		                <h:inputHidden id="fromDateHidden" value="#{usersBB.usersDto.userBranchObj.fromDate}"
+		                	 required="true" requiredMessage="#{err['Messages.required_fromDate']}"/>
+	                </h:panelGroup>
+	                <h:outputText value="#{msgs['Messages.date_to']}" />
+	                <h:panelGroup id="toDateGroup">
+		                <rich:calendar id="toDateInput" datePattern="dd-MM-yyyy" value="#{usersBB.usersDto.toDate}"
+		                	enableManualInput="true" showWeeksBar="false">
+		                	<a4j:ajax event="change" render="toDateGroup" execute="@this" listener="#{usersBB.toDateListner}"/>
+		                </rich:calendar>
+		                <h:outputText value="#{usersBB.usersDto.userBranchObj.toDate}"/>
+		                <h:inputHidden id="toDateHidden" value="#{usersBB.usersDto.userBranchObj.toDate}"/>
+	                </h:panelGroup>
+	            	<h:outputText value="#{msgs['Messages.active']}"/>
+	                <h:selectBooleanCheckbox id="activeInput" value="#{usersBB.usersDto.userBranchObj.isactive}"/>
+                	<h:outputText/>
+	            	<h:inputHidden value="#{usersBB.usersDto.userBranchObj.userBranchBean}"/>
+	            	<h:inputHidden value="#{usersBB.usersDto.userObj.userId}"/>
+	            </h:panelGrid>
+                <h:panelGrid id="addEditButtonGrid" columns="3" styleClass="searchactionTB_Bg" cellspacing="0" cellpadding="0" border="0">
+		            <h:commandButton style="display:none" action="#{usersBB.saveBranchListner}" id="saveButton"/>
+		            <a4j:commandButton styleClass="Btn_S_Normal" value="#{msgs['Action.save']}"
+		                oncomplete="if (#{facesContext.maximumSeverity==null}) {document.getElementById('manageUserBranchForm:saveButton').click();}"
+		            	execute="editGrid"/>
+		            <h:commandButton styleClass="Btn_S_Normal" value="#{msgs['Action.cancel']}"
+		            	onclick="document.getElementById('returnForm:returnButton').click();return false;"/>
+		        </h:panelGrid>
+			</h:form>
+			<h:form id="returnForm">
+				<h:inputHidden value="#{usersBB.usersDto.userObj.userId}"/>
+	            <h:inputHidden value="#{usersBB.usersDto.userObj.userName}"/>
+				<h:commandButton id="returnButton" style="display:none" action="userBranches.xhtml"/>
+			</h:form>
+	</ui:define>
+</ui:composition>

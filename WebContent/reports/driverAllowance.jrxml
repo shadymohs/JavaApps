@@ -1,0 +1,794 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="driverAllowance" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" resourceBundle="com.SAPTCO.common.resources.messages.reportMessages">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="114"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1"/>
+	<parameter name="logopath" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="user" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="checkedPath" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="uncheckedPath" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="subreportStream" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="serviceSubreportStream" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="stationSubreportStream" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="sdp" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="userNumber" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="paramHeaderSubreport" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="sdpId" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="allowanceDetailId" class="java.lang.String"/>
+	<parameter name="p_branch_desc" class="java.lang.String"/>
+	<parameter name="p_username" class="java.lang.String"/>
+	<parameter name="system_name" class="java.lang.String"/>
+	<parameter name="tripCode" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT AD.ALLOWANCE_DETAIL_ID, AD.TRIP_NUMBER, AD.STATION_ID, AD.STATION_DESC_AR, AD.STATION_DESC_EN, AD.TRIP_CODE, AD.TRIP_DATE, AD.DRIVER1_NUMBER, AD.DRIVER1_NAME,
+AD.DRIVER1_ALLOWANCE, AD.DRIVER2_NUMBER, AD.DRIVER2_NAME, AD.DRIVER2_ALLOWANCE, AD.BUS_NUMBER, AD.PLATE_NUMBER, AD.ALLOWANCE_TYPE_ID, AD.DIESEL_ALLOWANCE, AD.HOUSING_ALLOWANCE,
+AD.STAYING_ALLOWANCE, AD.VISA_ALLOWANCE, AD.BORDER_INSURANCE_ALLOWANCE, AD.BORDER_STAYING_ALLOWANCE, AD.WEEKLY_VACATION_ALLOW, AD.INTERNATIONAL_STAYING_ALLOW, AD.INTERNAL_STAYING_ALLOW,
+AD.EVENT_VACATION_ALLOW, AD.RAMADAN_ALLOWANCE, AD.OTHER_ALLOWANCE, AD.SYSTEM_ID, ad.is_fin_integrated,
+AD.DIESEL_ALLOWANCE2, AD.HOUSING_ALLOWANCE2, AD.STAYING_ALLOWANCE2, AD.VISA_ALLOWANCE2, AD.BORDER_INSURANCE_ALLOWANCE2, AD.BORDER_STAYING_ALLOWANCE2, AD.WEEKLY_VACATION_ALLOW2, AD.INTERNAL_STAYING_ALLOW2, AD.INTERNATIONAL_STAYING_ALLOW2,
+AD.EVENT_VACATION_ALLOW2, AD.RAMADAN_ALLOWANCE2,AD.OTHER_ALLOWANCE2, AD.DESCRIPTION
+, T.LOCALE_NAME
+
+FROM ALLOWANCE_DETAILS  AD, ALLOWANCE_TYPES T
+WHERE
+AD.ALLOWANCE_TYPE_ID = T.ALLOWANCE_TYPE_ID
+AND
+AD.ALLOWANCE_DETAIL_ID = $P{allowanceDetailId}]]>
+	</queryString>
+	<field name="ALLOWANCE_DETAIL_ID" class="java.math.BigDecimal"/>
+	<field name="TRIP_NUMBER" class="java.math.BigDecimal"/>
+	<field name="STATION_ID" class="java.math.BigDecimal"/>
+	<field name="STATION_DESC_AR" class="java.lang.String"/>
+	<field name="STATION_DESC_EN" class="java.lang.String"/>
+	<field name="TRIP_CODE" class="java.lang.String"/>
+	<field name="TRIP_DATE" class="java.sql.Timestamp"/>
+	<field name="DRIVER1_NUMBER" class="java.lang.String"/>
+	<field name="DRIVER1_NAME" class="java.lang.String"/>
+	<field name="DRIVER1_ALLOWANCE" class="java.math.BigDecimal"/>
+	<field name="DRIVER2_NUMBER" class="java.lang.String"/>
+	<field name="DRIVER2_NAME" class="java.lang.String"/>
+	<field name="DRIVER2_ALLOWANCE" class="java.math.BigDecimal"/>
+	<field name="BUS_NUMBER" class="java.lang.String"/>
+	<field name="PLATE_NUMBER" class="java.lang.String"/>
+	<field name="ALLOWANCE_TYPE_ID" class="java.math.BigDecimal"/>
+	<field name="DIESEL_ALLOWANCE" class="java.math.BigDecimal"/>
+	<field name="HOUSING_ALLOWANCE" class="java.math.BigDecimal"/>
+	<field name="STAYING_ALLOWANCE" class="java.math.BigDecimal"/>
+	<field name="VISA_ALLOWANCE" class="java.math.BigDecimal"/>
+	<field name="BORDER_INSURANCE_ALLOWANCE" class="java.math.BigDecimal"/>
+	<field name="BORDER_STAYING_ALLOWANCE" class="java.math.BigDecimal"/>
+	<field name="WEEKLY_VACATION_ALLOW" class="java.math.BigDecimal"/>
+	<field name="INTERNATIONAL_STAYING_ALLOW" class="java.math.BigDecimal"/>
+	<field name="INTERNAL_STAYING_ALLOW" class="java.math.BigDecimal"/>
+	<field name="EVENT_VACATION_ALLOW" class="java.math.BigDecimal"/>
+	<field name="RAMADAN_ALLOWANCE" class="java.math.BigDecimal"/>
+	<field name="OTHER_ALLOWANCE" class="java.math.BigDecimal"/>
+	<field name="SYSTEM_ID" class="java.math.BigDecimal"/>
+	<field name="IS_FIN_INTEGRATED" class="java.math.BigDecimal"/>
+	<field name="DIESEL_ALLOWANCE2" class="java.math.BigDecimal"/>
+	<field name="HOUSING_ALLOWANCE2" class="java.math.BigDecimal"/>
+	<field name="STAYING_ALLOWANCE2" class="java.math.BigDecimal"/>
+	<field name="VISA_ALLOWANCE2" class="java.math.BigDecimal"/>
+	<field name="BORDER_INSURANCE_ALLOWANCE2" class="java.math.BigDecimal"/>
+	<field name="BORDER_STAYING_ALLOWANCE2" class="java.math.BigDecimal"/>
+	<field name="WEEKLY_VACATION_ALLOW2" class="java.math.BigDecimal"/>
+	<field name="INTERNAL_STAYING_ALLOW2" class="java.math.BigDecimal"/>
+	<field name="INTERNATIONAL_STAYING_ALLOW2" class="java.math.BigDecimal"/>
+	<field name="EVENT_VACATION_ALLOW2" class="java.math.BigDecimal"/>
+	<field name="RAMADAN_ALLOWANCE2" class="java.math.BigDecimal"/>
+	<field name="OTHER_ALLOWANCE2" class="java.math.BigDecimal"/>
+	<field name="DESCRIPTION" class="java.lang.String"/>
+	<field name="LOCALE_NAME" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="217" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="389" y="109" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRIP_DATE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="389" y="149" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DRIVER1_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="389" y="129" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{BUS_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="189" y="129" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PLATE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="489" y="109" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{tripDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="489" y="129" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{busNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="489" y="149" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{driver1Number}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="289" y="129" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{plateNumber}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="189" y="169" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DRIVER2_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="289" y="169" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{driver2Name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="489" y="169" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{driver2Number}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="389" y="169" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DRIVER2_NUMBER}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" isUsingCache="true">
+				<reportElement x="421" y="4" width="168" height="38"/>
+				<imageExpression><![CDATA[$P{logopath}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="289" y="81" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="12" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{allowanceDetailId}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="189" y="81" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="12" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ALLOWANCE_DETAIL_ID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="198" y="54" width="178" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="16" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{daReportTitle}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="149" width="89" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{dAllowance1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="149" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DRIVER1_ALLOWANCE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="169" width="89" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{dAllowance2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="169" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DRIVER2_ALLOWANCE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="189" y="149" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DRIVER1_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="289" y="149" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{driver1Name}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="7" y="211" width="585" height="1"/>
+			</line>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="7" y="2" width="93" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="h:mm:ss a" isBlankWhenNull="true">
+				<reportElement x="7" y="22" width="93" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="2" width="56" height="20"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="22" width="56" height="20"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{time}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="231" y="3" width="124" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="16" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{system_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="231" y="23" width="124" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_branch_desc}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center">
+				<reportElement x="7" y="51" width="171" height="50"/>
+				<imageExpression><![CDATA[new com.keepdynamic.barcode.generator.jasperreports.BarCodeRenderer(com.keepdynamic.barcode.generator.jasperreports.BarcodeFactory.createLinear(8,$F{ALLOWANCE_DETAIL_ID}.toString()))]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="7" y="103" width="582" height="1"/>
+			</line>
+			<line>
+				<reportElement x="7" y="48" width="582" height="1"/>
+			</line>
+			<textField>
+				<reportElement x="489" y="189" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{desc}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="18" y="189" width="471" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESCRIPTION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="289" y="109" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{allowanceType}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="18" y="109" width="271" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{LOCALE_NAME}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="278" splitType="Stretch">
+			<rectangle>
+				<reportElement x="52" y="2" width="111" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="430" y="2" width="111" height="20"/>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement x="489" y="52" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIESEL_ALLOWANCE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="389" y="52" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{HOUSING_ALLOWANCE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="489" y="172" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STAYING_ALLOWANCE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="389" y="172" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VISA_ALLOWANCE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="489" y="92" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{BORDER_INSURANCE_ALLOWANCE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="389" y="92" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{BORDER_STAYING_ALLOWANCE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="489" y="132" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{WEEKLY_VACATION_ALLOW}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="489" y="212" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INTERNATIONAL_STAYING_ALLOW}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="389" y="212" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INTERNAL_STAYING_ALLOW}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="389" y="132" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{EVENT_VACATION_ALLOW}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="489" y="252" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RAMADAN_ALLOWANCE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="389" y="252" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OTHER_ALLOWANCE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="489" y="72" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{borderInsurance}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="389" y="72" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{borderStaying}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="489" y="192" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{international}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="389" y="192" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{internal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="489" y="232" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{ramadan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="389" y="112" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{event}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="389" y="232" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{other}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="489" y="112" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{weekly}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="489" y="32" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{diesel}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="389" y="32" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{housing}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="489" y="152" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{staying}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="389" y="152" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{visa}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="4" y="276" width="585" height="1"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="107" y="52" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIESEL_ALLOWANCE2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="7" y="72" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{borderStaying2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="107" y="32" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{diesel2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="107" y="72" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{borderInsurance2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="7" y="92" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{BORDER_STAYING_ALLOWANCE2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="7" y="32" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{housing2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="7" y="52" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{HOUSING_ALLOWANCE2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="107" y="112" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{weekly2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="107" y="172" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STAYING_ALLOWANCE2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="7" y="212" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INTERNAL_STAYING_ALLOW2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="107" y="192" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{international2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="107" y="132" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{WEEKLY_VACATION_ALLOW2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="7" y="172" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VISA_ALLOWANCE2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="7" y="232" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{other2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="7" y="192" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{internal2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="107" y="252" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RAMADAN_ALLOWANCE2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="7" y="132" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{EVENT_VACATION_ALLOW2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="107" y="212" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INTERNATIONAL_STAYING_ALLOW2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="107" y="92" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{BORDER_INSURANCE_ALLOWANCE2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="7" y="152" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{visa2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="7" y="112" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{event2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="7" y="252" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OTHER_ALLOWANCE2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="107" y="232" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{ramadan2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="107" y="152" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{staying2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="441" y="2" width="89" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="13" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{dAllowance1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="63" y="2" width="89" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="13" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{dAllowance2}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="83">
+			<rectangle>
+				<reportElement x="189" y="20" width="100" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="189" y="40" width="100" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="489" y="0" width="100" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="489" y="20" width="100" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="489" y="40" width="100" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="489" y="60" width="100" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="289" y="0" width="200" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="289" y="20" width="200" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="289" y="40" width="200" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="289" y="60" width="200" height="20"/>
+			</rectangle>
+			<textField>
+				<reportElement x="489" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{station}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="489" y="20" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="489" y="40" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{dispatcher}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="189" y="20" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{time}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="189" y="40" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{sign}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="489" y="61" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{user}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="4" y="20" width="185" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="4" y="40" width="185" height="20"/>
+			</rectangle>
+			<textField>
+				<reportElement x="303" y="60" width="186" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_username}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+</jasperReport>

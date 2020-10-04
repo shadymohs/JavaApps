@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">Branches</ui:define>
+   	<ui:define name="content">
+  		<h:form id="manageBranchesForm">
+            <h:panelGrid columns="4" id="editGrid" cellspacing="0" cellpadding="0" border="0" style="width:100%;text-align:center;">
+               <h:panelGroup>
+               		<h:outputText value="#{msgs['system']}"/>
+                	<h:outputText style="color:red" value="*" />
+                </h:panelGroup>
+               	<h:selectOneMenu value="#{branchesBB.branchesDto.branchObj.systemId}" required="true" requiredMessage="#{err['systemRequired']}">
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{branchesBB.systemsList}"/>
+				</h:selectOneMenu>
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['Messages.code']}"/>
+                	<h:outputText style="color:red" value="*" />
+                </h:panelGroup>
+                <h:panelGroup id="codeGroup">
+	                <h:inputText maxlength="20" id="codeInput" value="#{branchesBB.branchesDto.branchObj.code}" disabled="#{!empty branchesBB.branchesDto.branchObj.id}">
+	                	<a4j:ajax event="blur" render="codeGroup" execute="@this" listener="#{branchesBB.addCodeListner}"/>
+	                </h:inputText>
+	                <h:inputHidden id="codeHidden" value="#{branchesBB.branchesDto.branchObj.code}"
+	                	 required="true" requiredMessage="#{err['Messages.required_code']}"/>
+                </h:panelGroup>
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['Messages.arName']}"/>
+                	<h:outputText style="color:red" value="*" />
+                </h:panelGroup>
+                <h:inputText id="arNameInput" value="#{branchesBB.branchesDto.branchObj.localeName}" maxlength="50"
+                	required="true" requiredMessage="#{err['Messages.required_arName']}"/>
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['Messages.enName']}"/>
+                	<h:outputText style="color:red" value="*" />
+                </h:panelGroup>
+                <h:inputText id="enNameInput" value="#{branchesBB.branchesDto.branchObj.foreignName}" maxlength="50"
+                	required="true" requiredMessage="#{err['Messages.required_enName']}"/>
+                <h:outputText value="#{msgs['Messages.active']}"/>
+                <h:selectBooleanCheckbox id="activeInput" value="#{branchesBB.branchesDto.branchObj.isActive}"/>
+            	<h:inputHidden value="#{branchesBB.branchesDto.branchObj.id}"/>
+            </h:panelGrid>
+            <h:panelGrid columns="2" style="width:100%;text-align:center;">
+            	<h:commandLink styleClass="no-decor" action="#{branchesBB.saveListner}" title="#{msgs['Action.save']}">
+                    <h:graphicImage library="images" name="save.jpg" style="border:none" width="50" height="50"/>
+                </h:commandLink>
+                <h:commandLink styleClass="no-decor" action="branches.xhtml" title="#{msgs['Action.cancel']}" immediate="true">
+                    <h:graphicImage library="images" name="return.png" style="border:none" width="100" height="100"/>
+                </h:commandLink>
+            </h:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>

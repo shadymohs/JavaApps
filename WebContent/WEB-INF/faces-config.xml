@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+    version="2.0">
+    
+    <application>
+    	<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+		<locale-config>
+			<default-locale>ar</default-locale>
+			<supported-locale>en</supported-locale>
+			<supported-locale>ar</supported-locale>
+		</locale-config>
+		<resource-bundle>
+			<base-name>com.SAPTCO.common.resources.messages.presentationMessages</base-name>
+			<var>msgs</var>
+	   </resource-bundle>
+		<resource-bundle>
+			<base-name>com.SAPTCO.common.resources.messages.errorMessages</base-name>
+			<var>err</var>
+	   </resource-bundle>
+		<resource-bundle>
+			<base-name>com.SAPTCO.common.resources.messages.reportMessages</base-name>
+			<var>rep</var>
+	   </resource-bundle>
+	  
+	</application>
+	 
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>logOut</from-outcome>
+			<to-view-id>/pages/common/login.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>changePasswordHome</from-outcome>
+			<to-view-id>/pages/common/homePage.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+	</navigation-rule>
+	<converter>
+        <converter-id>CalDateStrConveter</converter-id>
+        <converter-class>com.SAPTCO.common.backingBean.CalDateStrConveter</converter-class>
+     </converter>
+     <converter>
+        <converter-id>CalDateTimeStrConveter</converter-id>
+        <converter-class>com.SAPTCO.common.backingBean.CalDateTimeStrConveter</converter-class>
+     </converter>
+     <converter>
+        <converter-id>CalDateStrConveter2</converter-id>
+        <converter-class>com.SAPTCO.common.backingBean.CalDateStrConveter2</converter-class>
+     </converter>
+</faces-config>

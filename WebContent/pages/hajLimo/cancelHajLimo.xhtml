@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">Cancel Haj Limo</ui:define>
+   	<ui:define name="content">
+	
+		<h:form id="hajLimo">
+		 
+		  <h:panelGrid columns="3" styleClass="customTB95" cellpadding="1" border="1"
+				 style="width:100%;text-align:center;" cellspacing="1" >
+				 		        
+		       	 <h:panelGroup>
+                	<h:outputText value="#{msgs['haj.ticket']}"/> 
+                	<h:outputText style="color:red" value="*" />   
+                 </h:panelGroup>
+                 <h:inputText value="#{hajLimoBB.ticketNumber}"/>
+                 
+                 <h:commandButton value="#{msgs['Action.cancel']}" action="#{hajLimoBB.cancelTicket}"/>
+                				
+            </h:panelGrid>
+	</h:form>
+		
+	</ui:define>
+</ui:composition>

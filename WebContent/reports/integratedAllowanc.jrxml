@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="integratedAllowanc" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="842" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" resourceBundle="com.SAPTCO.common.resources.messages.reportMessages">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="serviceSubreportStream" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="sdpId" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="stationSubreportStream" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="userNumber" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="checkedPath" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="paramHeaderSubreport" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="sdp" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="user" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="uncheckedPath" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="subreportStream" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="logopath" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="p_branch_desc" class="java.lang.String"/>
+	<parameter name="p_username" class="java.lang.String"/>
+	<parameter name="system_name" class="java.lang.String"/>
+	<parameter name="systemId" class="java.lang.Long"/>
+	<parameter name="branchId" class="java.lang.Long"/>
+	<parameter name="fromDate" class="java.lang.String"/>
+	<parameter name="toDate" class="java.lang.String"/>
+	<parameter name="driverId" class="java.lang.Long"/>
+	<parameter name="isIntegrated" class="java.lang.Integer"/>
+	<parameter name="tripCode" class="java.lang.String"/>
+	<parameter name="hrBranchId" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT AD.ALLOWANCE_DETAIL_ID, AD.TRIP_CODE, T.LOCALE_NAME, to_char(AD.TRIP_DATE,'dd-mm-yyyy') TRIP_DATE, to_char(AD.INTEGRATION_DATE,'dd-mm-yyyy') INTEGRATION_DATE,AD.DRIVER1_NUMBER d_num, AD.DRIVER1_NAME d_name,
+(AD.DRIVER1_ALLOWANCE+ AD.DIESEL_ALLOWANCE+AD.HOUSING_ALLOWANCE+
+AD.STAYING_ALLOWANCE+ AD.VISA_ALLOWANCE+ AD.BORDER_INSURANCE_ALLOWANCE+ AD.BORDER_STAYING_ALLOWANCE+ AD.WEEKLY_VACATION_ALLOW+ AD.INTERNATIONAL_STAYING_ALLOW+
+AD.INTERNAL_STAYING_ALLOW+AD.EVENT_VACATION_ALLOW+ AD.RAMADAN_ALLOWANCE+AD.OTHER_ALLOWANCE)  TOT, D.HR_BRANCH,D.HR_BRANCH_CODE,ast.asset_number, ast.plate_number
+FROM ALLOWANCE_DETAILS  AD, ALLOWANCE_TYPES T, SAP_USER_INF D,assets ast
+WHERE
+ AD.ALLOWANCE_TYPE_ID = T.ALLOWANCE_TYPE_ID AND AD.DRIVER1_NUMBER=D.USER_INF_ID
+and ad.bus_number = ast.asset_number (+)
+ AND AD.DRIVER1_NUMBER IS NOT NULL
+ AND AD.IS_FIN_INTEGRATED =  $P{isIntegrated}
+ AND AD.SYSTEM_ID = $P{systemId}
+ AND (AD.BRANCH_ID IS NULL OR AD.BRANCH_ID = $P{branchId})
+ AND AD.TRIP_DATE BETWEEN (TO_DATE($P{fromDate},'DD-MM-YYYY'))AND  (TO_DATE($P{toDate},'DD-MM-YYYY'))
+AND ($P{driverId} IS NULL OR AD.DRIVER1_NUMBER = $P{driverId} )
+AND ($P{tripCode} IS NULL OR AD.TRIP_CODE = $P{tripCode} )
+AND ($P{hrBranchId} is null or D.HR_BRANCH_CODE = $P{hrBranchId})
+
+ UNION
+ SELECT AD.ALLOWANCE_DETAIL_ID, AD.TRIP_CODE, T.LOCALE_NAME, to_char(AD.TRIP_DATE,'dd-mm-yyyy') TRIP_DATE, to_char(AD.INTEGRATION_DATE,'dd-mm-yyyy') INTEGRATION_DATE,
+AD.DRIVER2_NUMBER d_num, AD.DRIVER2_NAME d_name,
+(AD.DRIVER2_ALLOWANCE+AD.DIESEL_ALLOWANCE2+ AD.HOUSING_ALLOWANCE2+ AD.STAYING_ALLOWANCE2+ AD.VISA_ALLOWANCE2+ AD.BORDER_INSURANCE_ALLOWANCE2+
+AD.BORDER_STAYING_ALLOWANCE2+ AD.WEEKLY_VACATION_ALLOW2+ AD.INTERNAL_STAYING_ALLOW2+ AD.INTERNATIONAL_STAYING_ALLOW2+
+AD.EVENT_VACATION_ALLOW2+ AD.RAMADAN_ALLOWANCE2+AD.OTHER_ALLOWANCE2) TOT, D.HR_BRANCH,D.HR_BRANCH_CODE, ast.asset_number, ast.plate_number
+FROM ALLOWANCE_DETAILS  AD, ALLOWANCE_TYPES T, SAP_USER_INF D,assets ast
+WHERE
+ AD.ALLOWANCE_TYPE_ID = T.ALLOWANCE_TYPE_ID AND AD.DRIVER1_NUMBER=D.USER_INF_ID
+and ad.bus_number = ast.asset_number (+)
+ AND AD.DRIVER2_NUMBER IS NOT NULL
+ AND AD.IS_FIN_INTEGRATED =  $P{isIntegrated}
+ AND AD.SYSTEM_ID = $P{systemId}
+ AND (AD.BRANCH_ID IS NULL OR AD.BRANCH_ID = $P{branchId})
+ AND AD.TRIP_DATE BETWEEN (TO_DATE($P{fromDate},'DD-MM-YYYY'))AND  (TO_DATE($P{toDate},'DD-MM-YYYY'))
+AND ($P{driverId} IS NULL OR AD.DRIVER2_NUMBER = $P{driverId} )
+AND ($P{tripCode} IS NULL OR AD.TRIP_CODE = $P{tripCode} )
+AND ($P{hrBranchId} is null or D.HR_BRANCH_CODE = $P{hrBranchId})
+ORDER BY  d_num]]>
+	</queryString>
+	<field name="ALLOWANCE_DETAIL_ID" class="java.math.BigDecimal"/>
+	<field name="TRIP_CODE" class="java.lang.String"/>
+	<field name="LOCALE_NAME" class="java.lang.String"/>
+	<field name="TRIP_DATE" class="java.lang.String"/>
+	<field name="INTEGRATION_DATE" class="java.lang.String"/>
+	<field name="D_NUM" class="java.lang.String"/>
+	<field name="D_NAME" class="java.lang.String"/>
+	<field name="TOT" class="java.math.BigDecimal"/>
+	<field name="HR_BRANCH" class="java.lang.String"/>
+	<field name="HR_BRANCH_CODE" class="java.math.BigDecimal"/>
+	<field name="ASSET_NUMBER" class="java.lang.String"/>
+	<field name="PLATE_NUMBER" class="java.lang.String"/>
+	<variable name="TOTAL" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOT}]]></variableExpression>
+	</variable>
+	<pageHeader>
+		<band height="78" splitType="Stretch">
+			<textField>
+				<reportElement x="103" y="2" width="56" height="20"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="103" y="22" width="56" height="20"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{time}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="365" y="4" width="124" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="16" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{system_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="10" y="2" width="93" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" isUsingCache="true">
+				<reportElement x="667" y="4" width="168" height="38"/>
+				<imageExpression><![CDATA[$P{logopath}]]></imageExpression>
+			</image>
+			<textField pattern="h:mm:ss a" isBlankWhenNull="true">
+				<reportElement x="10" y="22" width="93" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="365" y="24" width="124" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_branch_desc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="340" y="55" width="178" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="16" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{isIntegrated}.equals(1))?$R{intgReportTitle}:$R{non_intgReportTitle}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<textField>
+				<reportElement x="331" y="2" width="70" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{intgDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="463" y="2" width="70" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="401" y="2" width="62" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{date}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="4" y="22" width="831" height="1"/>
+			</line>
+			<textField>
+				<reportElement x="533" y="2" width="58" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{allowanceType}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="741" y="2" width="70" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{driver1Number}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="671" y="2" width="70" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{driver1Name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="591" y="2" width="80" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{tot1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="165" y="2" width="166" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{branch}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="96" y="3" width="69" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{assetNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="27" y="2" width="69" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{plateNumber}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="401" y="2" width="62" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRIP_DATE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="331" y="2" width="70" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INTEGRATION_DATE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="463" y="2" width="68" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRIP_CODE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="531" y="2" width="60" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{LOCALE_NAME}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="741" y="2" width="70" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_NUM}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="591" y="2" width="80" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="671" y="2" width="70" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_NAME}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="217" y="2" width="114" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{HR_BRANCH}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="165" y="2" width="52" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{HR_BRANCH_CODE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="96" y="2" width="69" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ASSET_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="27" y="2" width="69" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PLATE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement x="375" y="1" width="92" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="467" y="1" width="83" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

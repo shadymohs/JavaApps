@@ -1,0 +1,378 @@
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD iBatis Mapper 3.0 //EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.SAPTCO.common.ibatis.mapperInterface.ManageAllowance">
+	<!-- TR Trips -->
+	
+	<resultMap id="allowanceDetailResult" type="AllowanceDetail">     
+		<id property="id" column="ALLOWANCE_DETAIL_ID"/>
+		<result property="tripNumber" column="TRIP_NUMBER"/>
+		<result property="localeName" column="STATION_DESC_AR"/>
+		<result property="foreignName" column="STATION_DESC_EN"/>
+		<result property="stationId" column="STATION_ID"/>
+		<result property="tripCode" column="TRIP_CODE"/>
+		<result property="tripDate" column="TRIP_DATE"/>
+		<result property="driver1Name" column="DRIVER1_NAME"/>
+		<result property="driver2Name" column="DRIVER2_NAME"/>
+		<result property="driver1Number" column="DRIVER1_NUMBER"/>
+		<result property="driver2Number" column="DRIVER2_NUMBER"/>
+		<result property="driver1Allowance" column="DRIVER1_ALLOWANCE"/>
+		<result property="driver2Allowance" column="DRIVER2_ALLOWANCE"/>
+		<result property="driver1IsMuslim" column="is_muslim"/>
+		<result property="driver2IsMuslim" column="is_muslim2"/>
+		<result property="busNumber" column="BUS_NUMBER"/>
+		<result property="plateNumber" column="PLATE_NUMBER"/>
+		<result property="diesel" column="DIESEL_ALLOWANCE"/>
+		<result property="housing" column="HOUSING_ALLOWANCE"/>
+		<result property="staying" column="STAYING_ALLOWANCE"/>
+		<result property="visa" column="VISA_ALLOWANCE"/>
+		<result property="borderInsurance" column="BORDER_INSURANCE_ALLOWANCE"/>
+		<result property="borderStaying" column="BORDER_STAYING_ALLOWANCE"/>
+		<result property="weeklyVacation" column="WEEKLY_VACATION_ALLOW"/>
+		<result property="internalStaying" column="INTERNAL_STAYING_ALLOW"/>
+		<result property="internationalStaying" column="INTERNATIONAL_STAYING_ALLOW"/>
+		<result property="eventVacation" column="EVENT_VACATION_ALLOW"/>
+		<result property="ramadan" column="RAMADAN_ALLOWANCE"/>
+		<result property="other" column="OTHER_ALLOWANCE"/>
+		<result property="diesel2" column="DIESEL_ALLOWANCE2"/>
+		<result property="housing2" column="HOUSING_ALLOWANCE2"/>
+		<result property="staying2" column="STAYING_ALLOWANCE2"/>
+		<result property="visa2" column="VISA_ALLOWANCE2"/>
+		<result property="borderInsurance2" column="BORDER_INSURANCE_ALLOWANCE2"/>
+		<result property="borderStaying2" column="BORDER_STAYING_ALLOWANCE2"/>
+		<result property="weeklyVacation2" column="WEEKLY_VACATION_ALLOW2"/>
+		<result property="internalStaying2" column="INTERNAL_STAYING_ALLOW2"/>
+		<result property="internationalStaying2" column="INTERNATIONAL_STAYING_ALLOW2"/>
+		<result property="eventVacation2" column="EVENT_VACATION_ALLOW2"/>
+		<result property="ramadan2" column="RAMADAN_ALLOWANCE2"/>
+		<result property="other2" column="OTHER_ALLOWANCE2"/>
+		<result property="isIntegrated" column="IS_FIN_INTEGRATED"/>
+		<result property="financialElementBean.id" column="FINANCIAL_ELEMENT"/>
+		<result property="percentage" column="DRIVER1_PERCENT"/>
+		<result property="percentage2" column="DRIVER2_PERCENT"/>
+		
+		
+	</resultMap>
+	
+	<select id="searchTRTrips" statementType="CALLABLE" resultType="TRTripsDto" parameterType="TRTripsDto">
+		{call DRIVER_ALLOWANCE_PKG.GET_TR_DRIVER_ALLOWANCE(#{tripNumber,mode=IN,jdbcType=NUMERIC},
+			#{tripCode,mode=IN,jdbcType=VARCHAR},#{tripDate,mode=IN,jdbcType=VARCHAR},
+			#{detailsList,mode=OUT,javaType=ResultSet,jdbcType=CURSOR,resultMap=allowanceDetailResult},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+	<select id="saveTRTrips" statementType="CALLABLE" resultType="TRTripsDto" parameterType="TRTripsDto">
+		{call DRIVER_ALLOWANCE_PKG. EDIT_TR_DRIVER_ALLOWANCE(#{allowanceDetailBean.id,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.driver1Allowance,mode=IN,jdbcType=NUMERIC},#{allowanceDetailBean.driver2Allowance,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.diesel,mode=IN,jdbcType=NUMERIC},#{allowanceDetailBean.housing,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.staying,mode=IN,jdbcType=NUMERIC},#{allowanceDetailBean.visa,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.borderInsurance,mode=IN,jdbcType=NUMERIC},#{allowanceDetailBean.borderStaying,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.weeklyVacation,mode=IN,jdbcType=NUMERIC},#{allowanceDetailBean.internalStaying,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.internationalStaying,mode=IN,jdbcType=NUMERIC},#{allowanceDetailBean.eventVacation,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.ramadan,mode=IN,jdbcType=NUMERIC},#{allowanceDetailBean.other,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.diesel2,mode=IN,jdbcType=NUMERIC},#{allowanceDetailBean.housing2,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.staying2,mode=IN,jdbcType=NUMERIC},#{allowanceDetailBean.visa2,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.borderInsurance2,mode=IN,jdbcType=NUMERIC},#{allowanceDetailBean.borderStaying2,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.weeklyVacation2,mode=IN,jdbcType=NUMERIC},#{allowanceDetailBean.internalStaying2,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.internationalStaying2,mode=IN,jdbcType=NUMERIC},#{allowanceDetailBean.eventVacation2,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.ramadan2,mode=IN,jdbcType=NUMERIC},#{allowanceDetailBean.other2,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.financialElementBean.id , mode=IN ,jdbcType=NUMERIC} , 
+			#{allowanceDetailBean.percentage , mode=IN ,jdbcType=NUMERIC} ,
+			#{allowanceDetailBean.percentage2 , mode=IN ,jdbcType=NUMERIC} ,
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+	<select id="saveNewAllowance" statementType="CALLABLE" resultType="NewAllowanceDto" parameterType="NewAllowanceDto">
+		{call DRIVER_ALLOWANCE_PKG.SAVE_NEW_DRIVER_ALLOWANCE(#{oldDriverAllowance,mode=IN,jdbcType=NUMERIC},
+			#{driver1Number,mode=IN,jdbcType=NUMERIC},#{driver2Number,mode=IN,jdbcType=NUMERIC},
+			#{busNumber,mode=IN,jdbcType=NUMERIC},#{newDriver1Number,mode=IN,jdbcType=NUMERIC},
+			#{newDriver2Number,mode=IN,jdbcType=NUMERIC},#{newBusNumber,mode=IN,jdbcType=NUMERIC},
+			#{changeReason,mode=IN,jdbcType=VARCHAR,javaType=String},#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String},
+			#{createdBy,mode=IN,jdbcType=NUMERIC},#{wsURL,mode=OUT,jdbcType=VARCHAR,javaType=String}
+		)}
+	</select>
+	
+	
+	<select id="sendToHR" statementType="CALLABLE" resultType="TRTripsDto" parameterType="TRTripsDto">
+		{call SEND_DETAIL_TO_HR.INS_DRV_ALLOW_HR(#{allowanceDetailBean.id,mode=IN,jdbcType=NUMERIC},#{updatedBy,mode=IN,jdbcType=VARCHAR},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+	<!--  Other  -->
+    <select id="saveAllowanceDetail" statementType="CALLABLE" resultType="AllowanceDetailDto" parameterType="AllowanceDetailDto">
+		{call DRIVER_ALLOWANCE_PKG.INSERT_DRIVER_ALLOWANCE(
+		    #{allowanceDetailBean.createdBy,mode=IN,jdbcType=NUMERIC},
+		    #{allowanceDetailBean.branchId,mode=IN,jdbcType=NUMERIC},
+		    #{allowanceDetailBean.tripNumber,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.stationId,mode=IN,jdbcType=NUMERIC},
+			null,null,
+			#{allowanceDetailBean.tripCode,mode=IN,jdbcType=VARCHAR},
+			#{allowanceDetailBean.tripDate,mode=IN,jdbcType=VARCHAR},
+			#{allowanceDetailBean.driver1Number,mode=IN,jdbcType=VARCHAR},			
+			#{allowanceDetailBean.driver1Name,mode=INOUT,jdbcType=VARCHAR},
+			#{allowanceDetailBean.driver2Number,mode=IN,jdbcType=VARCHAR},
+			#{allowanceDetailBean.driver2Name,mode=INOUT,jdbcType=VARCHAR},
+			#{allowanceDetailBean.busNumber,mode=IN,jdbcType=VARCHAR},
+			#{allowanceDetailBean.plateNumber,mode=IN,jdbcType=VARCHAR},
+			#{allowanceDetailBean.driver1Allowance,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.driver2Allowance,mode=INOUT,jdbcType=NUMERIC},
+			#{allowanceDetailBean.allowanceTypeBean.id,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.diesel,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.housing,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.staying,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.visa,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.borderInsurance,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.borderStaying,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.weeklyVacation,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.internalStaying,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.internationalStaying,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.eventVacation,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.ramadan,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.other,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.systemId,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.diesel2,mode=INOUT,jdbcType=NUMERIC},
+			#{allowanceDetailBean.housing2,mode=INOUT,jdbcType=NUMERIC},
+			#{allowanceDetailBean.staying2,mode=INOUT,jdbcType=NUMERIC},
+			#{allowanceDetailBean.visa2,mode=INOUT,jdbcType=NUMERIC},
+			#{allowanceDetailBean.borderInsurance2,mode=INOUT,jdbcType=NUMERIC},
+			#{allowanceDetailBean.borderStaying2,mode=INOUT,jdbcType=NUMERIC},
+			#{allowanceDetailBean.weeklyVacation2,mode=INOUT,jdbcType=NUMERIC},
+			#{allowanceDetailBean.internalStaying2,mode=INOUT,jdbcType=NUMERIC},
+			#{allowanceDetailBean.internationalStaying2,mode=INOUT,jdbcType=NUMERIC},
+			#{allowanceDetailBean.eventVacation2,mode=INOUT,jdbcType=NUMERIC},
+			#{allowanceDetailBean.ramadan2,mode=INOUT,jdbcType=NUMERIC},
+			#{allowanceDetailBean.other2,mode=INOUT,jdbcType=NUMERIC},
+			#{allowanceDetailBean.trailerNumber,mode=IN,jdbcType=VARCHAR},
+			#{allowanceDetailBean.description,mode=IN,jdbcType=VARCHAR},
+			#{allowanceDetailBean.financialElementBean.id , mode=IN ,jdbcType=NUMERIC} ,
+			#{allowanceDetailBean.percentage , mode=IN ,jdbcType=NUMERIC} ,
+			#{allowanceDetailBean.percentage2 , mode=IN ,jdbcType=NUMERIC} ,
+			#{allowanceDetailBean.id,mode=OUT,jdbcType=NUMERIC},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+    
+    
+    <select id="editAllowanceDetail" statementType="CALLABLE" resultType="AllowanceDetailDto" parameterType="AllowanceDetailDto">
+		{call DRIVER_ALLOWANCE_PKG.EDIT_DRIVER_ALLOWANCE(
+	        #{allowanceDetailBean.createdBy,mode=IN,jdbcType=NUMERIC},
+		    #{allowanceDetailBean.branchId,mode=IN,jdbcType=NUMERIC},
+		    #{allowanceDetailBean.systemId,mode=IN,jdbcType=NUMERIC},
+		    #{allowanceDetailBean.driver1Allowance,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.driver2Allowance,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.allowanceTypeBean.id,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.id,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.diesel,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.housing,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.staying,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.visa,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.borderInsurance,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.borderStaying,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.weeklyVacation,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.internationalStaying,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.internalStaying,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.eventVacation,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.ramadan,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.other,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.diesel2,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.housing2,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.staying2,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.visa2,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.borderInsurance2,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.borderStaying2,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.weeklyVacation2,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.internalStaying2,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.internationalStaying2,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.eventVacation2,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.ramadan2,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.other2,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.trailerNumber,mode=IN,jdbcType=VARCHAR},
+			#{allowanceDetailBean.description,mode=IN,jdbcType=VARCHAR},
+			#{allowanceDetailBean.financialElementBean.id , mode=IN ,jdbcType=NUMERIC} ,
+			#{allowanceDetailBean.percentage , mode=IN ,jdbcType=NUMERIC} ,
+			#{allowanceDetailBean.percentage2 , mode=IN ,jdbcType=NUMERIC} ,
+	        #{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+    
+    <select id="deleteAllowanceDetail" statementType="CALLABLE" resultType="AllowanceDetailDto" parameterType="AllowanceDetailDto">
+		{call DRIVER_ALLOWANCE_PKG.DELETE_DRIVER_ALLOWANCE(
+		    #{allowanceDetailBean.id,mode=IN,jdbcType=NUMERIC},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+    <resultMap id="otherAllowanceDetailResult" type="AllowanceDetail">     
+		<id property="id" column="ALLOWANCE_DETAIL_ID"/>
+		<result property="tripNumber" column="TRIP_NUMBER"/>
+		<result property="localeName" column="STATION_DESC_AR"/>
+		<result property="foreignName" column="STATION_DESC_EN"/>
+		<result property="stationId" column="STATION_ID"/>
+		<result property="tripCode" column="TRIP_CODE"/>
+		<result property="tripDate" column="TRIP_DATE"/>
+		<result property="driver1Name" column="DRIVER1_NAME"/>
+		<result property="driver2Name" column="DRIVER2_NAME"/>
+		<result property="driver1Number" column="DRIVER1_NUMBER"/>
+		<result property="driver2Number" column="DRIVER2_NUMBER"/>
+		<result property="driver1Allowance" column="DRIVER1_ALLOWANCE"/>
+		<result property="driver2Allowance" column="DRIVER2_ALLOWANCE"/>
+		<result property="driver1IsMuslim" column="is_muslim"/>
+		<result property="driver2IsMuslim" column="is_muslim2"/>
+		<result property="busNumber" column="BUS_NUMBER"/>
+		<result property="plateNumber" column="PLATE_NUMBER"/>
+		<result property="diesel" column="DIESEL_ALLOWANCE"/>
+		<result property="housing" column="HOUSING_ALLOWANCE"/>
+		<result property="staying" column="STAYING_ALLOWANCE"/>
+		<result property="visa" column="VISA_ALLOWANCE"/>
+		<result property="borderInsurance" column="BORDER_INSURANCE_ALLOWANCE"/>
+		<result property="borderStaying" column="BORDER_STAYING_ALLOWANCE"/>
+		<result property="weeklyVacation" column="WEEKLY_VACATION_ALLOW"/>
+		<result property="internalStaying" column="INTERNAL_STAYING_ALLOW"/>
+		<result property="internationalStaying" column="INTERNATIONAL_STAYING_ALLOW"/>
+		<result property="eventVacation" column="EVENT_VACATION_ALLOW"/>
+		<result property="ramadan" column="RAMADAN_ALLOWANCE"/>
+		<result property="other" column="OTHER_ALLOWANCE"/>
+		<result property="diesel2" column="DIESEL_ALLOWANCE2"/>
+		<result property="housing2" column="HOUSING_ALLOWANCE2"/>
+		<result property="staying2" column="STAYING_ALLOWANCE2"/>
+		<result property="visa2" column="VISA_ALLOWANCE2"/>
+		<result property="borderInsurance2" column="BORDER_INSURANCE_ALLOWANCE2"/>
+		<result property="borderStaying2" column="BORDER_STAYING_ALLOWANCE2"/>
+		<result property="weeklyVacation2" column="WEEKLY_VACATION_ALLOW2"/>
+		<result property="internalStaying2" column="INTERNAL_STAYING_ALLOW2"/>
+		<result property="internationalStaying2" column="INTERNATIONAL_STAYING_ALLOW2"/>
+		<result property="eventVacation2" column="EVENT_VACATION_ALLOW2"/>
+		<result property="ramadan2" column="RAMADAN_ALLOWANCE2"/>
+		<result property="other2" column="OTHER_ALLOWANCE2"/>
+		
+		<result property="description" column="DESCRIPTION"/>
+		<result property="isIntegrated" column="IS_FIN_INTEGRATED"/>
+		<result property="allowanceTypeBean.id" column="ALLOWANCE_TYPE_ID"/>
+		<result property="financialElementBean.id" column="FINANCIAL_ELEMENT"/>
+		<result property="percentage" column="DRIVER1_PERCENT"/>
+		<result property="percentage2" column="DRIVER2_PERCENT"/>
+		
+		
+		
+	</resultMap>
+	
+    <select id="getDriverAllowance" statementType="CALLABLE" resultType="AllowanceDetailDto" parameterType="AllowanceDetailDto">
+		{call DRIVER_ALLOWANCE_PKG.GET_DRIVER_ALLOWANCE(
+		    #{allowanceNumber,mode=IN,jdbcType=NUMERIC},
+		    #{allowanceType,mode=IN,jdbcType=NUMERIC},
+			#{date,mode=IN,jdbcType=VARCHAR},
+			#{driverNumber,mode=IN,jdbcType=VARCHAR},
+			#{allowanceDetailBean.systemId,mode=IN,jdbcType=NUMERIC},
+			#{tripCode,mode=IN,jdbcType=VARCHAR},
+			#{driversAllowance,mode=OUT,javaType=ResultSet,jdbcType=CURSOR,resultMap=otherAllowanceDetailResult},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+    <resultMap id="allowanceTypeResult" type="AllowanceType">     
+		<id property="id" column="ALLOWANCE_TYPE_ID"/>
+		<result property="localeName" column="LOCALE_NAME"/>
+		<result property="foreignName" column="FOREIGN_NAME"/>
+		<result property="createdDate" column="CREATION_DATE"/>
+		<result property="createdBy" column="CREATED_BY"/>
+		<result property="system.id" column="SYSTEM_ID"/>
+		<result property="code" column="CODE"/>
+	</resultMap>
+    
+    <select id="findAllowanceTypes" resultMap="allowanceTypeResult" parameterType="Long">
+		 SELECT t.allowance_type_id, t.locale_name, t.foreign_name, 
+		 t.created_by, t.creation_date, t.system_id, t.code 
+		 FROM allowance_types T
+		 where t.allowance_type_id != 1
+		 and t.SYSTEM_ID in(#{systemId} , 1)
+	</select>
+	
+     <resultMap id="detailAllowanceTypeResult" type="AllowanceType">     
+		<id property="id" column="ALLOWANCE_TYPE_ID"/>
+		<result property="localeName" column="LOCALE_NAME"/>
+		<result property="foreignName" column="FOREIGN_NAME"/>
+		<result property="createdDate" column="CREATION_DATE"/>
+		<result property="createdBy" column="CREATED_BY"/>
+		<result property="system.id" column="SYSTEM_ID"/>
+		<result property="code" column="CODE"/>
+		<result property="system.localeName" column="SYS_L"/>
+		<result property="system.foreignName" column="SYS_F"/>
+		<result property="isAuto" column="IS_AUTOMATIC"/>
+	</resultMap>
+	
+     <select id="getAllAllowanceTypes" resultMap="detailAllowanceTypeResult" >
+		 SELECT t.allowance_type_id, t.locale_name, t.foreign_name, t.IS_AUTOMATIC, 
+		 t.created_by, t.creation_date, t.system_id, t.code , S.LOCALE_NAME SYS_L, S.FOREIGN_NAME SYS_F 
+		 FROM allowance_types T , SYSTEMS S
+     WHERE T.SYSTEM_ID = S.SYSTEM_ID
+		order by t.code
+	</select>
+	
+      <resultMap id="FinancialElementListResult" type="FinancialElement">     
+		<id property="id" column="FAINANCIAL_ID"/>
+		<result property="localeName" column="ARABIC_DES"/>
+		<result property="foreignName" column="ENGLISH_DES"/>
+	</resultMap>
+	
+	<select id="getFinancialElementList" resultMap="FinancialElementListResult" parameterType="java.lang.Long" >
+	    select f.financial_element_id FAINANCIAL_ID, f.fe_ar_desc  ARABIC_DES, f.fe_en_desc ENGLISH_DES    
+		from financial_elements f where f.system_id=#{systemId} 
+	</select>
+    <insert id="insertAllowanceType" parameterType="AllowanceTypeDto">
+        INSERT INTO ALLOWANCE_TYPES
+        	(ALLOWANCE_TYPE_ID, LOCALE_NAME, FOREIGN_NAME, CREATION_DATE, CREATED_BY, SYSTEM_ID, CODE, IS_AUTOMATIC)
+        VALUES 
+         ((SELECT NVL(MAX(ALLOWANCE_TYPE_ID),0)+1 FROM ALLOWANCE_TYPES),
+         #{allowanceType.localeName}, #{allowanceType.foreignName} , SYSDATE, #{allowanceType.createdBy} 
+			,#{allowanceType.system.id}, #{allowanceType.code}, #{allowanceType.isAuto})
+        
+    </insert>
+    
+    <update id="updateAllowanceTypes" parameterType="AllowanceTypeDto">
+        UPDATE ALLOWANCE_TYPES SET 
+         LOCALE_NAME = #{allowanceType.localeName},
+         FOREIGN_NAME = #{allowanceType.foreignName} , 
+         SYSTEM_ID = #{allowanceType.system.id},
+         CODE = #{allowanceType.code},IS_AUTOMATIC = #{allowanceType.isAuto}
+         WHERE ALLOWANCE_TYPE_ID =  #{allowanceType.id}
+        
+    </update>
+    
+    <select id="saveAllowanceDetailExcel" statementType="CALLABLE" resultType="AllowanceDetailDto" parameterType="AllowanceDetailDto">
+		{call DRIVER_ALLOWANCE_PKG .UPLOAD_DRIVER_ALLOWANCE(
+		    #{allowanceDetailBean.createdBy,mode=IN,jdbcType=NUMERIC},
+		    #{allowanceDetailBean.branchId,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.tripCode,mode=IN,jdbcType=VARCHAR},
+			#{allowanceDetailBean.tripDate,mode=IN,jdbcType=VARCHAR},
+			#{allowanceDetailBean.driver1Number,mode=IN,jdbcType=VARCHAR},
+			#{allowanceDetailBean.busNumber,mode=IN,jdbcType=VARCHAR},
+			#{allowanceDetailBean.driver1Allowance,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.allowanceTypeBean.id,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.diesel,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.housing,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.staying,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.visa,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.borderInsurance,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.borderStaying,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.weeklyVacation,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.internalStaying,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.internationalStaying,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.eventVacation,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.ramadan,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.other,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.systemId,mode=IN,jdbcType=NUMERIC},
+			#{allowanceDetailBean.trailerNumber,mode=IN,jdbcType=VARCHAR},
+			#{allowanceDetailBean.description,mode=IN,jdbcType=VARCHAR},
+			#{allowanceDetailBean.financialElementBean.id , mode=IN ,jdbcType=NUMERIC} ,
+			#{allowanceDetailBean.percentage , mode=IN ,jdbcType=NUMERIC} ,
+			#{allowanceDetailBean.percentage2 , mode=IN ,jdbcType=NUMERIC} ,
+			#{allowanceDetailBean.id,mode=OUT,jdbcType=NUMERIC},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+    <select id="getUnIntegratedAllowances" resultMap="allowanceDetailResult" parameterType="Long">
+        SELECT AD.ALLOWANCE_DETAIL_ID,AD.TRIP_CODE, TO_CHAR(AD.TRIP_DATE,'DD-MM-YYYY') TRIP_DATE,
+        	AD.DRIVER1_NUMBER, AD.DRIVER1_ALLOWANCE, AD.DRIVER2_NUMBER, AD.DRIVER2_ALLOWANCE,
+            AD.ALLOWANCE_TYPE_ID,ad.FINANCIAL_ELEMENT
+        FROM ALLOWANCE_DETAILS AD LEFT JOIN SAP_USER_INF U ON AD.DRIVER1_NUMBER = U.USER_INF_ID LEFT JOIN  SAP_USER_INF R
+        	ON AD.DRIVER2_NUMBER = R.USER_INF_ID LEFT JOIN ALLOWANCE_TYPES T ON AD.ALLOWANCE_TYPE_ID = T.ALLOWANCE_TYPE_ID
+        WHERE  AD.IS_FIN_INTEGRATED = 0 and AD.DESCRIPTION = 'upload' and AD.BRANCH_ID = #{branchId}
+    </select>
+	
+</mapper>

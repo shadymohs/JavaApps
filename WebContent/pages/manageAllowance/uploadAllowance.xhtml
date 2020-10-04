@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">Upload allowances</ui:define>
+   	<ui:define name="content">
+   	
+	   	<h:form>
+            <rich:fileUpload addLabel="#{msgs['Action.add']}" deleteLabel="#{msgs['Action.delete']}" sizeExceededLabel="#{msgs['exceed_size']}" clearLabel="#{msgs['Action.delete']}"
+            	clearAllLabel="#{msgs['Action.delete']}" uploadLabel="#{msgs['Action.upload']}" doneLabel="#{msgs['upload_success']}" serverErrorLabel="#{err['Messages.process_exception']}"
+            	fileUploadListener="#{fileUploadBB.listener}" id="upload" acceptedTypes="xls,xlsx" ontyperejected="alert('#{msgs['different_type']}');" maxFilesQuantity="1">
+                <a4j:ajax event="uploadcomplete" execute="@none" render="info" />
+            </rich:fileUpload>
+            <h:panelGrid columnClasses="top,top" id="info">
+                <h:commandButton action="#{fileUploadBB.readExcel}" value="#{msgs['Action.save']}"
+                    rendered="#{fileUploadBB.data != null}" styleClass="buttonStyle"/>
+                <h:commandButton value="#{msgs['Action.sendToHR']}" action="#{fileUploadBB.sendToHR}" styleClass="bigButtonStyle"
+            		rendered="#{baseBB.authorizeSendToHR and !empty fileUploadBB.fileUploadDto.succedAllowance}"/>
+                <h:panelGrid columns="2">
+                	<h:outputText value="#{msgs.succedIntegreted}" rendered="#{fileUploadBB.integratedAllowances}"/>
+                	<h:outputText value="#{fileUploadBB.fileUploadDto.succedIntegreted}" rendered="#{fileUploadBB.integratedAllowances}"/>
+                	<h:outputText value="#{msgs.rejectedIntegreted}" rendered="#{fileUploadBB.integratedAllowances}"/>
+                	<h:outputText value="#{fileUploadBB.fileUploadDto.rejectedIntegreted}" rendered="#{fileUploadBB.integratedAllowances}"/>
+                	<h:outputText value="#{msgs.allSheetCount}"/>
+                	<h:outputText value="#{fileUploadBB.fileUploadDto.totalRows}"/>
+		        	<h:outputText value="#{msgs.savedCount}"/>
+                	<h:outputText value="#{fileUploadBB.fileUploadDto.succedRows}"/>
+		        	<h:outputText value="#{msgs.rejectedAllowance}"/>
+                	<h:outputText value="#{fileUploadBB.fileUploadDto.rejectedRows}"/>
+                </h:panelGrid>
+		        <rich:dataTable value="#{fileUploadBB.fileUploadDto.rejectedAllowance}" var="dtl" id="table" rows="20" style="width:100%;text-align:center;">
+					<f:facet name="noData">
+		                #{err['Messages.no_data']}
+		            </f:facet>
+		            <f:facet name="header">
+		            	<h:outputLabel value="#{msgs.rejectedAllowance}"/>
+		            </f:facet>
+		            <rich:column>
+		                <f:facet name="header">
+	                		<h:outputText value="#{msgs['seq']}"/>
+	                	</f:facet>
+		                <h:outputText value="#{dtl.seq}" />
+		            </rich:column>
+		             <rich:column>
+		                <f:facet name="header">
+	                		<h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.driver1_number']}"/>
+	                	</f:facet>
+		                <h:outputText value="#{dtl.driver1Number}" />
+		            </rich:column> 
+		            <rich:column>
+		            	<f:facet name="header">
+	                		<h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.error_reason']}"/>
+	                	</f:facet>
+		            	<h:outputText value="#{dtl.errorReason}" />
+		            </rich:column>
+		            <f:facet name="footer">
+		            	<h:panelGrid width="100%" style="text-align:center;" columns="1">
+		                	<rich:dataScroller for="table"/>
+	                	</h:panelGrid>
+		            </f:facet>
+		        </rich:dataTable>
+	        </h:panelGrid>
+	    </h:form>
+	    
+   	</ui:define>
+</ui:composition>

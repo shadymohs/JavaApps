@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:c="http://java.sun.com/jsp/jstl/core">
+		
+	<rich:toolbar style="background-color: transparent;background-image:none;border-color: transparent;">				
+		<c:forEach items="#{sessionScope.menuList}" var="menuItem">
+			<rich:dropDownMenu mode="ajax" label="#{menuItem.label}" dir="ltr" style="font-family: Tahoma; font-size: 11px; float: center; color: #ffffff" >
+			    <c:forEach items="#{menuItem.pagesList}" var="pageItem">
+				    <c:if test="#{pageItem.parentPage == null}">
+				    	<rich:menuItem submitMode="client" label="#{pageItem.label}" style="font-family: Tahoma, sans-serif;
+				    		font-size: 11px; margin-left: 20px; font-color:#b0c4de" onclick="document.location = '#{request.contextPath}/faces#{pageItem.menuUrl}'"/>
+				    </c:if>
+				</c:forEach>
+			</rich:dropDownMenu>
+		</c:forEach>		
+	</rich:toolbar>
+		
+</ui:composition>

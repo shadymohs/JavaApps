@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"   
+	xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:rich="http://richfaces.org/rich">
+
+	<c:if test="#{sessionScope.userInf.id != null and baseBB.authorizeView}">
+		<h:head>
+	        <title><ui:insert name="title">SAPTCO Apps System</ui:insert></title>
+			<h:outputScript library="javascript" name="DriverAllowance.js"/>
+			<h:outputStylesheet library="css" name="common.css"/>
+			<h:outputStylesheet library="css" name="boilerplat.css"/>
+			<h:outputStylesheet library="css" name="DriverAllowance.css"/>
+			<h:outputStylesheet library="css" name="inside.css"/>
+		</h:head>
+	    <h:body class="no-js" dir="#{baseBB.pageDirection}">
+			<f:view locale="#{sessionScope.locale != null ? sessionScope.locale : baseBB.locale}">
+		    	<h:panelGroup layout="block" id="container-outer" style="height:95%;width:90%;background-color:white;">
+					<h:panelGroup layout="block" id="container-inner">
+						<h:panelGroup layout="block" id="header" class="noPrint"/>
+						<!--Body-->
+						<h:panelGroup layout="block" id="main" class="clearfix" style="text-align:center;width:100%;">
+							<!--Content-->
+							<h:panelGroup layout="block" id="content-wrapper" class="clearfix" align="center" style="text-align:center;width:100%;">
+								<ui:insert name="header" >
+									<ui:include src="header.xhtml" />
+								</ui:insert>
+							   	<ui:insert name="content"/>	    	
+								<rich:popupPanel style="border:none" id="statPane" domElementAttachment="parent" autosized="true">
+							        <h:graphicImage library="images" name="loading2.gif"/>
+							    </rich:popupPanel>
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+		    	<ui:insert name="footer" >
+		    		<ui:include src="footer.xhtml" />
+		    	</ui:insert>
+			</f:view>
+		</h:body>
+	</c:if>
+    <c:if test="#{sessionScope.userInf.id == null or !baseBB.authorizeView}">
+    	<h:outputScript>
+    		window.location = '#{request.contextPath}/faces/pages/common/login.xhtml';
+    	</h:outputScript>
+    </c:if>
+</ui:composition>

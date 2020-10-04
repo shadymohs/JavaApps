@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">Fixed assets</ui:define>
+   	<ui:define name="content">
+		<h:form id="intgReportForm">
+	    	<h:panelGrid columns="4" cellspacing="0" cellpadding="0" border="0" id="searchGrid"
+	    		style="width:100%;text-align:center;">
+				<h:outputText value="#{msgs['Messages.tagNum']}"/>
+				<h:inputText value="#{fABB.fADto.tagNum}"/>
+				
+				<h:outputText value="#{msgs['Messages.parentTag']}"/>
+				<h:inputText value="#{fABB.fADto.parentTag}"/>
+				
+				<h:outputText value="#{msgs['Messages.assetNum']}"/>
+				<h:inputText value="#{fABB.fADto.assetNum}"/>
+				
+				<h:outputText value="#{msgs['Messages.parentAsset']}"/>
+				<h:inputText value="#{fABB.fADto.parentAsset}"/>
+				
+				<h:outputText value="#{msgs['Messages.empNum']}"/>
+				<h:inputText value="#{fABB.fADto.empNum}"/>
+				
+				<h:outputText value="#{msgs['Messages.region']}"/>
+				<h:inputText value="#{fABB.fADto.region}"/>
+				
+				<h:outputText value="#{msgs['Messages.fromDept']}"/>
+				<h:inputText value="#{fABB.fADto.fromDept}"/>
+				
+				<h:outputText value="#{msgs['Messages.toDept']}"/>
+				<h:inputText value="#{fABB.fADto.toDept}"/>
+			</h:panelGrid>
+			<h:panelGrid id="printGrid" columns="2" cellspacing="0" cellpadding="0" border="0" style="width:100%;text-align:center;">
+				<h:commandLink styleClass="no-decor" action="#{fABB.viewReport}" title="#{msgs['Action.print']}" >  <!-- rendered="#{baseBB.authorizePrint}" -->
+                    <h:graphicImage library="images" name="pdf.png" style="border:none" width="40" height="40"/>
+                </h:commandLink>
+			</h:panelGrid>	
+		</h:form>
+	</ui:define>
+</ui:composition>

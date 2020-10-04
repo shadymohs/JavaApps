@@ -1,0 +1,291 @@
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="HajLimo">
+    
+    <resultMap class="BaseDto" id="locationsResult">
+	    <result property="id" column="LOCATION_ID"/>
+	    <result property="localeName" column="AR_NAME"/>
+	    <result property="foreignName" column="EN_NAME"/>
+	</resultMap>
+	
+	<parameterMap id="getFromLocationsParams" class="java.util.Map">
+	    <parameter property="branchId" jdbcType="BIGINT"
+            javaType="java.lang.Long" mode="IN" />
+		<parameter property="resultList" jdbcType="ORACLECURSOR"
+			javaType="java.sql.ResultSet" mode="OUT" resultMap="locationsResult"/>
+        <parameter property="errorCode" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+        <parameter property="errorDesc" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="getFromLocations" parameterMap="getFromLocationsParams"> 
+	{ call	LIMO_HAJ_PKG.GET_MAIN_LOCATIONS(?,?,?,?) }</procedure>
+	
+	<parameterMap id="getToLocationsParams" class="java.util.Map">	    
+        <parameter property="fromLocation" jdbcType="BIGINT"
+            javaType="java.lang.Long" mode="IN" />
+		<parameter property="resultList" jdbcType="ORACLECURSOR"
+			javaType="java.sql.ResultSet" mode="OUT" resultMap="locationsResult"/>
+        <parameter property="errorCode" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+        <parameter property="errorDesc" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="getToLocations" parameterMap="getToLocationsParams"> 
+	{ call	LIMO_HAJ_PKG.GET_TO_LOCATIONS(?,?,?,?) }</procedure>
+	
+	<resultMap class="BaseDto" id="vehicleResult">
+	    <result property="id" column="vehicle_id"/>
+	    <result property="localeName" column="AR_NAME"/>
+	    <result property="foreignName" column="EN_NAME"/>
+	</resultMap>
+	
+	<parameterMap id="getVehiclsParams" class="java.util.Map">	    
+        <parameter property="fromLocation" jdbcType="BIGINT"
+            javaType="java.lang.Long" mode="IN" />	    
+        <parameter property="toLocation" jdbcType="BIGINT"
+            javaType="java.lang.Long" mode="IN" />	    
+        <parameter property="vehicleType" jdbcType="BIGINT"
+            javaType="java.lang.Long" mode="IN" />
+		<parameter property="resultList" jdbcType="ORACLECURSOR"
+			javaType="java.sql.ResultSet" mode="OUT" resultMap="vehicleResult"/>
+        <parameter property="errorCode" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+        <parameter property="errorDesc" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="getVehicls" parameterMap="getVehiclsParams"> 
+	{ call	LIMO_HAJ_PKG.GET_VEHICLES(?,?,?,?,?,?) }</procedure>
+	
+	<resultMap class="BaseDto" id="vehicleTypeResult">
+	    <result property="id" column="vehicle_type_id"/>
+	    <result property="localeName" column="AR_NAME"/>
+	    <result property="foreignName" column="EN_NAME"/>
+	</resultMap>
+	
+	<select id="getvehiclsTypes" resultMap="vehicleTypeResult" >
+	    select vehicle_type_id,ar_name,en_name from vehicle_type where is_active = 1 order by vehicle_type_id
+	</select>
+	
+	<resultMap class="BaseDto" id="vPaymentMethodResult">
+	    <result property="id" column="payment_method_id"/>
+	    <result property="localeName" column="AR_NAME"/>
+	    <result property="foreignName" column="EN_NAME"/>
+	</resultMap>
+	
+	<select id="getPaymentMethods" resultMap="vPaymentMethodResult" >
+	    select payment_method_id,ar_name,en_name from payment_method where is_active = 1
+	</select>
+	
+	<parameterMap id="calculatePriceParams" class="java.util.Map">	    
+        <parameter property="fromStationId" jdbcType="BIGINT"
+            javaType="java.lang.Long" mode="IN" />	    
+        <parameter property="toStationId" jdbcType="BIGINT"
+            javaType="java.lang.Long" mode="IN" />	    
+        <parameter property="vehicleId" jdbcType="BIGINT"
+            javaType="java.lang.Long" mode="IN" />	    
+        <parameter property="etimadList" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="IN" />	    
+        <parameter property="remainingAmount" jdbcType="BIGINT"
+            javaType="java.lang.Float" mode="OUT" />	    
+        <parameter property="vatAmount" jdbcType="BIGINT"
+            javaType="java.lang.Float" mode="OUT" />	    
+        <parameter property="vatPer" jdbcType="BIGINT"
+            javaType="java.lang.Float" mode="OUT" />		    
+        <parameter property="vehiclePrice" jdbcType="BIGINT"
+            javaType="java.lang.Float" mode="OUT" />		    
+        <parameter property="totalEtimadAmount" jdbcType="BIGINT"
+            javaType="java.lang.Float" mode="OUT" />	
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+        <parameter property="errorDesc" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="calculatePrice" parameterMap="calculatePriceParams"> 
+	{ call	LIMO_HAJ_PKG.CALC_PRICE(?,?,?,?,?,?,?,?,?,?,?) }</procedure>
+	
+	<parameterMap id="createTicketsParams" class="java.util.Map">	    
+        <parameter property="fromStationId" jdbcType="BIGINT"
+            javaType="java.lang.Long" mode="IN" />	    
+        <parameter property="toStationId" jdbcType="BIGINT"
+            javaType="java.lang.Long" mode="IN" />	    
+        <parameter property="vehicleId" jdbcType="BIGINT"
+            javaType="java.lang.Long" mode="IN" />	    
+        <parameter property="isManual" jdbcType="BIGINT"
+            javaType="java.lang.Boolean" mode="IN" />	   
+        <parameter property="manualAmount" jdbcType="BIGINT"
+            javaType="java.lang.Float" mode="IN" />	   
+        <parameter property="paymentMethodId" jdbcType="BIGINT"
+            javaType="java.lang.Long" mode="IN" />	   
+        <parameter property="driverNumber" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="IN" />	   
+        <parameter property="vehicleNumber" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="IN" />	  
+        <parameter property="officeNumber" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="IN" />	 
+        <parameter property="creator" jdbcType="BIGINT"
+            javaType="java.lang.Long" mode="IN" />	  
+        <parameter property="etimadList" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="IN" />	
+        <parameter property="season" jdbcType="BIGINT"
+            javaType="java.lang.Integer" mode="IN" />		    
+        <parameter property="ticketNumber" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />	    
+        <parameter property="remainingAmount" jdbcType="BIGINT"
+            javaType="java.lang.Float" mode="OUT" />	    
+        <parameter property="vatAmount" jdbcType="BIGINT"
+            javaType="java.lang.Float" mode="OUT" />		    
+        <parameter property="vehiclePrice" jdbcType="BIGINT"
+            javaType="java.lang.Float" mode="OUT" />		    
+        <parameter property="totalEtimadAmount" jdbcType="BIGINT"
+            javaType="java.lang.Float" mode="OUT" />	
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+        <parameter property="errorDesc" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="createTickets" parameterMap="createTicketsParams"> 
+	{ call	LIMO_HAJ_PKG.CREATE_TICKET(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }</procedure>
+	
+	<select id="validateEtimad" resultClass="Boolean" parameterClass="String">
+	    select decode(count(e.etimad_number),0,1,0) valid from ticket_etimad e inner join ticket t on e.ticket_number = t.ticket_number
+	    where t.is_cancelled = 0 and e.etimad_number = #etimadNumber#
+	</select>
+	
+	<parameterMap id="dispatchTicketParams" class="java.util.Map">	    
+        <parameter property="ticketNumber" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="IN" />        	    
+        <parameter property="userId" jdbcType="BIGINT"
+            javaType="java.lang.Long" mode="IN" />
+        <parameter property="vehicle" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+        <parameter property="toLocation" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+        <parameter property="lastTransaction" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.Integer" mode="OUT" />
+        <parameter property="errorDesc" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+    </parameterMap>
+	
+	<procedure id="dispatchTicket" parameterMap="dispatchTicketParams"> 
+	{ call	LIMO_HAJ_PKG.RECORD_DEPARTURE (?,?,?,?,?,?,?) }</procedure>
+	
+	<parameterMap id="arrivalTicketParams" class="java.util.Map">	    
+        <parameter property="ticketNumber" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="IN" />        	    
+        <parameter property="userId" jdbcType="BIGINT"
+            javaType="java.lang.Long" mode="IN" />
+        <parameter property="vehicle" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+        <parameter property="lastTransaction" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.Integer" mode="OUT" />
+        <parameter property="errorDesc" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+    </parameterMap>
+	
+	<procedure id="arrivalTicket" parameterMap="arrivalTicketParams"> 
+	{ call	LIMO_HAJ_PKG.RECORD_ARRIVAL (?,?,?,?,?,?) }</procedure>
+	
+	<update id="printTicket" parameterClass="String">
+	    update ticket set printing_count = nvl(printing_count,0) + 1 where ticket_number = #ticketNumber#
+	</update>	
+	
+	<select id="validateUser" resultClass="Long" parameterClass="UserMapperBean">
+		select user_id from drv_allow.sap_users
+		where user_name = #userName# and user_password = #password# and user_is_active = 1 and user_is_deleted = 0
+	</select>
+	
+	<parameterMap id="cancelTicketParams" class="java.util.Map">	    
+        <parameter property="ticketNumber" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="IN" />    
+        <parameter property="userId" jdbcType="BIGINT"
+            javaType="java.lang.Long" mode="IN" />
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+    </parameterMap>
+	
+	<procedure id="cancelTicket" parameterMap="cancelTicketParams"> 
+	{ call LIMO_HAJ_PKG.cancel_ticket (?,?,?) }</procedure>
+	
+	<resultMap class="LimoHajBean" id="finIntegResult">
+	    <result property="ticketNumber" column="INVOICE_NUMBER"/>
+	    <result property="sourceName" column="SOURCE_NAME"/>
+		<result property="serviceCode" column="SERVICE_CODE"/>
+		<result property="serviceDesc" column="SERVICE_DESCRIPTION"/>
+		<result property="serviceRegion" column="SERVICE_REGION_CODE"/>
+		<result property="serviceDate" column="SERVICE_DATE"/>
+		<result property="transactionType" column="TRANSACTION_TYPE"/>
+		<result property="totalAmount" column="TOTAL_AMOUNT"/>
+		<result property="discountAmount" column="DISCOUNT_AMOUNT"/>
+		<result property="penaltyAmount" column="PENALTY_AMOUNT"/>
+		<result property="currency" column="CURRENCY"/>
+		<result property="sourcePartyId" column="SOURCE_PARTY_ID"/>
+		<result property="sourcePartyName" column="SOURCE_PARTY_NAME"/>
+		<result property="customerCat" column="CUSTOMER_CATEGORY"/>
+		<result property="customerRegion" column="CUSTOMER_REGION"/>
+		<result property="isMain" column="IS_MAIN"/>
+		<result property="sourceAddr" column="SOURCE_ADDR_ID"/>
+		<result property="line1" column="LINE1"/>
+		<result property="line2" column="LINE2"/>
+		<result property="city" column="CITY"/>
+		<result property="country" column="COUNTRY"/>
+		<result property="sourceType" column="SOURCE_TYPE"/>
+		<result property="termsType" column="TERMS_TYPE"/>
+		<result property="freeAmount" column="FREE_AMOUNT"/>
+		<result property="additionalAmount" column="ADDITIONAL_AMOUNT"/>
+		<result property="agentCommAmount" column="AGENT_COMMISSION_AMOUNT"/>
+		<result property="agentCommTax" column="AGENT_COMMISSION_TAX_AMOUNT"/>
+		<result property="additionalTax" column="ADDITIONAL_TAX_AMOUNT"/>
+		<result property="taxAmount" column="TAX_AMOUNT"/>
+		<result property="customerVat" column="CUSTOMER_VAT_REG_NO"/>
+		<result property="deductionAmount" column="DEDUCTION_AMOUNT"/>
+		<result property="deductionTax" column="DEDUCTION_TAX_AMOUNT"/>
+		<result property="receiptsNo" column="RECEIPTS_NO"/>
+		<result property="invoiceType" column="INVOICE_TYPE"/>
+		<result property="taxCountry" column="TAX_COUNTRY"/>
+		<result property="contractStartDate" column="CONTRACT_START_DATE"/>
+		<result property="discountTax" column="DISCOUNT_TAX_AMOUNT"/>
+	</resultMap>
+	
+	<parameterMap id="getFinIntegrationListParams" class="java.util.Map">
+		<parameter property="resultList" jdbcType="ORACLECURSOR"
+			javaType="java.sql.ResultSet" mode="OUT" resultMap="finIntegResult"/>
+    </parameterMap>
+	
+	<procedure id="getFinIntegrationList" parameterMap="getFinIntegrationListParams"> 
+	{ call LIMO_HAJ_INTEG_PKG.GET_TICKETS_LIST(?) }</procedure>
+	
+	<parameterMap id="generateBatchNumberParams" class="java.util.Map">
+		<parameter property="batchNumber" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="OUT"/>
+		<parameter property="isNewService" jdbcType="BIGINT"
+			javaType="java.lang.Boolean" mode="OUT"/>
+    </parameterMap>
+	
+	<procedure id="generateBatchNumber" parameterMap="generateBatchNumberParams"> 
+	{ call LIMO_HAJ_INTEG_PKG.GET_BATCH_NUMBER (?,?) }</procedure>
+	
+	<parameterMap id="updateTicketFinIntegrationParams" class="java.util.Map">
+		<parameter property="ticketNumber" jdbcType="BIGINT"
+			javaType="java.lang.String" mode="IN"/>
+		<parameter property="errorCode" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="OUT"/>
+        <parameter property="errorDesc" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+    </parameterMap>
+	
+	<procedure id="updateTicketFinIntegration" parameterMap="updateTicketFinIntegrationParams"> 
+	{ call LIMO_HAJ_INTEG_PKG.UPDATE_TICKET_DATA (?,?,?) }</procedure>
+	
+</sqlMap>

@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">Allowance Types</ui:define>
+   	<ui:define name="content">
+
+    <h:form id="allowanceTypesForm">
+				<rich:dataTable value="#{allowanceTypesBB.allowanceTypeDto.allowanceTypeList}" var="pg" id="table" rows="20" styleClass="newTable" style="width:100%;text-align:center;">
+					<f:facet name="noData">
+		                #{err['Messages.no_data']}
+		            </f:facet>
+		            <rich:column>
+		                <f:facet name="header">
+	                		<h:outputText value="#{msgs['Messages.code']}"/>
+	                	</f:facet>
+		                <h:outputText value="#{pg.code}" />
+		            </rich:column>
+		            <rich:column>
+		                <f:facet name="header">
+		                	#{msgs['Messages.arName']}
+		                </f:facet>
+		                <h:outputText value="#{pg.localeName}" />
+		            </rich:column>
+		            <rich:column>
+		                <f:facet name="header">
+		                	#{msgs['Messages.enName']}
+		                </f:facet>
+		                <h:outputText value="#{pg.foreignName}" />
+		            </rich:column>
+		             <rich:column>
+		                <f:facet name="header">
+		                	#{msgs['system']}
+		                </f:facet>
+		                <h:outputText value="#{pg.system.localeName}" />
+		            </rich:column>
+		            <rich:column>
+		            	<h:commandLink styleClass="no-decor" rendered="#{baseBB.authorizeUpdate}" actionListener="#{allowanceTypesBB.editListner}" action="manageAllowanceTypes.xhtml" immediate="true">
+	                    <h:graphicImage library="images" name="edit2.gif" alt="#{msgs['Action.edit']}" style="border:none" />
+	                    <f:setPropertyActionListener target="#{allowanceTypesBB.allowanceTypeDto.allowanceType}" value="#{pg}"/>
+	                    <f:param value="#{pg.code}" name="typeCode"/>
+	                    <f:param value="#{pg.id}" name="typeId"/>
+	                    <f:param value="#{pg.localeName}" name="typeArName"/>
+	                    <f:param value="#{pg.foreignName}" name="typeEnName"/>
+	                    <f:param value="#{pg.system.id}" name="systemId"/>
+	                    <f:param value="#{pg.isAuto}" name="isAuto"/>
+	                    </h:commandLink>		               
+		                <h:outputText/>
+		            </rich:column>
+		            
+		            <f:facet name="footer">
+		                <h:panelGrid id="addGrid" columns="2" styleClass="searchactionTB_Bg" cellspacing="0" cellpadding="0" border="0"  width="100%" style="text-align:center;">
+		                	<rich:dataScroller for="table" />
+								<h:commandLink styleClass="no-decor" action="manageAllowanceTypes.xhtml" actionListener="#{allowanceTypesBB.addListner}" title="#{msgs['Action.add']}" immediate="true" rendered="#{baseBB.authorizeAdd}">
+		                    		<h:graphicImage library="images" name="add.jpg" style="border:none" width="20" height="20"/>
+		                		</h:commandLink>
+		                 
+				        </h:panelGrid>
+		            </f:facet>
+		        </rich:dataTable>
+		      
+			</h:form>
+
+    
+   	</ui:define>
+</ui:composition>   	

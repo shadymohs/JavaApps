@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">Add assets</ui:define>
+   	<ui:define name="content">
+		<h:form id="addAssetsForm">
+			
+			<h:panelGrid columns="4" cellspacing="0" cellpadding="0" border="0" id="searchGrid" style="width:100%;text-align:center;">	
+				<h:outputText value="#{msgs['Assets.assetNumber']}"/>
+                <h:inputText value="#{assetsBB.assetsDto.assetObject.assetNumber}" required="true" requiredMessage="#{err['asset_required']}"/>
+                
+                <h:outputText value="#{msgs['Assets.assetType']}"/>
+                <h:inputText value="#{assetsBB.assetsDto.assetObject.assetType}"/>
+                
+                <h:outputText value="#{msgs['Assets.plate_no']}"/>
+                <h:inputText value="#{assetsBB.assetsDto.assetObject.plateNumber}" required="true" requiredMessage="#{err['plate_required']}"/>
+                
+                <h:outputText value="#{msgs['Assets.chassis_no']}"/>
+                <h:inputText value="#{assetsBB.assetsDto.assetObject.chassisNumber}"/>
+                
+                <h:outputText value="#{msgs['Assets.seats']}"/>
+                <h:inputText value="#{assetsBB.assetsDto.assetObject.seats}"/>
+                
+                <h:outputText value="#{msgs['Assets.sector']}"/>
+                <h:inputText value="#{assetsBB.assetsDto.assetObject.sectorDesc}"/>
+                
+                <h:outputText value="#{msgs['Assets.location']}"/>
+                <h:inputText value="#{assetsBB.assetsDto.assetObject.assetLocation}"/>
+                
+                <h:outputText value="#{msgs['Assets.Category']}"/>
+                <h:inputText value="#{assetsBB.assetsDto.assetObject.assetCategory}"/>
+                
+                <h:outputText value="#{msgs['Assets.license_expiry']}"/>
+				<rich:calendar id="toDateInput" datePattern="dd-MM-yyyy" 
+		        	enableManualInput="true" showWeeksBar="false" value="#{assetsBB.assetsDto.assetObject.licenseExpDate}">
+		        </rich:calendar>
+                
+				
+			</h:panelGrid>
+			
+			<!-- action grid -->
+			<h:panelGroup layout="block">
+				<h:commandLink styleClass="no-decor" action="#{assetsBB.save}" title="#{msgs['Action.save']}">
+                    <h:graphicImage library="images" name="save.jpg" style="border:none" width="60" height="60"/>
+                </h:commandLink>
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">Users</ui:define>
+   	<ui:define name="content">
+   		<h:form id="manageUsersForm">
+	            <h:panelGrid columns="4" id="editGrid" styleClass="customTB95" cellspacing="0" cellpadding="0" border="0" binding="#{usersBB.addEditPanel}">
+	            	<f:facet name="header">
+	                	#{msgs.addEditForm}
+	                </f:facet>
+	                <h:panelGroup>
+	                	<h:outputText value="#{msgs['Login.userName']}"/>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <h:panelGroup id="userNameGroup">
+		                <h:inputText maxlength="20" id="userNameInput" value="#{usersBB.usersDto.userObj.userName}" disabled="#{!empty usersBB.usersDto.userObj.userId}">
+		                	<a4j:ajax event="blur" render="userNameGroup" execute="@this" listener="#{usersBB.addUserNameListner}"/>
+		                </h:inputText>
+		                <h:inputHidden id="userNameHidden" value="#{usersBB.usersDto.userObj.userName}"
+		                	 required="true" requiredMessage="#{err['Users.required_userName']}"/>
+	                </h:panelGroup>
+	                <h:outputText value="#{msgs['Messages.expire_date']}" />
+	                <h:panelGroup id="toDateGroup">
+		                <rich:calendar id="toDateInput" datePattern="dd-MM-yyyy" value="#{usersBB.usersDto.expireDate}"
+		                	enableManualInput="true" showWeeksBar="false">
+		                	<a4j:ajax event="change" render="toDateGroup" execute="@this" listener="#{usersBB.expireDateListner}"/>
+		                </rich:calendar>
+		                <h:outputText value="#{usersBB.usersDto.userObj.expireDate}"/>
+		                <h:inputHidden id="toDateHidden" value="#{usersBB.usersDto.userObj.expireDate}"/>
+	                </h:panelGroup>
+	                <h:outputText value="#{msgs['Messages.active']}"/>
+	                <h:selectBooleanCheckbox id="activeInput" value="#{usersBB.usersDto.userObj.isactive}"/>
+	                <h:panelGroup>
+	                	<h:outputText value="#{msgs['Users.user_type']}"/>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <h:panelGroup>
+	                	<h:selectOneMenu id="userTypeInput" value="#{usersBB.usersDto.userObj.userInf.userType}" styleClass="dropDownStyle"
+	                		rendered="#{empty usersBB.usersDto.userObj.userId}" onchange="checkUserType();">
+		                	<f:selectItem itemLabel="#{msgs['Messages.selectList']}" itemValue=""/>
+		                	<f:selectItem itemLabel="#{msgs['Users.internal_type']}" itemValue="I"/>
+		                	<f:selectItem itemLabel="#{msgs['Users.external_type']}" itemValue="E"/>
+	                	</h:selectOneMenu>
+	                	<h:outputText value="#{usersBB.usersDto.userObj.userInf.userTypeString}" rendered="#{!empty usersBB.usersDto.userObj.userId}"/>
+	                	<h:inputHidden id="userTypeHidden" value="#{usersBB.usersDto.userObj.userInf.userType}"
+		                	 required="true" requiredMessage="#{err['Users.required_userType']}"/>
+	                </h:panelGroup>
+	                <h:panelGroup id="searchEmployee" style="display:none">
+	                	<h:outputText value="#{msgs['Employees.empNum']}"/>
+	            	<a4j:commandLink styleClass="no-decor" execute="@this" onclick="window.open('#{request.contextPath}/faces/pages/security/userEmployeesPopup.xhtml','Employee','width=500,height=550,scrollbars=1');">
+	                    <h:graphicImage library="images" name="iconSearchTransaction.gif" alt="#{msgs['Action.Search']}" style="border:none" />
+	                </a4j:commandLink>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <h:inputText id="employeeInput" maxlength="10" value="#{usersBB.usersDto.userObj.userInf.userId}" style="display:none"
+	                	required="true" requiredMessage="#{err['Users.required_employeeNum']}"/>
+	                <h:panelGroup id="userFullNameMessage" style="display:none">
+	                	<h:outputText value="#{msgs['Users.user_fullName']}"/>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <h:panelGroup id="userFullNameGroup" style="display:none">
+		                <h:inputText maxlength="50" id="userFullNameInput" value="#{usersBB.usersDto.userObj.userInf.userFullName}">
+		                	<a4j:ajax event="blur" render="userFullNameHidden" execute="@this"/>
+		                </h:inputText>
+		                <h:inputHidden id="userFullNameHidden" value="#{usersBB.usersDto.userObj.userInf.userFullName}"
+		                	 required="true" requiredMessage="#{err['Users.required_userFullName']}"/>
+	                </h:panelGroup>
+	                <h:outputText id="mailMessage" value="#{msgs['Users.user_mail']}" style="display:none"/>
+                	<h:inputText id="mailInput" value="#{usersBB.usersDto.userObj.userInf.userMail}" style="display:none"/>
+	                <h:outputText id="mobil1Message" value="#{msgs['Users.user_mob1']}" style="display:none"/>
+                	<h:inputText id="mobil1Input" value="#{usersBB.usersDto.userObj.userInf.mobNum}" style="display:none"/>
+	                <h:outputText id="mobil2Message" value="#{msgs['Users.user_mob2']}" style="display:none"/>
+                	<h:inputText id="mobil2Input" value="#{usersBB.usersDto.userObj.userInf.mobNum2}" style="display:none"/>
+                	<h:outputText/>
+	            	<h:inputHidden value="#{usersBB.usersDto.userObj.userId}"/>
+	            </h:panelGrid>
+                <h:panelGrid id="addEditButtonGrid" columns="3" styleClass="searchactionTB_Bg" cellspacing="0" cellpadding="0" border="0">
+		            <h:commandButton style="display:none" action="#{usersBB.saveListner}" id="saveButton"/>
+		            <a4j:commandButton styleClass="Btn_S_Normal" value="#{msgs['Action.save']}"
+		                oncomplete="if (#{facesContext.maximumSeverity==null}) {document.getElementById('manageUsersForm:saveButton').click();}"
+		            	execute="editGrid"/>
+		            <h:commandButton styleClass="Btn_S_Normal" value="#{msgs['Action.cancel']}"
+		            	immediate="true" action="users.xhtml"/>
+		        </h:panelGrid>
+			</h:form>
+	</ui:define>
+</ui:composition>

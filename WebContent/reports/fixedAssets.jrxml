@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fixedAssets" printOrder="Horizontal" pageWidth="120" pageHeight="60" orientation="Landscape" columnWidth="120" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" resourceBundle="com.SAPTCO.common.resources.messages.reportMessages">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="com.barcodelib.barcode.BarcodeFactory"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="tagNum" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="region" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="assetNum" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="empNum" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="fromDept" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="toDept" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT DISTINCT ASST.TAG_NUMBER TAG_NUMBER,substr(ASST.DESCRIPTION,1,25) DESCRIPTION
+		FROM FA_ADDITIONS_ASSET_V ASST,
+	         FA_CATEGORIES_B CAT,
+	         FA_ASSET_KEYWORDS FAK,
+	         FA_DISTRIBUTION_HISTORY FD,
+	         GL_CODE_COMBINATIONS GL,
+	         FA_TRANSACTION_HISTORY_TRX_V TRX,
+	        FA_FINANCIAL_INQUIRY_COST_V A,
+	         FA_LOCATIONS LOC,
+	         PER_ALL_PEOPLE_F EMP
+		WHERE 1=1
+	         AND ASST.ASSET_NUMBER=FD.ASSET_ID
+	         AND FD.CODE_COMBINATION_ID = GL.CODE_COMBINATION_ID
+	         AND FD.DATE_INEFFECTIVE IS NULL
+	            AND FD.LOCATION_ID = LOC.LOCATION_ID
+	             AND FD.DISTRIBUTION_ID = (SELECT MAX(TDD.DISTRIBUTION_ID) FROM FA_DISTRIBUTION_HISTORY TDD WHERE FD.ASSET_ID = TDD.ASSET_ID)
+	         AND ASST.ASSET_KEY_CCID = FAK.CODE_COMBINATION_ID(+)
+	         AND ASST.ASSET_CATEGORY_ID = CAT.CATEGORY_ID
+	         AND TRX.ASSET_ID = FD.ASSET_ID
+	         AND TRX.TRANSACTION_HEADER_ID = (SELECT MAX(TRANSACTION_HEADER_ID) FROM FA_TRANSACTION_HISTORY_TRX_V TRX1 WHERE TRX1.ASSET_ID = TRX.ASSET_ID)
+	         AND A.ASSET_ID =   ASST.ASSET_ID
+	         AND A.TRANSACTION_HEADER_ID_IN = (SELECT MAX (TRANSACTION_HEADER_ID_IN)FROM  FA_FINANCIAL_INQUIRY_COST_V A1 WHERE A1.ASSET_ID =A.ASSET_ID)
+	         AND NOT EXISTS (SELECT FAR.ASSET_ID FROM FA_RETIREMENTS_V FAR WHERE FAR.ASSET_ID = ASST.ASSET_NUMBER)
+	         AND FD.ASSIGNED_TO = EMP.PERSON_ID(+)
+	         AND (EMP.EFFECTIVE_END_DATE = (SELECT MAX(EMPL.EFFECTIVE_END_DATE) FROM PER_ALL_PEOPLE_F EMPL WHERE EMPL.PERSON_ID = FD.ASSIGNED_TO) OR FD.ASSIGNED_TO IS NULL)
+	         AND ASST.ATTRIBUTE2 = 'Yes'
+	         AND (ASST.TAG_NUMBER = $P{tagNum} OR $P{tagNum} IS NULL)
+	         AND (ASST.ASSET_NUMBER = $P{assetNum} OR $P{assetNum} IS NULL)
+	         AND (EMP.PERSON_ID = $P{empNum} OR $P{empNum} IS NULL)
+	         AND (LOC.SEGMENT1 = $P{region} OR $P{region} IS NULL)
+	         AND (GL.SEGMENT3 >= $P{fromDept} OR $P{fromDept} IS NULL)
+	         AND (GL.SEGMENT3 <= $P{toDept} OR $P{toDept} IS NULL)
+		ORDER BY ASST.TAG_NUMBER]]>
+	</queryString>
+	<field name="TAG_NUMBER" class="java.lang.String"/>
+	<field name="DESCRIPTION" class="java.lang.String"/>
+	<detail>
+		<band height="60" splitType="Stretch">
+			<componentElement>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="120" height="25"/>
+				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
+					<jr:codeExpression><![CDATA[$F{TAG_NUMBER}]]></jr:codeExpression>
+				</jr:Code128>
+			</componentElement>
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="20" width="120" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESCRIPTION}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

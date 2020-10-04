@@ -1,0 +1,100 @@
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD iBatis Mapper 3.0 //EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.SAPTCO.common.ibatis.mapperInterface.General">
+	
+	<!--get list of branches-->
+	<resultMap id="getBranchesListResult" type="Branch">     
+		<id property="id" column="BRANCH_ID"/>
+		<result property="code" column="BRANCH_CODE"/>
+		<result property="localeName" column="BRANCH_AR_DESC"/>
+		<result property="foreignName" column="BRANCH_EN_DESC"/>
+	</resultMap>
+	
+	<select id="getBranchesList" resultMap="getBranchesListResult">
+		SELECT BRANCH_ID,BRANCH_CODE,BRANCH_AR_DESC,BRANCH_EN_DESC
+		FROM SAP_BRANCHES
+		WHERE BRANCH_IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/>
+		ORDER BY BRANCH_CODE
+	</select>
+	
+	<!--Hasona Sanad : get list of HR branches-->
+	<resultMap id="getHrBranchesListResult" type="HrBranch">     
+		<result property="id" column="HR_BRANCH_CODE"/>
+		<result property="hrBranchDes" column="HR_BRANCH"/>
+	</resultMap>
+	
+	<select id="getHrBranchesList" resultMap="getHrBranchesListResult">
+		SELECT  DISTINCT HR_BRANCH_CODE  ,    HR_BRANCH 
+		FROM SAP_USER_INF  WHERE 
+         (HR_BRANCH_CODE IS NOT NULL and HR_BRANCH IS NOT NULL)
+            and USER_IS_ACTIVE =1
+		ORDER BY HR_BRANCH_CODE
+	</select>
+	
+	<resultMap id="getSystemsListResult" type="System">     
+		<id property="id" column="SYSTEM_ID"/>
+		<result property="code" column="CODE"/>
+		<result property="localeName" column="LOCALE_NAME"/>
+		<result property="foreignName" column="FOREIGN_NAME"/>
+	</resultMap>
+	
+	<select id="getSystemsList" resultMap="getSystemsListResult" parameterType="Long">
+		SELECT SYSTEM_ID,CODE,LOCALE_NAME,FOREIGN_NAME FROM SYSTEMS where COMPANY_ID = #{companyId}
+	</select>
+	
+	<resultMap id="getCompaniesListResult" type="Company">     
+		<id property="id" column="COMPANY_ID"/>
+		<result property="localeName" column="COMPANY_AR_NAME"/>
+		<result property="foreignName" column="COMPANY_EN_NAME"/>
+	</resultMap>
+	
+	<select id="getCompaniesList" resultMap="getCompaniesListResult">
+		select COMPANY_ID,COMPANY_AR_NAME,COMPANY_EN_NAME from COMPANIES
+	</select>
+	
+	<resultMap type="Branch" id="getBranchesByUserResult">
+		<id property="branchId" column="BRANCH_ID"/>
+		<result property="code" column="BRANCH_CODE"/>
+		<result property="localeName" column="BRANCH_AR_DESC"/>
+		<result property="foreignName" column="BRANCH_EN_DESC"/>
+	</resultMap>
+
+	<select id="getBranchesByUser" resultMap="getBranchesByUserResult" parameterType="General">
+		SELECT BR.BRANCH_ID,BR.BRANCH_CODE,BR.BRANCH_AR_DESC,BR.BRANCH_EN_DESC
+		FROM SAP_BRANCHES BR INNER JOIN SAP_USER_BRANCHES UB ON (BR.BRANCH_ID = UB.BRANCH_ID)
+		WHERE UB.USER_ID = #{userId} AND BR.BRANCH_IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/>
+		AND UB.IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/> AND (UB.TO_DATE IS NULL OR UB.TO_DATE &gt; SYSDATE)
+		ORDER BY BR.BRANCH_CODE
+	</select>
+	
+	<select id="deleteMethod" statementType="CALLABLE" resultType="General" parameterType="General">
+		{call SAPTCO_DATA.DELETE_TABLE_DATA(#{tableName,mode=IN,jdbcType=VARCHAR},
+			#{columnName,mode=IN,jdbcType=VARCHAR},#{id,mode=IN,jdbcType=NUMERIC},
+			#{createUser,mode=IN,jdbcType=NUMERIC},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+
+	<resultMap type="SysCodesBean" id="vehicleTypeResult">
+		<id property="id" column="CODE_ID"/>
+		<result property="code" column="CODE"/>
+		<result property="localeName" column="CODE_AR_DESC"/>
+		<result property="foreignName" column="CODE_EN_DESC"/>
+	</resultMap>
+	
+	<select id="getVeichleTypesList" resultMap="vehicleTypeResult">
+		SELECT CODE_ID,CODE,CODE_AR_DESC,CODE_EN_DESC FROM SAP_SYS_CODES
+		WHERE CODE_IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/> AND TYPE_ID = <include refid="driverAllowance.VEICHLE_TYPE"/>
+	</select>
+	
+	<resultMap type="BaseDto" id="getHajBranchesresult">
+		<id property="id" column="BRANCH_ID"/>
+		<result property="code" column="BRANCH_CODE"/>
+		<result property="localeName" column="BRANCH_AR_DESC"/>
+		<result property="foreignName" column="BRANCH_EN_DESC"/>
+	</resultMap>
+	
+	<select id="getHajBranches" resultMap="getHajBranchesresult">
+	    select * from sap_branches where system_id = 13
+	</select>
+	
+</mapper>

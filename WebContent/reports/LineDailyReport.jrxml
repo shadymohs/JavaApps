@@ -1,0 +1,635 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LineDailyReport" printOrder="Horizontal" pageWidth="842" pageHeight="545" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" resourceBundle="com.SAPTCO.common.resources.messages.reportMessages">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="style1" mode="Transparent" backcolor="#CCCCCC" fill="Solid" hAlign="Center" vAlign="Middle" fontName="Arial" isBold="true" isItalic="false" pdfEncoding="Identity-H" isPdfEmbedded="true">
+		<box>
+			<pen lineWidth="1.0"/>
+			<topPen lineWidth="1.0"/>
+			<leftPen lineWidth="1.0"/>
+			<bottomPen lineWidth="1.0"/>
+			<rightPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<parameter name="P_FROM_DATE" class="java.lang.String"/>
+	<parameter name="P_TO_DATE" class="java.lang.String"/>
+	<parameter name="P_LINE_CODE" class="java.lang.Long"/>
+	<parameter name="P_NOF_PASSENGERS" class="java.lang.Long"/>
+	<parameter name="P_GOING_RETURN" class="java.lang.Integer"/>
+	<parameter name="P_REF_CURSOR" class="java.sql.ResultSet" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString language="plsql">
+		<![CDATA[{call TR_REPORTS_PKG.LINE_DETAILS_REPORT($P{P_FROM_DATE},$P{P_TO_DATE},
+$P{P_LINE_CODE},$P{P_NOF_PASSENGERS},$P{P_GOING_RETURN},$P{P_REF_CURSOR})}]]>
+	</queryString>
+	<field name="TRIP_DATE" class="java.util.Date"/>
+	<field name="LINE_CODE" class="java.lang.String"/>
+	<field name="LINE_DESCRIPTION_AR" class="java.lang.String"/>
+	<field name="LINE_DESCRIPTION_EN" class="java.lang.String"/>
+	<field name="NOF_TRIPS" class="java.lang.Long"/>
+	<field name="NOF_PASSENGERS" class="java.lang.Long"/>
+	<field name="SEATS_OCCUPANCY" class="java.lang.Long"/>
+	<field name="NOF_BUSES" class="java.lang.Long"/>
+	<field name="FIX_COST_OF_BUS" class="java.lang.Long"/>
+	<field name="TOTAL_TRIP_KMS" class="java.lang.Long"/>
+	<field name="TOTAL_COST_OF_KMS" class="java.lang.Long"/>
+	<field name="TOTAL_TRIP_HRS" class="java.lang.Float"/>
+	<field name="TOTAL_COST_OF_HRS" class="java.lang.Float"/>
+	<field name="TOTAL_VARIABLE_COST" class="java.lang.Float"/>
+	<field name="TOTAL_REVENUE" class="java.lang.Float"/>
+	<field name="TOTAL_COST" class="java.lang.Float"/>
+	<field name="PROFIT_LOSS_AMOUNT" class="java.lang.Float"/>
+	<field name="PROFIT_PERCENT" class="java.lang.Float"/>
+	<variable name="tot_trips" class="java.lang.Long" resetType="Group" resetGroup="trip_date" calculation="Count">
+		<variableExpression><![CDATA[$F{NOF_TRIPS}]]></variableExpression>
+	</variable>
+	<variable name="tot_pass" class="java.lang.Long" resetType="Group" resetGroup="trip_date" calculation="Sum">
+		<variableExpression><![CDATA[$F{NOF_PASSENGERS}]]></variableExpression>
+	</variable>
+	<variable name="tot_seats" class="java.lang.Float" resetType="Group" resetGroup="trip_date" calculation="Sum">
+		<variableExpression><![CDATA[$F{SEATS_OCCUPANCY}]]></variableExpression>
+	</variable>
+	<variable name="no_bus" class="java.lang.Long" resetType="Group" resetGroup="trip_date" calculation="Sum">
+		<variableExpression><![CDATA[$F{NOF_BUSES}]]></variableExpression>
+	</variable>
+	<variable name="total_fix" class="java.lang.Float" resetType="Group" resetGroup="trip_date" calculation="Sum">
+		<variableExpression><![CDATA[$F{FIX_COST_OF_BUS}]]></variableExpression>
+	</variable>
+	<variable name="total kms" class="java.lang.Long" resetType="Group" resetGroup="trip_date" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_TRIP_KMS}]]></variableExpression>
+	</variable>
+	<variable name="total_kms_cost" class="java.lang.Float" resetType="Group" resetGroup="trip_date" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_COST_OF_KMS}]]></variableExpression>
+	</variable>
+	<variable name="tot_hrs" class="java.lang.Float" resetType="Group" resetGroup="trip_date" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_TRIP_HRS}]]></variableExpression>
+	</variable>
+	<variable name="tot_hr_cost" class="java.lang.Float" resetType="Group" resetGroup="trip_date" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_COST_OF_HRS}]]></variableExpression>
+	</variable>
+	<variable name="tot_v_cost" class="java.lang.Float" resetType="Group" resetGroup="trip_date" incrementType="Group" incrementGroup="trip_date" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_VARIABLE_COST}]]></variableExpression>
+	</variable>
+	<variable name="tot_revnue" class="java.lang.Float" resetType="Group" resetGroup="trip_date" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_REVENUE}]]></variableExpression>
+	</variable>
+	<variable name="tot_cost" class="java.lang.Float" resetType="Group" resetGroup="trip_date" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_COST}]]></variableExpression>
+	</variable>
+	<variable name="tot_prof_amt" class="java.lang.Float" resetType="Group" resetGroup="trip_date" calculation="Sum">
+		<variableExpression><![CDATA[$F{PROFIT_LOSS_AMOUNT}]]></variableExpression>
+	</variable>
+	<variable name="tot_prof_loss" class="java.lang.Float" resetType="Group" resetGroup="trip_date" calculation="Sum">
+		<variableExpression><![CDATA[$F{PROFIT_PERCENT}]]></variableExpression>
+	</variable>
+	<variable name="R_TOT_TRIPS" class="java.lang.Long" calculation="Count">
+		<variableExpression><![CDATA[$F{NOF_TRIPS}]]></variableExpression>
+	</variable>
+	<variable name="R_TOT_PASS" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{NOF_PASSENGERS}]]></variableExpression>
+	</variable>
+	<variable name="R_TOT_STEATS" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{SEATS_OCCUPANCY}]]></variableExpression>
+	</variable>
+	<variable name="R_NO_BUS" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{NOF_BUSES}]]></variableExpression>
+	</variable>
+	<variable name="R_TOT_FIX" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{FIX_COST_OF_BUS}]]></variableExpression>
+	</variable>
+	<variable name="R_TOT_KM" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_TRIP_KMS}]]></variableExpression>
+	</variable>
+	<variable name="R_TOT_KM_COST" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_COST_OF_KMS}]]></variableExpression>
+	</variable>
+	<variable name="R_TOT_HRS" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_TRIP_HRS}]]></variableExpression>
+	</variable>
+	<variable name="R_TOT_JRS_COST" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_COST_OF_HRS}]]></variableExpression>
+	</variable>
+	<variable name="R_TOT_V_COST" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_VARIABLE_COST}]]></variableExpression>
+	</variable>
+	<variable name="R_TOT_REVENUE" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_REVENUE}]]></variableExpression>
+	</variable>
+	<variable name="R_TOT_COST" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_COST}]]></variableExpression>
+	</variable>
+	<variable name="R_TOT_PROF" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{PROFIT_LOSS_AMOUNT}]]></variableExpression>
+	</variable>
+	<variable name="R_TOT_PROF_LOSS" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{PROFIT_PERCENT}]]></variableExpression>
+	</variable>
+	<group name="trip_date">
+		<groupExpression><![CDATA[$F{TRIP_DATE}]]></groupExpression>
+		<groupHeader>
+			<band height="42">
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement x="63" y="2" width="100" height="20"/>
+					<textElement>
+						<font fontName="Arial" pdfFontName="arial" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TRIP_DATE}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement mode="Transparent" x="4" y="1" width="59" height="20" backcolor="#CCCCCC"/>
+					<textElement>
+						<font fontName="Arial" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{tripDate}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="720" y="21" width="38" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{profitLossAmount}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="600" y="21" width="40" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{totalVariableCost}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="145" y="21" width="95" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{lineDesc}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="360" y="21" width="40" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{numberOfBusses}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="520" y="21" width="40" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{totalTripHRS}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="67" y="21" width="78" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{lineDesc}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="320" y="21" width="40" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{seatsOccupancy}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="680" y="21" width="40" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{totalCost}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="560" y="21" width="40" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{totalCostOfHRS}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="758" y="21" width="44" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{profitPercent}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="440" y="21" width="40" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{totalTripKMS}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="400" y="21" width="40" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{fixCostOfBus}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="240" y="21" width="40" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{numberOfTrips}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="480" y="21" width="40" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{totalCostOfKMS}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="640" y="21" width="40" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{totalRevenue}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="280" y="21" width="40" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{numberOfPassengers}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="2" y="21" width="65" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{line_no}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="37">
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="280" y="10" width="40" height="20" backcolor="#FFFFCC"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_pass}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="240" y="10" width="40" height="20" backcolor="#FFFFCC"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_trips}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="320" y="10" width="40" height="20" backcolor="#FFFFCC"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_seats}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="360" y="10" width="40" height="20" backcolor="#FFFFCC"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{no_bus}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="400" y="10" width="40" height="20" backcolor="#FFFFCC"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{total_fix}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="440" y="10" width="40" height="20" backcolor="#FFFFCC"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{total kms}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="480" y="10" width="40" height="20" backcolor="#FFFFCC"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{total_kms_cost}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="520" y="10" width="40" height="20" backcolor="#FFFFCC"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_hrs}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="560" y="10" width="40" height="20" backcolor="#FFFFCC"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_v_cost}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="640" y="10" width="40" height="20" backcolor="#FFFFCC"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_revnue}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="680" y="10" width="40" height="20" backcolor="#FFFFCC"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_cost}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="758" y="10" width="44" height="20" backcolor="#FFFFCC"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_prof_loss}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="720" y="10" width="38" height="20" backcolor="#FFFFCC"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_prof_amt}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="600" y="10" width="40" height="20" backcolor="#FFFFCC"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_hr_cost}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="style1" mode="Opaque" x="2" y="10" width="238" height="20" backcolor="#FFFFCC"/>
+					<textElement>
+						<font fontName="Arial" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{tot_tripdt}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement style="style1" x="2" y="0" width="65" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{LINE_CODE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement style="style1" x="67" y="0" width="78" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{LINE_DESCRIPTION_AR}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement style="style1" x="145" y="0" width="95" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{LINE_DESCRIPTION_EN}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement style="style1" x="240" y="0" width="40" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOF_TRIPS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement style="style1" x="280" y="0" width="40" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOF_PASSENGERS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement style="style1" x="320" y="0" width="40" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SEATS_OCCUPANCY}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement style="style1" x="360" y="0" width="40" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOF_BUSES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement style="style1" x="400" y="0" width="40" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FIX_COST_OF_BUS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement style="style1" x="440" y="0" width="40" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTAL_TRIP_KMS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement style="style1" x="480" y="0" width="40" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTAL_COST_OF_KMS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement style="style1" x="520" y="0" width="40" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTAL_TRIP_HRS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement style="style1" x="560" y="0" width="40" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTAL_COST_OF_HRS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement style="style1" x="600" y="0" width="40" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTAL_VARIABLE_COST}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement style="style1" x="640" y="0" width="40" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTAL_REVENUE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement style="style1" x="680" y="0" width="40" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTAL_COST}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement style="style1" x="720" y="0" width="38" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PROFIT_LOSS_AMOUNT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement style="style1" x="758" y="0" width="44" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PROFIT_PERCENT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="21" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="702" y="0" width="100" height="20"/>
+				<textElement>
+					<font fontName="Arial" pdfFontName="arial" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" pdfFontName="arial" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="82" y="0" width="40" height="20"/>
+				<textElement>
+					<font fontName="Arial" pdfFontName="arial" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="22" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="240" y="0" width="40" height="20" backcolor="#FFFFCC"/>
+				<textElement>
+					<font fontName="Arial" size="8" pdfFontName="arial" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{R_TOT_TRIPS}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="280" y="0" width="40" height="20" backcolor="#FFFFCC"/>
+				<textElement>
+					<font fontName="Arial" size="8" pdfFontName="arial" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{R_TOT_PASS}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="320" y="0" width="40" height="20" backcolor="#FFFFCC"/>
+				<textElement>
+					<font fontName="Arial" size="8" pdfFontName="arial" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{R_TOT_STEATS}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="360" y="0" width="40" height="20" backcolor="#FFFFCC"/>
+				<textElement>
+					<font fontName="Arial" size="8" pdfFontName="arial" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{R_NO_BUS}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="400" y="0" width="40" height="20" backcolor="#FFFFCC"/>
+				<textElement>
+					<font fontName="Arial" size="8" pdfFontName="arial" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{R_TOT_FIX}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="440" y="0" width="40" height="20" backcolor="#FFFFCC"/>
+				<textElement>
+					<font fontName="Arial" size="8" pdfFontName="arial" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{R_TOT_KM}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="480" y="0" width="40" height="20" backcolor="#FFFFCC"/>
+				<textElement>
+					<font fontName="Arial" size="8" pdfFontName="arial" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{R_TOT_KM_COST}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="520" y="0" width="40" height="20" backcolor="#FFFFCC"/>
+				<textElement>
+					<font fontName="Arial" size="8" pdfFontName="arial" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{R_TOT_HRS}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="560" y="0" width="40" height="20" backcolor="#FFFFCC"/>
+				<textElement>
+					<font fontName="Arial" size="8" pdfFontName="arial" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{R_TOT_JRS_COST}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="600" y="0" width="40" height="20" backcolor="#FFFFCC"/>
+				<textElement>
+					<font fontName="Arial" size="8" pdfFontName="arial" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{R_TOT_V_COST}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="640" y="0" width="40" height="20" backcolor="#FFFFCC"/>
+				<textElement>
+					<font fontName="Arial" size="8" pdfFontName="arial" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{R_TOT_REVENUE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="680" y="0" width="40" height="20" backcolor="#FFFFCC"/>
+				<textElement>
+					<font fontName="Arial" size="8" pdfFontName="arial" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{R_TOT_COST}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="720" y="0" width="42" height="20" backcolor="#FFFFCC"/>
+				<textElement>
+					<font fontName="Arial" size="8" pdfFontName="arial" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{R_TOT_PROF}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="758" y="0" width="44" height="20" backcolor="#FFFFCC"/>
+				<textElement>
+					<font fontName="Arial" size="8" pdfFontName="arial" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{R_TOT_PROF_LOSS}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="1" y="0" width="239" height="20" backcolor="#FFFFCC"/>
+				<textElement>
+					<font fontName="Arial" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{tot_rep}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

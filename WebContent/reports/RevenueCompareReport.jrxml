@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RevenueCompareReport" printOrder="Horizontal" pageWidth="850" pageHeight="545" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="810" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" resourceBundle="com.SAPTCO.common.resources.messages.reportMessages">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="style1" mode="Transparent" backcolor="#CCCCCC" fill="Solid" hAlign="Center" vAlign="Middle" fontName="Arial" isBold="true" isItalic="false" pdfEncoding="Identity-H" isPdfEmbedded="true">
+		<box>
+			<pen lineWidth="1.0"/>
+			<topPen lineWidth="1.0"/>
+			<leftPen lineWidth="1.0"/>
+			<bottomPen lineWidth="1.0"/>
+			<rightPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<parameter name="P_FROM_DATE" class="java.lang.String"/>
+	<parameter name="P_TO_DATE" class="java.lang.String"/>
+	<parameter name="P_TRIP_CODE" class="java.lang.Long"/>
+	<parameter name="P_REF_CURSOR" class="java.sql.ResultSet" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="logopath" class="java.lang.String"/>
+	<queryString language="plsql">
+		<![CDATA[{call TR_REPORTS_PKG.REV_COMPARE_REPORT($P{P_FROM_DATE},$P{P_TO_DATE},
+$P{P_TRIP_CODE},$P{P_REF_CURSOR})}]]>
+	</queryString>
+	<field name="TRIP_CODE" class="java.lang.String"/>
+	<field name="NOF_TRIPS" class="java.lang.Long"/>
+	<field name="TOTAL_REVENUE" class="java.lang.Float"/>
+	<field name="TOTAL_COST" class="java.lang.Float"/>
+	<field name="NET_REVENUE" class="java.lang.Long"/>
+	<field name="LYR_NOF_TRIPS" class="java.lang.Long"/>
+	<field name="LYR_TOTAL_REVENUE" class="java.lang.Long"/>
+	<field name="LYR_TOTAL_COST" class="java.lang.Long"/>
+	<field name="LYR_NET_REVENUE" class="java.lang.Long"/>
+	<field name="DIFF_AMOUNT" class="java.lang.Long"/>
+	<variable name="R_TOT_TRIPS" class="java.lang.Long" calculation="Count">
+		<variableExpression><![CDATA[$F{TRIP_CODE}]]></variableExpression>
+	</variable>
+	<variable name="R_TOT_NO_TRIPS" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{NOF_TRIPS}]]></variableExpression>
+	</variable>
+	<variable name="R_TOT_REVENUE" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_REVENUE}]]></variableExpression>
+	</variable>
+	<variable name="R_TOT_COST" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_COST}]]></variableExpression>
+	</variable>
+	<variable name="R_TOT_NET_REV" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{NET_REVENUE}]]></variableExpression>
+	</variable>
+	<variable name="R_LYR_NO_TRIPS" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{LYR_NOF_TRIPS}]]></variableExpression>
+	</variable>
+	<variable name="R_LYR_TOT_REV" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{LYR_TOTAL_REVENUE}]]></variableExpression>
+	</variable>
+	<variable name="R_LYR_TOT_COST" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{LYR_TOTAL_COST}]]></variableExpression>
+	</variable>
+	<variable name="R_LYR_NET_REV" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{LYR_NET_REVENUE}]]></variableExpression>
+	</variable>
+	<variable name="R_DIFF_AMT" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{DIFF_AMOUNT}]]></variableExpression>
+	</variable>
+	<group name="trip_date">
+		<groupExpression><![CDATA[]]></groupExpression>
+	</group>
+	<title>
+		<band height="59">
+			<textField isBlankWhenNull="true">
+				<reportElement x="185" y="5" width="304" height="50"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="14" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{RevenuecompareReport}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="716" y="8" width="92" height="21"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true" pdfFontName="Arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{fromdate}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="566" y="8" width="78" height="21"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true" pdfFontName="Arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{tripNumber}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="644" y="8" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" pdfFontName="Arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_FROM_DATE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="716" y="26" width="92" height="21"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true" pdfFontName="Arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{Todate}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="495" y="8" width="71" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" pdfFontName="Arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_TRIP_CODE}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" isUsingCache="true">
+				<reportElement x="9" y="9" width="168" height="38"/>
+				<imageExpression><![CDATA[$P{logopath}]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement x="644" y="27" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" pdfFontName="Arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_TO_DATE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="30">
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="320" y="10" width="80" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{net_rev}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="640" y="10" width="80" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{lyr_net_rev}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="720" y="10" width="80" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{diff_amt}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="480" y="10" width="80" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{total_rev}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="400" y="10" width="80" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{no_trips}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="80" y="10" width="80" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{numberOfTrips}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="560" y="10" width="80" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{lyr_tot_cost}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="2" y="10" width="78" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{tripNumber}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="160" y="10" width="80" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{totalRevenue}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" mode="Opaque" x="240" y="10" width="80" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{totalCost}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="style1" x="2" y="0" width="78" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{TRIP_CODE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" x="80" y="0" width="80" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{NOF_TRIPS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" x="160" y="0" width="80" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{TOTAL_REVENUE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" x="240" y="0" width="80" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{TOTAL_COST}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" x="320" y="0" width="80" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{NET_REVENUE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" x="400" y="0" width="80" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{LYR_NOF_TRIPS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" x="480" y="0" width="80" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{LYR_TOTAL_REVENUE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" x="560" y="0" width="80" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{LYR_TOTAL_COST}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" x="640" y="0" width="80" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{LYR_NET_REVENUE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" x="720" y="0" width="80" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{DIFF_AMOUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="21" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="702" y="0" width="100" height="20"/>
+				<textElement>
+					<font fontName="Arial" pdfFontName="arial" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" pdfFontName="arial" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="82" y="0" width="40" height="20"/>
+				<textElement>
+					<font fontName="Arial" pdfFontName="arial" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="44" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="2" y="10" width="159" height="13" backcolor="#FFFFCC"/>
+				<textElement>
+					<font fontName="Arial" pdfFontName="arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{tot_rep}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" mode="Opaque" x="2" y="24" width="78" height="20" backcolor="#FFFFCC"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{R_TOT_TRIPS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" mode="Opaque" x="80" y="24" width="81" height="20" backcolor="#FFFFCC"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{R_TOT_NO_TRIPS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" mode="Opaque" x="240" y="24" width="80" height="20" backcolor="#FFFFCC"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{R_TOT_COST}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" mode="Opaque" x="320" y="24" width="80" height="20" backcolor="#FFFFCC"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{R_TOT_NET_REV}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" mode="Opaque" x="400" y="24" width="80" height="20" backcolor="#FFFFCC"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{R_LYR_NO_TRIPS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" mode="Opaque" x="480" y="24" width="80" height="20" backcolor="#FFFFCC"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{R_LYR_TOT_REV}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" mode="Opaque" x="161" y="24" width="79" height="20" backcolor="#FFFFCC"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{R_TOT_REVENUE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" mode="Opaque" x="560" y="24" width="80" height="20" backcolor="#FFFFCC"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{R_LYR_TOT_COST}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" mode="Opaque" x="640" y="24" width="80" height="20" backcolor="#FFFFCC"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{R_LYR_NET_REV}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" mode="Opaque" x="720" y="24" width="80" height="20" backcolor="#FFFFCC"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{R_DIFF_AMT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

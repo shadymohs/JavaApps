@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">Found lost luggage</ui:define>
+   	<ui:define name="content">
+		<h:form id="lostLuggageForm">
+		
+		<h3><h:outputText value="#{msgs['foundLostLuggage.title']}"/></h3>
+			<h:panelGrid columns="2" styleClass="customTB95" cellpadding="0" border="0"
+				columnClasses="columnWidth30, columnWidth70" cellspacing="0" style="margin: 0 auto;">
+				
+               <h:outputText value="#{msgs['foundLostLuggage.stickerNumber']}"/>
+               <h:inputText value="#{lostLuggageBB.lostLuggageDto.stickerNumber}" />
+               <h:outputText value="#{msgs['foundLostLuggage.reservationNum']}"/>
+               <h:inputText value="#{lostLuggageBB.lostLuggageDto.reservationNumber}" />
+               
+				
+			</h:panelGrid>
+			<h:commandButton styleClass="buttonStyle" action="#{lostLuggageBB.searchBySticker}" value="#{msgs['foundLostLuggage.searchBySticker']}" 
+			        disabled="#{lostLuggageBB.isSavedSuccessfully}"/>
+			
+		</h:form>
+		
+		<h:form id="lostLuggageFoundForm" rendered="#{!empty lostLuggageBB.lostLuggageDto.lostLuggageObj.ticketNumber}">
+		  <h4><h:outputText value="#{msgs['foundLostLuggage.title2']}"/></h4>
+		  <h:panelGrid columns="4" styleClass="customTB95" cellpadding="1" border="1"
+				 style="margin: 0 auto;" cellspacing="1" >
+				
+		       <h:outputText value="#{msgs['foundLostLuggage.ticketNumber']}"/>
+		       <h:outputText value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.ticketNumber}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.tripNumber']}"/>
+		       <h:outputText value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.tripCode}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.tripDate']}"/>
+		       <h:outputText value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.tripDateAsString}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.fromStation']}"/>
+		       <h:outputText value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.fromStation}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.toStation']}"/>
+		       <h:outputText value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.toStation}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.passengerName']}"/>
+		       <h:outputText value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.passengerName}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.contacteNumber']}"/>
+		       <h:outputText value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.contacteNumber}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.contactePass']}"/>
+            </h:panelGrid>   
+		</h:form>
+		
+		<h:form id="lostLuggageDataForm"  rendered="#{!empty lostLuggageBB.lostLuggageDto.lostLuggageObj.ticketNumber}">
+		  <h4><h:outputText value="#{msgs['foundLostLuggage.registerInfo']}"/></h4>
+		  <h:panelGrid columns="4" styleClass="customTB95" cellpadding="1" border="1"
+				 style="margin: 0 auto;" cellspacing="1" >
+				
+				<h:panelGroup>
+				<h:outputText value="#{msgs['Label.size']}"/>
+				<h:outputText value="*" style="color:red;" />
+				</h:panelGroup>
+                <h:selectOneMenu value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.size.id}"  required="true" requiredMessage="#{err['luggage.size_required']}" >
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{lostLuggageBB.sizeList}"/>
+				</h:selectOneMenu>
+				<h:panelGroup>
+				<h:outputText value="#{msgs['Label.class']}"/>
+				<h:outputText value="*" style="color:red;" />
+				</h:panelGroup>
+                <h:selectOneMenu value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.luggageClass.id}" required="true" requiredMessage="#{err['luggage.class_required']}" >
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{lostLuggageBB.luggageClassList}"/>
+				</h:selectOneMenu>
+				<h:panelGroup>
+				<h:outputText value="#{msgs['Label.color']}"/>
+				<h:outputText value="*" style="color:red;" />
+				</h:panelGroup>
+                <h:selectOneMenu value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.color.id}" required="true" requiredMessage="#{err['luggage.color_required']}"  >
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{lostLuggageBB.colorList}"/>
+				</h:selectOneMenu>
+				
+				<h:panelGroup>
+				<h:outputText value="#{msgs['foundLostLuggage.station']}"/>
+				<h:outputText value="*" style="color:red;" />
+				</h:panelGroup>
+                <h:selectOneMenu value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.stationId}" required="true"  requiredMessage="#{err['luggage.station_required']}" >
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{lostLuggageBB.stationList}"/>
+				  </h:selectOneMenu>
+			   <h:panelGroup>    
+			   <h:outputText value="#{msgs['foundLostLuggage.currentLocation']}"/>
+			   <h:outputText value="*" style="color:red;" />
+				</h:panelGroup>
+		       <h:inputText value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.currentLocation}"  required="true"  requiredMessage="#{err['luggage.location_required']}"/>  
+				
+				<h:panelGroup>
+				<h:outputText value="#{msgs['foundLostLuggage.foundDate']}"/>
+				<h:outputText value="*" style="color:red;" />
+				</h:panelGroup>
+				<rich:calendar id="foundDateInput" datePattern="dd-MM-yyyy" required="true" requiredMessage="#{err['Messages.required_Date']}"
+		        	enableManualInput="true" showWeeksBar="false" value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.foundDate}">
+		        </rich:calendar>  
+		       <h:outputText value="#{msgs['foundLostLuggage.specialMark']}"/>
+		       <h:inputText value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.specialMark}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.luggageContent']}"/>
+		       <h:inputText value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.luggageContent}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.line']}"/>
+		       <h:inputText value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.line}"/>
+		       <h:panelGroup>
+		       <h:outputText value="#{msgs['foundLostLuggage.refNumber']}"/>
+		       <h:outputText value="*" style="color:red;" />
+				</h:panelGroup>
+		       <h:inputText value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.refNumber}" required="true"  requiredMessage="#{err['luggage.refNum_required']}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.remarks']}"/>
+		       <h:inputText value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.remarks}"/>
+		       
+		        <h:outputLabel value="#{msgs['foundLostLuggage.image']}"/>
+				<rich:fileUpload addLabel="#{msgs['Action.add']}" deleteLabel="#{msgs['Action.delete']}" sizeExceededLabel="#{msgs['exceed_size']}" clearLabel="#{msgs['Action.delete']}"
+	            	clearAllLabel="#{msgs['Action.delete']}" uploadLabel="#{msgs['Action.upload']}" doneLabel="#{msgs['upload_success']}" serverErrorLabel="#{err['Messages.process_exception']}"
+	            	fileUploadListener="#{lostLuggageBB.listenerImage}" id="upload" acceptedTypes="pdf"  ontyperejected="alert('#{msgs['different_type_pdf']}');" maxFilesQuantity="1"/>
+				<h:commandLink styleClass="no-decor" action="#{lostLuggageBB.downloadUploadedImage}" title="#{msgs['Action.print']}" rendered="#{!empty lostLuggageBB.uploadedFile}">
+                    <h:graphicImage library="images" name="pdf.png" style="border:none" width="40" height="40"/>
+                </h:commandLink>
+                
+            </h:panelGrid>  
+            <h:outputText value=""/> 
+            <h:commandButton styleClass="buttonStyle" action="#{lostLuggageBB.saveLuggageData}" 
+                           rendered="#{baseBB.authorizeAdd and empty lostLuggageBB.lostLuggageDto.lostLuggageObj.lostLuggageId}" value="#{msgs['foundLostLuggage.save']}" />
+			
+			<h:panelGroup  rendered="#{!empty lostLuggageBB.lostLuggageDto.lostLuggageObj.lostLuggageId}">
+				<h:outputText value="#{msgs['foundLostLuggage.luggageId']}"/>
+				 <h:outputText value=""/> 
+				<h:outputText value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.lostLuggageId}" style="color:red;"  />
+			</h:panelGroup>
+		
+		</h:form>
+	</ui:define>
+</ui:composition>

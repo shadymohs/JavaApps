@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">Vehicle License</ui:define>
+   	<ui:define name="content">
+   		<h:form id="vehicleForm">
+			<rich:dataTable value="#{vehicleLicenceBB.vehicleLicenseTable}" var="br" id="table" rows="20" styleClass="newTable" style="width:100%;text-align:center;">
+				<f:facet name="noData">
+	                #{err['Messages.no_data']}
+	            </f:facet>
+	           
+	            <rich:column>
+	                <f:facet name="header">
+                		<h:outputText value="#{msgs['vehicleLicense.serialNo']}"/>
+	                	<h:inputText value="#{vehicleLicenceBB.vehicleLicenceDto.serialNo}"/>
+                	</f:facet>
+	                <h:outputText value="#{br.serialNo}" />
+	            </rich:column>
+	             <rich:column>
+	                <f:facet name="header">
+                		<h:outputText value="#{msgs['vehicleLicense.tagNumber']}"/>
+	                	<h:inputText value="#{vehicleLicenceBB.vehicleLicenceDto.tagNumber}"/>
+                	</f:facet>
+	                <h:outputText value="#{br.tagNumber}" />
+	            </rich:column>
+	            
+	            <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['vehicleLicense.sectorName']}
+	                </f:facet>
+	                <h:outputText value="#{br.sectorName}" />
+	            </rich:column>
+	           <!-- <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['vehicleLicense.FXplateNo']}
+	                </f:facet>
+	                <h:outputText value="#{br.FXplateNo}" />
+	            </rich:column>  --> 
+	             <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['vehicleLicense.plateNumber']}
+	                </f:facet>
+	                <h:outputText value="#{br.plateNumber}" />
+	            </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['vehicleLicense.plateLetterRight']}
+	                </f:facet>
+	                <h:outputText value="#{br.plateLetterRight}" />
+	            </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['vehicleLicense.plateLetterMiddle']}
+	                </f:facet>
+	                <h:outputText value="#{br.plateLetterMiddle}" />
+	            </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['vehicleLicense.plateLetterLeft']}
+	                </f:facet>
+	                <h:outputText value="#{br.plateLetterLeft}" />
+	            </rich:column>
+	            
+	            
+	             <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['vehicleLicense.plateType']}
+	                </f:facet>
+	               
+	                <h:selectOneMenu value="#{br.plateType}" disabled="true">
+						<f:selectItems value="#{vehicleLicenceBB.plateTypeList}"/>
+					</h:selectOneMenu>
+	            </rich:column>
+	             <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['vehicleLicense.busSeats']}
+	                </f:facet>
+	                <h:outputText value="#{br.busSeats}" />
+	            </rich:column>
+	             <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['vehicleLicense.licenseExpDate']}
+	                </f:facet>
+	                <h:outputText value="#{br.hijriExpDate}" />
+	            </rich:column>
+	              <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['vehicleLicense.registerWASEL']}
+	                </f:facet>
+	                <h:outputText value="#{br.registerWASEL}" />
+	            </rich:column>
+	            
+	            
+	            
+	            <rich:column>
+	            	<f:facet name="header">
+		            	<h:commandLink styleClass="no-decor" action="#{vehicleLicenceBB.vLSearchListner}" title="#{msgs['Action.Search']}" rendered="#{baseBB.authorizeSearchAll}">
+		                    <h:graphicImage library="images" name="search.png" style="border:none" width="25" height="25"/>
+		                </h:commandLink>
+	            	</f:facet>
+	                <h:commandLink styleClass="no-decor" rendered="#{baseBB.authorizeUpdate}" action="manageVehicleLicense.xhtml" immediate="true">
+	                    <h:graphicImage library="images" name="edit2.gif" alt="#{msgs['Action.edit']}" style="border:none" />
+			                    
+			                    <f:param name="serialNo" value="#{br.serialNo}"/>
+			                    <f:param name="tagNumber" value="#{br.tagNumber}"/>
+			                    <f:param name="sectorName" value="#{br.sectorName}"/>
+			                    <f:param name="FXplateNo" value="#{br.FXplateNo}"/>
+			                    <f:param name="plateNumber" value="#{br.plateNumber}"/>
+			                    <f:param name="plateType" value="#{br.plateType}"/>
+			                    <f:param name="sectorId" value="#{br.sectorId}"/>
+			                    <f:param name="plateLetterLeft" value="#{br.plateLetterLeft}"/>
+			                    <f:param name="plateLetterMiddle" value="#{br.plateLetterMiddle}"/>
+			                    <f:param name="plateLetterRight" value="#{br.plateLetterRight}"/>
+			                    <f:param name="busSeats" value="#{br.busSeats}"/>
+			                    <f:param name="licenseExpDate" value="#{br.licenseExpDate}"/>
+			                    <f:param name="hijriExpDate" value="#{br.hijriExpDate}"/>
+			                    <f:param name="isAddMode" value="0"/>
+			                    
+	                </h:commandLink>
+	                <h:outputText/>
+	                <a4j:commandLink styleClass="no-decor" execute="@this" rendered="#{baseBB.authorizeDelete}"
+	                    oncomplete="#{rich:component('confirmPane')}.show();">
+	                    <h:graphicImage library="images" name="delete.gif" alt="#{msgs['Action.delete']}" style="border:none"/>
+	                    <f:setPropertyActionListener target="#{vehicleLicenceBB.vehicleLicenceDto.vehicleLicenceObj}" value="#{br}" />
+	                </a4j:commandLink>
+	            </rich:column>
+	            
+	            <f:facet name="footer">
+	            	<h:panelGrid columns="2" width="100%" style="text-align:center;">
+	                	<rich:dataScroller for="table"/>
+		                <h:commandLink styleClass="no-decor" action="manageVehicleLicense.xhtml" actionListener="#{vehicleLicenceBB.addListner}" 
+		                               title="#{msgs['Action.add']}" immediate="true" rendered="#{baseBB.authorizeAdd}">
+		                    <h:graphicImage library="images" name="add.jpg" style="border:none" width="20" height="20"/>
+		                </h:commandLink>
+                	</h:panelGrid>
+	            </f:facet>
+	        </rich:dataTable>
+	       
+	        
+	        <rich:popupPanel modal="true" header="#{msgs['Messages.deleteMessege']}" id="confirmPane"
+	        	domElementAttachment="parent" width="200" height="80">
+	            <a4j:commandButton styleClass="Btn_S_Normal" value="#{msgs['Action.delete']}"
+	            	action="#{vehicleLicenceBB.deleteListner}" render="table" execute="confirmPane"
+	            	oncomplete="#{rich:component('confirmPane')}.hide();"/>
+	            <a4j:commandButton styleClass="Btn_S_Normal" value="#{msgs['Action.cancel']}" onclick="#{rich:component('confirmPane')}.hide(); return false;" />
+	        </rich:popupPanel>
+		
+		</h:form>
+	</ui:define>
+</ui:composition>

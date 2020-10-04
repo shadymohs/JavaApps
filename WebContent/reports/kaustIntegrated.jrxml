@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="kaustAllowance" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" resourceBundle="com.SAPTCO.common.resources.messages.reportMessages">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="serviceSubreportStream" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="sdpId" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="stationSubreportStream" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="userNumber" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="checkedPath" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="paramHeaderSubreport" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="sdp" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="user" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="uncheckedPath" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="subreportStream" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="logopath" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="p_branch_desc" class="java.lang.String"/>
+	<parameter name="p_username" class="java.lang.String"/>
+	<parameter name="system_name" class="java.lang.String"/>
+	<parameter name="systemId" class="java.lang.Long"/>
+	<parameter name="branchId" class="java.lang.Long"/>
+	<parameter name="year" class="java.lang.Integer"/>
+	<parameter name="month" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT AD.ALLOWANCE_DETAIL_ID, AD.TRIP_CODE, T.LOCALE_NAME, to_char(AD.TRIP_DATE,'dd-mm-yyyy') TRIP_DATE, to_char(AD.INTEGRATION_DATE,'dd-mm-yyyy') INTEGRATION_DATE,AD.DRIVER1_NUMBER d_num, AD.DRIVER1_NAME d_name,
+(AD.DRIVER1_ALLOWANCE+ AD.DIESEL_ALLOWANCE+AD.HOUSING_ALLOWANCE+
+AD.STAYING_ALLOWANCE+ AD.VISA_ALLOWANCE+ AD.BORDER_INSURANCE_ALLOWANCE+ AD.BORDER_STAYING_ALLOWANCE+ AD.WEEKLY_VACATION_ALLOW+ AD.INTERNATIONAL_STAYING_ALLOW+
+AD.INTERNAL_STAYING_ALLOW+AD.EVENT_VACATION_ALLOW+ AD.RAMADAN_ALLOWANCE+AD.OTHER_ALLOWANCE)  TOT,
+AD.IS_FIN_INTEGRATED, K.LOCALE_NAME KAUST_ALLOW_TYPE
+FROM ALLOWANCE_DETAILS  AD
+LEFT JOIN ALLOWANCE_TYPES T  ON AD.ALLOWANCE_TYPE_ID = T.ALLOWANCE_TYPE_ID
+LEFT JOIN SAP_USER_INF D ON  AD.DRIVER1_NUMBER=D.USER_INF_ID
+LEFT JOIN KAUST_ALLOW_TYPE K ON AD.KAUST_ALLOW_TYPE_ID = K.KAUST_ALLOW_TYPE_ID
+WHERE
+   AD.DRIVER1_NUMBER IS NOT NULL
+ AND AD.SYSTEM_ID = $P{systemId}
+ AND (AD.BRANCH_ID IS NULL OR AD.BRANCH_ID = $P{branchId})
+ AND to_char(AD.TRIP_DATE,'mm-yyyy') = lpad($P{month},2,'0') || '-' || $P{year}
+ORDER BY  AD.DRIVER1_NUMBER,AD.TRIP_DATE]]>
+	</queryString>
+	<field name="ALLOWANCE_DETAIL_ID" class="java.math.BigDecimal"/>
+	<field name="TRIP_CODE" class="java.lang.String"/>
+	<field name="LOCALE_NAME" class="java.lang.String"/>
+	<field name="TRIP_DATE" class="java.lang.String"/>
+	<field name="INTEGRATION_DATE" class="java.lang.String"/>
+	<field name="D_NUM" class="java.lang.String"/>
+	<field name="D_NAME" class="java.lang.String"/>
+	<field name="TOT" class="java.math.BigDecimal"/>
+	<field name="IS_FIN_INTEGRATED" class="java.lang.Integer"/>
+	<field name="KAUST_ALLOW_TYPE" class="java.lang.String"/>
+	<variable name="TOTAL" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOT}]]></variableExpression>
+	</variable>
+	<variable name="v_count" class="java.math.BigDecimal" calculation="Count">
+		<variableExpression><![CDATA[$F{TOT}]]></variableExpression>
+	</variable>
+	<pageHeader>
+		<band height="78" splitType="Stretch">
+			<textField>
+				<reportElement x="103" y="2" width="56" height="20"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="103" y="22" width="56" height="20"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{time}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="227" y="2" width="124" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="16" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{system_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="10" y="2" width="93" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" isUsingCache="true">
+				<reportElement x="427" y="2" width="168" height="38"/>
+				<imageExpression><![CDATA[$P{logopath}]]></imageExpression>
+			</image>
+			<textField pattern="h:mm:ss a" isBlankWhenNull="true">
+				<reportElement x="10" y="22" width="93" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="227" y="22" width="124" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_branch_desc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="191" y="47" width="178" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="16" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{IS_FIN_INTEGRATED}==1)?$R{intgReportTitle}:$R{non_intgReportTitle}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<textField>
+				<reportElement x="104" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{intgDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="174" y="0" width="62" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{date}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="23" width="589" height="1"/>
+			</line>
+			<textField>
+				<reportElement x="236" y="0" width="128" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{allowanceType}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="514" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{driver1Number}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="444" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{driver1Name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="364" y="0" width="80" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{tot1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="34" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{allowanceTypeDt}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="174" y="3" width="62" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRIP_DATE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="104" y="3" width="70" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INTEGRATION_DATE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="234" y="3" width="130" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{LOCALE_NAME}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="514" y="3" width="70" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_NUM}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="364" y="3" width="80" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="444" y="3" width="70" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_NAME}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="34" y="3" width="70" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{KAUST_ALLOW_TYPE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement x="97" y="0" width="92" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="369" y="0" width="83" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="244" y="0" width="92" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{v_count}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">ProgramGroups</ui:define>
+   	<ui:define name="content">
+   		<h:form id="programGroupsForm">
+				<rich:dataTable binding="#{programGroupsBB.programGroupsTable}" var="pg" id="table" rows="20" styleClass="newTable" rendered="#{baseBB.authorizeView}">
+					<f:facet name="noData">
+		                #{err['Messages.no_data']}
+		            </f:facet>
+		            <rich:column>
+		                <f:facet name="header">
+	                		<h:outputText value="#{msgs['Messages.code']}"/>
+		                	<h:inputText value="#{programGroupsBB.programGroupsDto.codeDesc}"/>
+	                	</f:facet>
+		                <h:outputText value="#{pg.code}" />
+		            </rich:column>
+		            <rich:column>
+		                <f:facet name="header">
+		                	#{msgs['Messages.arName']}
+		                </f:facet>
+		                <h:outputText value="#{pg.localeName}" />
+		            </rich:column>
+		            <rich:column>
+		                <f:facet name="header">
+		                	#{msgs['Messages.enName']}
+		                </f:facet>
+		                <h:outputText value="#{pg.foreignName}" />
+		            </rich:column>
+		            <rich:column>
+		            	<f:facet name="header">
+		            		<h:commandButton styleClass="buttonStyle" value="#{msgs['Action.Search']}"
+		            			rendered="#{baseBB.authorizeSearchAll}" action="#{programGroupsBB.programGroupsSearchListner}"/>
+		            	</f:facet>
+		                <h:commandLink styleClass="no-decor" rendered="#{baseBB.authorizeUpdate}" actionListener="#{programGroupsBB.editListner}" action="manageProgramGroups.xhtml" immediate="true">
+		                    <h:graphicImage library="images" name="edit2.gif" alt="#{msgs['Action.edit']}" style="border:none" />
+		                    <f:setPropertyActionListener target="#{programGroupsBB.programGroupsDto.programGroupsObj}" value="#{pg}"/>
+		                </h:commandLink>
+		                <h:outputText/>
+		                <a4j:commandLink styleClass="no-decor" render="deleteGrid" execute="@this" rendered="#{baseBB.authorizeDelete}"
+		                    oncomplete="#{rich:component('confirmPane')}.show();">
+		                    <h:graphicImage library="images" name="delete.gif" alt="#{msgs['Action.delete']}" style="border:none"/>
+		                    <f:setPropertyActionListener target="#{programGroupsBB.programGroupsDto.programGroupsObj.id}" value="#{pg.id}" />
+		                </a4j:commandLink>
+		                <h:outputText/>
+		                <h:commandButton styleClass="buttonStyle" value="#{msgs['ProgramGroups.pages']}" action="programGroupPages.xhtml">
+		                    <f:setPropertyActionListener target="#{programGroupsBB.programGroupsDto.programGroupsObj}" value="#{pg}" />
+		                </h:commandButton>
+		            </rich:column>
+		            <f:facet name="footer">
+		                <h:panelGrid id="addGrid" columns="2" styleClass="searchactionTB_Bg" cellspacing="0" cellpadding="0" border="0">
+		                	<rich:dataScroller for="table"/>
+							<h:commandButton styleClass="Btn_S_Normal" value="#{msgs['Action.add']}" rendered="#{baseBB.authorizeAdd}"
+								action="manageProgramGroups.xhtml" actionListener="#{programGroupsBB.addListner}" immediate="true"/>
+				        </h:panelGrid>
+		            </f:facet>
+		        </rich:dataTable>
+		        <rich:popupPanel modal="true" header="#{msgs['Messages.deleteMessege']}" id="confirmPane"
+		        	domElementAttachment="parent" width="200" height="80">
+		            <h:panelGrid columns="2" id="deleteGrid">
+		            	<h:inputHidden value="#{programGroupsBB.programGroupsDto.programGroupsObj.id}"/>
+		            </h:panelGrid>
+		            <a4j:commandButton styleClass="Btn_S_Normal" value="#{msgs['Action.delete']}"
+		            	action="#{programGroupsBB.deleteListner}" render="table" execute="confirmPane"
+		            	oncomplete="#{rich:component('confirmPane')}.hide();"/>
+		            <a4j:commandButton styleClass="Btn_S_Normal" value="#{msgs['Action.cancel']}" onclick="#{rich:component('confirmPane')}.hide(); return false;" />
+		        </rich:popupPanel>
+			</h:form>
+	</ui:define>
+</ui:composition>

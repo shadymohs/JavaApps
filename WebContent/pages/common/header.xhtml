@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<h:panelGroup layout="block" style="height:28px;background-color:gray;">
+		<h:form>
+			<h:panelGrid columns="5" width="100%" style="border:none;text-align:center;color:white;">
+				<h:panelGroup><h:outputText value="#{msgs['Label.home.user']}"/><h:outputText value="#{sessionScope.userInf.userInf.userFullName}"/></h:panelGroup>
+				<h:panelGroup><h:outputText value="#{msgs['system']}"/><h:outputText value=" : "/><h:outputText value="#{sessionScope.userInf.loggedInSystem.label}"/></h:panelGroup>
+				<h:panelGroup><h:outputText value="#{msgs['Label.home.branch']}"/><h:outputText value="#{sessionScope.userInf.loggedInBranch.label}"/></h:panelGroup>
+				<h:commandLink styleClass="no-decor" action="#{baseBB.changeLanguage}" immediate="true" style="color:white;" value="#{msgs.language}"/>
+				<a4j:commandLink styleClass="no-decor" action="#{commonBB.logout}" title="#{msgs.logoff}" immediate="true"
+					oncomplete="document.location = '#{request.contextPath}/faces/pages/common/login.xhtml'">
+                    <h:graphicImage library="images" name="logout.png" style="border:none" width="25" height="25"/>
+                </a4j:commandLink>
+			</h:panelGrid>
+		</h:form>
+	</h:panelGroup>
+	<!--Menu-->
+	<a4j:status onstart="#{rich:component('statPane')}.show()" onstop="#{rich:component('statPane')}.hide()" onerror="#{rich:component('statPane')}.hide()" errorText=""/>
+	<h:panelGrid columns="1" id="global-nav-items" style="width:100%;margin-left:auto;margin-right:auto" styleClass="clearfix noPrint">
+		<ui:include src="menu.xhtml"/>
+	</h:panelGrid>
+	<h1 style="background-color:#d1d1d1;color:black;font-size:120%"><h:outputText value="#{baseBB.title.label}"/></h1>
+	<rich:message id="lookupMessages" layout="table" errorClass="error" infoClass="info" ajaxRendered="true" style="font:red;"/>
+	<br/>
+</ui:composition>

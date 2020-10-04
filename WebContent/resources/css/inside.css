@@ -1,0 +1,700 @@
+/*
+  Running Squiz Matrix
+  Developed by Squiz - http://www.squiz.net
+  MySource, MySource Matrix and Squiz.net are registered Trademarks of Squiz Pty Ltd
+  Page generated: 16 September 2012 21:36:25
+*/
+
+
+/*
+ * Inside CSS
+ */
+
+/* Restore list items */
+
+#page_content ul,
+#page_content ol,
+#page_content_rightbox ul,
+#page_content_rightbox ol  {
+   margin-left: 10px;
+   padding-left: 15px;
+   margin-bottom: 8px;
+   margin-top: 8px;
+}
+
+#right-column ul,
+#right-column ol {
+   padding-left: 0px;
+}
+
+#right-column p {
+   padding-left: 12px;
+}
+
+
+
+#page_content ol li,
+#page_content_rightbox ol li {
+   margin-left: 6px;
+}
+
+#page_content {
+   margin-bottom: 20px;
+}
+
+.smalltext {
+   font-size:80%}
+
+
+/* =============================================================================
+   Left Column - Menu/Section
+   ========================================================================== */
+
+#left-column {
+    float: left;
+    width: 230px;
+}
+
+#left-menu {
+    margin-bottom: 10px;
+} 
+
+#left-menu li {
+    margin-bottom: 1px;
+}
+
+#left-menu li a {
+    display: block;
+    line-height: 20px;
+    background-color: #cecbc5;
+    color: #000;
+    text-decoration: none;
+    padding: 8px 5px 8px 23px; 
+}
+
+#left-menu li a:hover,
+#left-menu li li.current>a {
+    background-color: #e6f3f5;
+}
+
+/* 2nd level */
+#left-menu li li a {
+    background-color: #e7e5e2;
+    padding-left: 31px;
+}
+
+/* 3rd level */
+#left-menu li li li a {
+    padding-left: 39px;
+    background-color: #f4f3ee;
+}
+
+#left-menu ul ul {
+    margin-top: 1px;
+}
+
+#left-menu li.current>a,
+#left-menu li.hierarchy>a {
+    background-color: #c1e2e5;
+}
+
+#section {
+    background-color: #000;
+    color: #fff;
+    font-weight: bold;
+    line-height: 30px;
+    padding: 0 8px 0 8px;
+    margin-bottom: 1px;
+}
+
+#section a {
+    color: #fff;
+}
+
+/* =============================================================================
+   Content Layout
+   ========================================================================== */
+
+#content-wrapper {
+    position: relative;
+}
+
+#right-column {
+    margin-top: 0;
+    top: 190px;
+    position: absolute;
+    right: 0;
+}
+
+/* =============================================================================
+   Content Styles
+   ========================================================================== */
+
+#content-wrapper a {
+   font-weight: bold;
+   text-decoration: underline;
+}
+
+#content-wrapper a:hover {
+   text-decoration: none;
+}
+
+#right-column a {
+   text-decoration: none;
+}
+
+#right-column a:hover {
+   text-decoration: underline;
+}
+
+
+
+.important-box-1,
+.important-box-2,
+.important-box-3,
+.see-also-box {
+    display: block;
+    padding: 6px;
+}
+
+.important-box-1 {
+    background-color: #6a4061;
+    color: #fff;
+    font-weight: bold;
+}
+
+.important-box-1 a, .important-box-1 a:hover, .important-box-1 a:visited {
+    color: #fff;
+}
+
+
+.important-box-2 {
+    background-color: #f0ecef;
+    color: #6a4061;
+    font-weight: bold;
+}
+
+.important-box-3 {
+    border: 1px solid #6a4061;
+    color: #6a4061;
+}
+
+.see-also-box {
+    background-color: #f0ecef;
+    color: #6a4061;
+}
+
+
+#content-wrapper .topic-home {
+    overflow: hidden;
+    margin-bottom: 8px;
+    margin-top: 8px;
+}
+
+#content-wrapper .topic-home a {
+    color: #222;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+#content-wrapper .topic-home a:hover {
+    text-decoration: underline;
+}
+
+#content-wrapper .topic-home h2 {
+    font-size: 1.3em;
+    border-bottom: 1px solid #222;
+    padding-bottom: 12px;
+    font-weight: bold;
+}
+
+#content-wrapper .topic-home h2 span {
+    float: left;
+}
+
+
+#content-wrapper .topic-home h3 {
+    font-size: 1.2em;
+    margin-bottom: 4px;
+    margin-top: 6px;
+}
+
+#content-wrapper .topic-home h3 a {
+    font-weight: bold;
+}
+
+#content-wrapper .topic-home ul {
+    margin: 0;
+    padding: 0;
+}
+
+#content-wrapper .topic-home ul li {
+    list-style: none;
+}
+
+.feature-box {
+    min-height: 92px;
+}
+
+#content-wrapper .feature-box h2,
+#content-wrapper .feature-box h3 {
+   float: left;
+   color: #fff;
+   width: 120px;
+   font-size: 1.3em;
+   padding-left: 6px;
+   margin-top: 8px;
+}
+
+#content-wrapper .feature-box div {
+   margin-left: 246px;
+   padding-top: 8px;
+}
+
+#content-wrapper .column {
+   width: 48%;
+   float: left;
+   padding-right: 1%;
+}
+
+#content-wrapper #grants {font-size: .9em;}
+#content-wrapper #grants th {font-size: 1em; border-color: #fff; padding: 3px 4px;}
+
+.pubtext {font-size:80%}
+
+.report-note {
+    color: #fff;
+    background-color: #000;
+}
+
+.report-highlight {
+    background-color: #d8d8d8;
+}
+
+
+/* =============================================================================
+   Heading Levels
+   ========================================================================== */
+
+#content-wrapper h1 {
+    color: #284e36;
+    line-height: 30px;
+    min-height: 30px;
+    font-weight: normal;
+    font-size: 1.3em;
+    background-color: #cde8ea;
+    padding-left: 8px;
+    margin-top: 0;
+}
+
+#content-wrapper h2 {
+    color: #284e36;
+    font-weight: bold;
+    font-size: 1.3em;
+
+}
+
+#content-wrapper h3 {
+    font-size: 1.2em;
+}
+
+#content-wrapper h4 {
+    font-size: 1.1em;
+    color: #284e36;
+}
+
+#content-wrapper h5 {
+    font-weight: bold;
+}
+
+#content-wrapper h5,
+#content-wrapper h6 {
+    font-size: 1em;
+}
+
+#content-wrapper h6 {
+    color: #284e36;
+    font-weight: normal;
+}
+
+
+/* =============================================================================
+   Biosecurity News
+   ========================================================================== */
+#aqishomenews {width:auto; border-bottom: 1px solid black; margin-bottom:20px;}
+#aqishomenews h2 a {font-size: .7em; font-weight:bold;}
+#aqishomenews img {margin-bottom:10px; margin-right:5px;}
+#aqishomenews table {background-color: #ffffff; border-color: #ffffff; width:0; min-width:75%; }
+#aqishomenews table tbody {padding-right:200px;}
+#aqishomenews table tr {background-color: #ffffff; border-color: #ffffff;}
+#aqishomenews table td {width: 50%; background-color: #ffffff; border-color: #ffffff; vertical-align: top; padding-bottom:20px;}
+#aqishomenews table .featured {float: left; margin: 0 0 20px 0;}
+#aqishomenews table .featured p {padding: 0 10px 0 5px; margin-top:0; font-size: 1em;}
+
+#aqisactivities {width: 100%; }
+#aqisactivities table {background-color: #ffffff; border-color: #ffffff; margin-bottom:20px;  }
+#aqisactivities table tr {background-color: #ffffff; border-color: #ffffff; }
+#aqisactivities table td {width: 50%; background-color: #ffffff; border-color: #ffffff; padding:2px; }
+
+/* =============================================================================
+   Collapse areas
+   ========================================================================== */
+#collapsefaq h2 {display:inline; margin-top:20px;}
+#collapsefaq h3.trigger {cursor:pointer; text-decoration:underline; color: #005EB8; font-weight:normal; padding: 5px 0; margin:0;}        
+#collapsefaq .trigger:hover {cursor:pointer;text-decoration:none; color: #005EB8; }        
+#collapsefaq h3.expanded {text-decoration:none; cursor:pointer; font-weight:bold; padding: 5px 0 0; margin:0; color:#002f63; }
+#collapsefaq .expanded:hover {cursor:pointer;}
+#collapsefaq .show {padding-bottom: 5px; border-bottom: 1px dotted #ccc; margin:-5px 0 10px 15px;}
+#collapsefaq .hide {position:absolute;left:-999em;height:1px;width:100px;    overflow:hidden;}
+#collapsefaq .excoll {cursor:pointer; font-size:.8em; font-weight:normal; color:#002f63;}
+
+
+/* =============================================================================
+   FMD Statistics
+   ========================================================================== */
+
+
+span.note {font-size: .85em; color: #000000; margin-left: 1.5em; font-weight: normal;}
+#fmdstats #collapsefaq h3.trigger {text-decoration: none; padding: 0;color: #005EB8;}
+#fmdstats #collapsefaq h3.trigger span.note {display:none;} 
+#fmdstats #collapsefaq h3.expanded {text-decoration: none; margin-bottom: .5em; color: #005EB8;} 
+
+#fmdstats #collapsefaq ul, #fmdstats #collapsefaq .show {margin: 0 0 0 2em; border-bottom: none; padding-left: 0;}
+
+
+
+
+
+
+
+/* =============================================================================
+   Tables
+   ========================================================================== */
+
+table th {
+    color: #284e36;
+    line-height: 20px;
+    min-height: 30px;
+    font-weight: normal;
+    font-size: 15px;
+    background-color: #d9b6b6;
+    padding-left: 8px;
+    border-right-color: #ffffff;
+    cell-spacing:0;
+}
+table th:last-child, th.last {border-right-color: #cde8ea;}
+
+
+table td {
+    border: 1px solid #cde8ea;
+}
+
+table caption {
+    color: #284e36;
+    font-weight: bold;
+    text-align: left;
+}
+
+table.no-border, table.no-border td  {
+    border: 0;
+}
+
+table td.btm-border, table tr.btm-border {
+    border-bottom: 2px solid #000;
+}
+
+table td.top-border, table tr.top-border {
+    border-top: 2px solid #000;
+}
+
+
+/* =============================================================================
+   Sortable Tables
+   ========================================================================== */
+table.tablesorter thead tr .headerSortAsc {
+   background-image: url("http://www.daff.gov.au/design/css/inside.css/sort_asc.gif"); 
+} 
+table.tablesorter thead tr .headerSortDesc {
+   background-image: url("http://www.daff.gov.au/design/css/inside.css/sort_desc.gif");
+} 
+
+table.tablesorter .headerSortable {
+   background-image: url("http://www.daff.gov.au/design/css/inside.css/sort.gif");
+   cursor: pointer;
+   background-repeat: no-repeat;
+   background-position: center right;
+   padding-right: 20px;
+   margin-right: -1px;
+} 
+
+
+/* =============================================================================
+   Publications header work-around
+   ========================================================================== */
+h5.Publications { display: none; }
+
+
+
+/* =============================================================================
+   Page update and contact details
+   ========================================================================== */
+
+#page-details {
+    border-top: 1px solid #222;
+    padding-top: 16px;
+    margin-top: 8px;
+    margin-right: 258px;
+}
+
+#page-details .last-reviewed {
+    float: right;
+    text-align: right;
+}
+
+/* =============================================================================
+   Forms
+   ========================================================================== */
+
+ /* Common.css */
+
+/* Layout */
+body { margin: 0; padding: 0; }
+.nocss { display: none; }
+.clr { clear: both; overflow: hidden; height: 1px; }
+.clear { clear: both; }
+.clear-right { clear: right; }
+.clear-left{ clear: left; }
+
+
+
+/*common forms css*/
+ 
+
+.form_errors {font-weight: bold; border: 1px red solid; width: 100%; padding-top: 10px; padding-left: 5px;}
+.form_errors ul li {color: red; font-weight: normal;}
+.form_label { width: auto; margin-bottom: 3px; margin-top: 3px; padding-top:6px;}
+.form_label_unbold { width: auto; margin-bottom: -6px; margin-top: 3px;}
+.question_block {width: 95%; border: 1px solid #82C1EA; background-color: #E7E5E2; padding: 15px; margin-bottom: 10px;}
+.float-form-left {float: left; margin: 0 20px 0 0;}
+.floating-left {float: left; margin: 0 0 0 10px;}
+.float-form-end{ float: left; margin: 0 100px 0 0;} /* a work around to push divs down below left floated fields */
+.form_submit {margin-left: 25px;}
+#page_content .question_block ul li {list-style-type: none;}
+.form_list ul li {list-style-type: none; padding-left:0; margin-left: 0; margin-right: 10px;}
+.inline_list li {display: inline; margin-right:10px;}
+.q22 li, .q24 li {display: inline; padding-right: 30px;}
+.q20 li, .q21 li {display: inline; width: 300px;}
+.select {width: 195px; margin-bottom: 5px;}
+.codex_li form li {display: block; padding-right:15px;}
+
+#concern_form {
+   width: 100%;
+   border: 1px solid #82C1EA;
+   background-color: #E7E5E2;
+}
+
+#concern_form fieldset {width: 90%; 
+    margin: 10px;
+    padding: 10px;
+    }
+
+
+/*FORM */
+/* legend styling */
+
+legend {
+    font-weight: bold;
+    color:#284e36;
+    }
+
+fieldset {
+    margin-bottom:2em;
+    width:88%;
+}
+
+fieldset label {
+    display: block;
+    Margin: 1px 0 2px 0;
+}
+
+/* style for  labels */
+
+label {
+    display:inline; 
+    margin: 0;
+    padding:0;
+}
+
+form .required li  {
+    color:#f27506;
+    display:block;
+}
+
+.left{
+    float:left;
+    padding-right: 5px;
+    }
+
+
+div.inline ul li, div.inline label {
+    display:inline;
+}
+
+form li {
+    display:block;
+    padding-right:15px;
+    list-style: none;
+}
+
+#mainform p {
+    margin: 6px 0;
+    } 
+    
+#mainform {
+    width: 100%;
+    padding: 5px;
+    border: 2px solid #cde8ea;
+}
+
+#mainform ul li {list-style: none;}
+
+#mainform label {
+    font-weight: bold;
+    color: #000000;
+    display:inline;
+}
+
+#mainform fieldset {
+    border: 1px solid #E7E5E2;
+    color: #000000;
+    margin: 25px 10px 25px;
+    padding-top: 0;
+    padding-right: 20px;
+    padding-bottom: 0;
+    padding-left: 20px;
+  }
+
+#mainform legend {
+    color: #284e36;
+    background: #fff;
+    padding: 4px 8px;
+}  
+
+.submit input {
+   margin-left: 30px;
+}
+
+.lab td {border: 1px solid #c2d2df;} 
+.lab_form_list label {display: none;}
+.lab input {display: block; margin-right: 15px;}
+.lab p {float:right;}
+
+#feedbackform fieldset {
+     border-top:1px solid #0b4c88;
+     border-left:1px solid #0b4c88;
+     border-right:1px solid #0b4c88;
+     border-bottom:1px solid #0b4c88;
+     padding: 0 10px 10px 10px; 
+     background-position: top left; 
+     background-repeat: repeat-x; 
+     width:615px;
+     background-position: top left; 
+     background-repeat: repeat-x;
+}
+
+#feedbackform legend {
+     color:#284e36; 
+     border-top:1px solid #0b4c88; 
+     border-right:1px solid #0b4c88; 
+     border-left:1px solid #0b4c88; 
+     padding: 5px 10px; 
+     margin-top:5px; 
+}
+
+#feedbackform label { padding-top:5px;}
+#feedbackform input, #feedbackform textarea{ border:1px solid #b3c8dc;}
+#feedbackform p {font-weight:normal;}
+
+/* =============================================================================
+   Specific for FOI request form - no border around button
+   ========================================================================== */
+#form_email_2129480 table {border-style: none;}
+#form_email_2129480 table td {border-style: none;}
+
+
+
+#foi-feedback {width: 100%;border: 1px solid #82C1EA; background-color: #E7E5E2}
+#foi-feedback fieldset {margin: 0 10px 25px;padding: 0 100px 0 10px;}
+#foi-feedback legend {color:#284e36; padding: 5px 10px; margin-top:5px; }
+#foi-feedback label { padding-top:5px; font-weight: bold;}
+#foi-feedback input, Form #foi-feedback textarea{ border:1px solid #98baac; }
+#foi-feedback ul {list-style-type: none; display: inline; margin: 10px 0 4px 0;}
+@-moz-document url-prefix() {
+#foi-feedback ul {padding-left: 0;}
+}
+#foi-feedback li {list-style-type: none; display:inline; padding:0 5px 4px 0;}
+#foi-feedback li input {border:none;}
+#foi-feedback li label {display: block; vertical-align: middle; clear: left; display:inline-block;}
+#foi-feedback .form_submit {margin: 5px 0 0 5px;}
+#foi-feedback .form-errors {color: red; font-weight: bold;}
+#foi-feedback .float-form-left {float: left; margin: 0 10px 0 0;}
+#foi-feedback .adjust {float: left; vertical-align: text-top; display:inline;}
+
+
+
+#stakeholder .form_errors {border: none;}
+#stakeholder {border:1px solid #0b4c88; background-color: #E7E5E2; padding: 0 10px 10px 10px; width: 100%;  }
+#stakeholder fieldset {width: 100%;}
+#stakeholder legend {color:#284e36; padding: 5px 10px; }
+#stakeholder label { padding-top:5px; font-weight:bold;}
+#stakeholder input, #stakeholder textarea, #stakeholder select {border:1px solid #98baac;}
+#stakeholder .question {display: block;}
+#stakeholder .interests li label {display: inline;}
+#stakeholder .interests ul {width: 100%;}
+#stakeholder .interests li {float: left; width: 45%;}
+#stakeholder .interests li input {border: none;}
+#stakeholder .interests br {clear: left;}
+#stakeholder .category li input {border:none;}
+#stakeholder .category li label {display: inline;}
+#stakeholder .category ul li {list-style-type: none; display: inline;}
+#stakeholder .interests2 ul {width: 280px; float: left;}
+#stakeholder .interests2 li label {display: inline;}
+#stakeholder .interests2 li input {border: none;}
+#stakeholder .interests3 ul {width: 300px; float: left;}
+#stakeholder .interests3 li label {width: 350px; display: inline;}
+#stakeholder .interests3 li input {border: none;}
+#stakeholder .category2 {width: 650px; float: left;}
+#stakeholder .category2 li input {border:none;}
+#stakeholder .category2 li label {display: inline; }
+#stakeholder .category2 ul li {width: 275px; float: left;}
+
+
+
+#stakeholder .inlinelist {display: inline-block; width: 100%; vertical-align: top;}
+#stakeholder .leftwide {width: 900px; float: left; padding-bottom: -10px;}
+#stakeholder .leftcolumn {width: 250px; float: left; padding-bottom: -10px;}
+#stakeholder .rightcolumn {width: 250px; float:left; clear: right; padding-bottom: -10px;}
+#stakeholder .leftcol {float: left; clear: left; padding-bottom: -10px;}
+ 
+#stakeholder .rightcol {float:right; clear: right; padding-bottom: -10px;} 
+
+
+#eoi .form_errors {border: none;}
+#eoi {border:1px solid #0b4c88; background-color: #E7E5E2; padding: 10px 10px; width: 550px;  }
+#eoi fieldset {width: 100%; margin-bottom: 1.6em; }
+#eoi legend {color:#284e36; padding: 0 5px;/*background-color: #fff; border:1px solid #284E36;*/ margin-top: 20px;}
+#eoi label { font-weight:bold;}
+#eoi input, #eoi textarea, #eoi select {border:1px solid #98baac; margin-right: 1em;}
+#eoi input[type="checkbox"] {border: none;}
+#eoi .category {margin-right: 1em;}
+#eoi .category li input {border:none;}
+#eoi .category li label {display: inline;}
+#eoi .category ul li {list-style-type: none; display: inline;}
+#eoi .row {width: 100%; vertical-align: top; padding-top: 10px;}
+#eoi .tick ul {margin-left: 0; padding-left: 0;}
+#eoi .tick li {padding-bottom: 10px; padding-right: 0;}
+#eoi .tick li label, #eoi .submit label {display: inline;}
+#eoi .form_submit {margin-top: 10px;}
+/*end common forms css*/
+
+ 

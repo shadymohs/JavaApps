@@ -1,0 +1,136 @@
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD iBatis Mapper 3.0 //EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.SAPTCO.common.ibatis.mapperInterface.Common">
+	
+	<!-- return branches list -->
+	<resultMap id="findUsernranchesByNameResult" type="Branch">     
+		<id property="id" column="branch_id"/>
+		<result property="code" column="branch_code"/>
+		<result property="localeName" column="branch_ar_desc"/>
+		<result property="foreignName" column="BRANCH_EN_DESC"/>
+	</resultMap>
+  		
+	<select id="findUserbranchesByName" resultMap="findUsernranchesByNameResult" parameterType="Common">
+		SELECT br.branch_id,br.branch_code,br.branch_ar_desc,BR.BRANCH_EN_DESC
+		FROM SAP_BRANCHES br inner join SAP_user_branches ub on BR.BRANCH_ID = ub.branch_id
+			inner join SAP_users u on ub.user_id = u.user_id
+		WHERE U.USER_NAME = #{userBean.userName} and br.branch_is_active = <include refid="driverAllowance.STATUS_ACTIVE"/> and
+			u.user_is_active = <include refid="driverAllowance.STATUS_ACTIVE"/> and u.user_is_deleted = <include refid="driverAllowance.STATUS_DEACTIVE"/> and
+			(u.expire_date is null or u.expire_date &gt; sysdate) and ub.is_active = <include refid="driverAllowance.STATUS_ACTIVE"/> and
+			(ub.to_date is null or ub.to_date &gt; sysdate) and br.SYSTEM_ID = #{userBean.loggedInSystem.id}
+		ORDER BY br.branch_code
+	</select>
+	
+	<resultMap id="findUserSystemsByNameResult" type="System">     
+		<id property="id" column="SYSTEM_ID"/>
+		<result property="code" column="CODE"/>
+		<result property="localeName" column="LOCALE_NAME"/>
+		<result property="foreignName" column="FOREIGN_NAME"/>
+	</resultMap>  
+		
+	<select id="findUserSystemsByName" resultMap="findUserSystemsByNameResult" parameterType="Common">
+		select DISTINCT SYSTEM_ID,CODE,LOCALE_NAME,FOREIGN_NAME from SYSTEMS
+		where SYSTEM_ID in (SELECT br.SYSTEM_ID
+			FROM SAP_BRANCHES br inner join SAP_user_branches ub on BR.BRANCH_ID = ub.branch_id
+				inner join SAP_users u on ub.user_id = u.user_id
+			WHERE U.USER_NAME = #{userBean.userName} and br.branch_is_active = <include refid="driverAllowance.STATUS_ACTIVE"/> and
+				u.user_is_active = <include refid="driverAllowance.STATUS_ACTIVE"/> and u.user_is_deleted = <include refid="driverAllowance.STATUS_DEACTIVE"/> and
+				(u.expire_date is null or u.expire_date &gt; sysdate) and ub.is_active = <include refid="driverAllowance.STATUS_ACTIVE"/> and
+				(ub.to_date is null or ub.to_date &gt; sysdate))
+		order by SYSTEM_ID
+	</select>
+	
+	<select id="authenticationUser" statementType="CALLABLE" resultType="Common" parameterType="Common">
+		{call SECURITY_PKG.VALIDATE_LOGIN(trim(#{userBean.userName,mode=IN,jdbcType=VARCHAR}),
+			#{userBean.password,mode=IN,jdbcType=VARCHAR},#{userBean.loggedInBranch.id,mode=IN,jdbcType=NUMERIC},
+			#{userBean.loggedInSystem.id,mode=IN,jdbcType=NUMERIC},#{userBean.id,mode=OUT,jdbcType=NUMERIC,javaType=Long},
+			#{userBean.userInf.userFullName,mode=OUT,jdbcType=VARCHAR,javaType=String},
+			#{userBean.loggedInBranch.code,mode=OUT,jdbcType=VARCHAR,javaType=String},
+			#{userBean.loggedInBranch.localeName,mode=OUT,jdbcType=VARCHAR,javaType=String},
+			#{userBean.loggedInBranch.foreignName,mode=OUT,jdbcType=VARCHAR,javaType=String},
+			#{userBean.loggedInSystem.code,mode=OUT,jdbcType=VARCHAR,javaType=String},
+			#{userBean.loggedInSystem.localeName,mode=OUT,jdbcType=VARCHAR,javaType=String},
+			#{userBean.loggedInSystem.foreignName,mode=OUT,jdbcType=VARCHAR,javaType=String},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+	<!-- return authorized program -->
+	<resultMap id="findPrivelegesResult" type="Privelege">
+		<id property="id" column="PRIVILEGE_id"/>
+		<result property="code" column="PRIVILEGE_CODE"/>
+		<result property="localeName" column="PRIVILEGE_AR_DESC"/>
+		<result property="foreignName" column="PRIVILEGE_EN_DESC"/>
+	</resultMap>
+  
+	<select id="findPriveleges" resultMap="findPrivelegesResult" parameterType="java.util.HashMap">
+		select
+	    	sp.PRIVILEGE_id , SP.PRIVILEGE_CODE, SP.PRIVILEGE_AR_DESC, SP.PRIVILEGE_EN_DESC
+		FROM
+	 		SAP_P_G_M_P PGMP INNER JOIN SAP_SYSTEM_PRIVILEGE SP
+	      	ON (PGMP.PRIVILEGE_ID = sp.PRIVILEGE_id)
+	      	INNER JOIN SAP_PROGRAM_GROUP_MENU PGM ON (pgm.P_G_M_ID = pgmp.program_menu_id)
+	      	INNER JOIN SAP_MENU_PRIVILEGE MP ON (MP.MENU_ID = pgm.menu_id AND MP.PRIVILEGE_ID = PGMP.PRIVILEGE_ID)
+		WHERE
+	 		PGM.PROGRAM_GROUP_ID = #{programId} AND
+	      	PGM.MENU_ID = #{pageId} AND
+	      	SP.PRIVILEGE_IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/>
+	      	AND SP.PRIVILEGE_ID IN(SELECT PRIVILEGE_ID FROM SAP_MENU_PRIVILEGE WHERE menu_id = #{pageId})
+	</select>
+	
+	<resultMap id="retrieveAuthorizedProgramsResult" type="Pages">
+		<id property="id" column="PAGE_ID"/>
+		<result property="menuUrl" column="MENU_URL"/>
+		<result property="parentPage.id" column="PARENT_ID"/>
+		<result property="localeName" column="MENU_AR_DESC"/>
+		<result property="foreignName" column="MENU_EN_DESC"/>
+		<result property="menuId" column="MENU_ID"/>
+		<collection property="privelegeList" column="{pageId=PAGE_ID,programId=PROGRAM_GROUP_ID}" javaType="ArrayList" select="findPriveleges"/>
+	</resultMap>
+   
+	<select id="getPagesList" resultMap="retrieveAuthorizedProgramsResult" parameterType="java.util.HashMap">
+		SELECT SM.PAGE_ID,SM.MENU_URL,SM.PARENT_ID,SM.MENU_AR_DESC,SM.MENU_EN_DESC,PG.PROGRAM_GROUP_ID,#{menuId} MENU_ID
+		FROM
+		  	SAP_USER_BRANCHES UB INNER JOIN SAP_PROGRAM_GROUP PG ON (PG.PROGRAM_GROUP_ID = UB.PROGRAM_ID)
+			INNER JOIN SAP_PROGRAM_GROUP_MENU PGM ON (PGM.PROGRAM_GROUP_ID = PG.PROGRAM_GROUP_ID)
+			INNER JOIN SAP_SYSTEM_MENU SM ON (SM.PAGE_ID = PGM.MENU_ID)
+		    INNER JOIN SAP_MENU M ON (M.MENU_ID = SM.MENU_ID)
+		WHERE UB.BRANCH_ID = #{branch} AND UB.USER_ID = #{user}
+			AND SM.MENU_IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/>
+			AND PG.P_G_IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/>
+		    AND M.IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/> AND M.MENU_ID = #{menuId}
+			AND UB.IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/> AND (UB.TO_DATE IS NULL OR UB.TO_DATE &gt; SYSDATE)
+			and sm.SYSTEM_ID in (1,#{systemId})
+		    AND SM.PAGE_ID IN (SELECT P.PAGE_ID FROM SAP_SYSTEM_MENU P INNER JOIN SAP_MENU_PRIVILEGE MP ON(P.PAGE_ID = MP.MENU_ID)
+			    	INNER JOIN SAP_PROGRAM_GROUP_MENU PM ON (PM.MENU_ID = P.PAGE_ID)
+			    	INNER JOIN SAP_P_G_M_P PMP ON (PMP.PROGRAM_MENU_ID = PM.MENU_ID)
+			    WHERE PMP.PRIVILEGE_ID = 1 AND MP.PRIVILEGE_ID = 1 AND PM.PROGRAM_GROUP_ID = PG.PROGRAM_GROUP_ID)
+		ORDER BY SM.PAGE_ID
+	</select>
+	
+	<resultMap type="Menu" id="menuResult">
+		<id property="id" column="MENU_ID"/>
+		<result property="localeName" column="MENU_AR_NAME"/>
+		<result property="foreignName" column="MENU_EN_NAME"/>
+		<collection property="pagesList" select="getPagesList" javaType="ArrayList" column="{menuId=MENU_ID,user=USER_ID,branch=BRANCH_ID,systemId=systemId}"/>
+	</resultMap>
+	
+	<select id="retrieveAuthorizedPrograms" parameterType="Common" resultMap="menuResult">
+		SELECT MENU_ID,MENU_AR_NAME,MENU_EN_NAME,#{userBean.id} USER_ID,#{userBean.loggedInBranch.id} BRANCH_ID,#{userBean.loggedInSystem.id} systemId
+		FROM SAP_MENU WHERE IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/> AND MENU_ID IN (
+			SELECT M.MENU_ID FROM SAP_USER_BRANCHES UB INNER JOIN SAP_PROGRAM_GROUP PG ON (PG.PROGRAM_GROUP_ID = UB.PROGRAM_ID)
+				INNER JOIN SAP_PROGRAM_GROUP_MENU PGM ON (PGM.PROGRAM_GROUP_ID = PG.PROGRAM_GROUP_ID)
+				INNER JOIN SAP_SYSTEM_MENU SM ON (SM.PAGE_ID = PGM.MENU_ID) INNER JOIN SAP_MENU M ON (M.MENU_ID = SM.MENU_ID)
+			WHERE UB.BRANCH_ID = #{userBean.loggedInBranch.id} AND UB.USER_ID = #{userBean.id}
+				AND SM.MENU_IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/>
+				AND PG.P_G_IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/>
+			    AND M.IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/> AND SM.PARENT_ID IS NULL
+				AND UB.IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/> AND (UB.TO_DATE IS NULL OR UB.TO_DATE &gt; SYSDATE)
+				and sm.SYSTEM_ID in (1,#{userBean.loggedInSystem.id})
+			    AND SM.PAGE_ID IN (SELECT P.PAGE_ID FROM SAP_SYSTEM_MENU P INNER JOIN SAP_MENU_PRIVILEGE MP ON(P.PAGE_ID = MP.MENU_ID)
+				    	INNER JOIN SAP_PROGRAM_GROUP_MENU PM ON (PM.MENU_ID = P.PAGE_ID)
+				    	INNER JOIN SAP_P_G_M_P PMP ON (PMP.PROGRAM_MENU_ID = PM.MENU_ID)
+				    WHERE PMP.PRIVILEGE_ID = 1 AND MP.PRIVILEGE_ID = 1 AND PM.PROGRAM_GROUP_ID = PG.PROGRAM_GROUP_ID))
+		ORDER BY MENU_ID
+	</select>
+	
+</mapper>

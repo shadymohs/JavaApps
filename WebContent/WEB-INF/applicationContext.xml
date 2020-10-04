@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:faces="http://www.springframework.org/schema/faces"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:int-security="http://www.springframework.org/schema/integration/security"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration/security http://www.springframework.org/schema/integration/security/spring-integration-security-2.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/faces http://www.springframework.org/schema/faces/spring-faces-2.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+    
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          p:location="/resources/configuration/db.properties"/>
+          
+    <util:properties id="versionConfig" location="/resources/configuration/version.properties"/>
+    <util:properties id="wsConfig" location="/resources/configuration/wsConfig.properties"/>
+    <util:properties id="dbConfig" location="/resources/configuration/db.properties"/>
+       
+ 	<!-- 
+     <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+          p:driverClassName="${db.driver_class}"
+          p:url="${db.url}"
+          p:username="${db.username}"
+          p:password="${db.password}"/>
+    <bean id="dataSourceCostAnaysis"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+          p:driverClassName="${db.driver_class}"
+          p:url="${db.url2}"
+          p:username="${db.username2}"
+          p:password="${db.password2}"/>
+    <bean id="dataSourceTR"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+          p:driverClassName="${db.driver_class}"
+          p:url="${db.url3}"
+          p:username="${db.username3}"
+          p:password="${db.password3}"/>
+    <bean id="dataSourceLuggage"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+          p:driverClassName="${db.driver_class}"
+          p:url="${db.url4}"
+          p:username="${db.username4}"
+          p:password="${db.password4}"/>
+    <bean id="dataSourceFA"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+          p:driverClassName="${db.driver_class}"
+          p:url="${db.url5}"
+          p:username="${db.username5}"
+          p:password="${db.password5}"/>
+    <bean id="dataSourceUrbanFest"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+          p:driverClassName="${db.driver_class}"
+          p:url="${db.url6}"
+          p:username="${db.username6}"
+          p:password="${db.password6}"/>
+ 	
+    -->
+      
+      
+    <bean id="dataSourceSadadPayment"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+          p:driverClassName="${db.driver_class_sql}"
+          p:url="${db.url.sadad}"
+          p:username="${db.username.sadad}"
+          p:password="${db.password.sadad}"/>
+    <bean id="dataSourceCCPayment"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+          p:driverClassName="${db.driver_class_sql}"
+          p:url="${db.url.credit}"
+          p:username="${db.username.credit}"
+          p:password="${db.password.credit}"/>
+    
+    <bean id="dataSourceHajLimo"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+          p:driverClassName="${db.driver_class}"
+          p:url="${db.url7}"
+          p:username="${db.username7}"
+          p:password="${db.password7}"/>
+     
+    <bean id="dataSource"
+ 		class="org.springframework.jndi.JndiObjectFactoryBean">
+ 		<property name="jndiName">
+ 			<value>jdbc/dadb</value>
+ 		</property>
+ 	</bean>
+    <bean id="dataSourceCostAnaysis"
+ 		class="org.springframework.jndi.JndiObjectFactoryBean">
+ 		<property name="jndiName">
+ 			<value>jdbc/cadb</value>
+ 		</property>
+ 	</bean>
+    <bean id="dataSourceTR"
+ 		class="org.springframework.jndi.JndiObjectFactoryBean">
+ 		<property name="jndiName">
+ 			<value>jdbc/trdb</value>
+ 		</property>
+ 	</bean>
+    <bean id="dataSourceLuggage"
+ 		class="org.springframework.jndi.JndiObjectFactoryBean">
+ 		<property name="jndiName">
+ 			<value>jdbc/lldb</value>
+ 		</property>
+ 	</bean>
+    <bean id="dataSourceFA"
+ 		class="org.springframework.jndi.JndiObjectFactoryBean">
+ 		<property name="jndiName">
+ 			<value>jdbc/fadb</value>
+ 		</property>
+ 	</bean>
+    <bean id="dataSourceUrbanFest"
+ 		class="org.springframework.jndi.JndiObjectFactoryBean">
+ 		<property name="jndiName">
+ 			<value>jdbc/urbanfestdb</value>
+ 		</property>
+ 	</bean>
+ 	<!-- 
+ 	
+    <bean id="dataSourceSadadPayment"
+ 		class="org.springframework.jndi.JndiObjectFactoryBean">
+ 		<property name="jndiName">
+ 			<value>jdbc/sadaddb</value>
+ 		</property>
+ 	</bean>
+    <bean id="dataSourceCCPayment"
+ 		class="org.springframework.jndi.JndiObjectFactoryBean">
+ 		<property name="jndiName">
+ 			<value>jdbc/ccdb</value>
+ 		</property>
+ 	</bean>
+    <bean id="dataSourceHajLimo"
+ 		class="org.springframework.jndi.JndiObjectFactoryBean">
+ 		<property name="jndiName">
+ 			<value>jdbc/hajLimodb</value>
+ 		</property>
+ 	</bean>
+ 	
+    -->
+  	
+  	<bean id="sqlMapClientCostAnaysis" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation"><value>classpath:com/SAPTCO/common/ibatis/mapperXML/sqlmap-config2.xml</value></property>
+		<property name="dataSource" ref="dataSourceCostAnaysis"/>
+	</bean>
+	
+  	<bean id="sqlMapClientTR" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation"><value>classpath:com/SAPTCO/common/ibatis/mapperXML/sqlmap-config3.xml</value></property>
+		<property name="dataSource" ref="dataSourceTR"/>
+	</bean>
+	
+	<bean id="sqlMapClientLuggage" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation"><value>classpath:com/SAPTCO/common/ibatis/mapperXML/sqlmap-config4.xml</value></property>
+		<property name="dataSource" ref="dataSourceLuggage"/>
+	</bean>
+	
+	<bean id="sqlMapClientFA" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation"><value>classpath:com/SAPTCO/common/ibatis/mapperXML/sqlmap-config5.xml</value></property>
+		<property name="dataSource" ref="dataSourceFA"/>
+	</bean>
+	
+	<bean id="sqlMapClientUrbanFest" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation"><value>classpath:com/SAPTCO/common/ibatis/mapperXML/sqlmap-config6.xml</value></property>
+		<property name="dataSource" ref="dataSourceUrbanFest"/>
+	</bean>
+	
+	<bean id="sqlMapClientHajLimo" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation"><value>classpath:com/SAPTCO/common/ibatis/mapperXML/sqlmap-config7.xml</value></property>
+		<property name="dataSource" ref="dataSourceHajLimo"/>
+	</bean>
+	
+	<bean id="sqlMapClientTemplateCostAnaysis" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+    	<property name="sqlMapClient" ref="sqlMapClientCostAnaysis" />
+    </bean>
+	
+	<bean id="sqlMapClientTemplateTR" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+    	<property name="sqlMapClient" ref="sqlMapClientTR" />
+    </bean>
+    
+	<bean id="sqlMapClientTemplateLuggage" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+    	<property name="sqlMapClient" ref="sqlMapClientLuggage" />
+    </bean>
+    
+	<bean id="sqlMapClientTemplateFA" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+    	<property name="sqlMapClient" ref="sqlMapClientFA" />
+    </bean>
+    
+	<bean id="sqlMapClientTemplateUrbanFest" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+    	<property name="sqlMapClient" ref="sqlMapClientUrbanFest" />
+    </bean>
+    
+	<bean id="sqlMapClientTemplateHajLimo" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+    	<property name="sqlMapClient" ref="sqlMapClientHajLimo" />
+    </bean>
+	
+	<bean id="ibatisResourceReader" class="org.apache.ibatis.io.Resources" factory-method="getResourceAsReader" >
+		<constructor-arg value="com/SAPTCO/common/ibatis/mapperXML/sqlmap-config.xml" />
+	</bean>
+
+    <context:component-scan base-package="com.SAPTCO" />
+          	
+  	<bean id="saltGenerator" class="org.jasypt.salt.FixedStringSaltGenerator">
+  		<property name="salt" value="saltGenerator"/>
+	</bean>
+	
+	<bean id="configurationEncryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+		<property name="algorithm" value="PBEWithMD5AndDES"/>
+		<property name="password" value="EJADA_SAPTCO_1112009"/>
+	</bean>
+  	
+  	<bean id="passwordEncryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+    	<property name="algorithm" value="PBEWithMD5AndDES"/>
+    	<property name="password" value ="EJADA_SAPTCO_1112009"/>
+	    <property name="saltGenerator" ref="saltGenerator"/>
+  	</bean>
+  	
+  	
+	<bean name="jobClass" class="com.SAPTCO.hajLimo.endPoints.LimoHajJob"/>
+  	
+  	<bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean" name="hajJob">
+		<property name="targetObject" ref="jobClass"/>  
+     	<property name="targetMethod" value="execute"/>
+	</bean>
+
+	<bean class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean" id="simpleTrigger">
+		<property name="jobDetail" ref="hajJob"/>
+		<property name="repeatInterval" value="7200000"/>
+		<property name="startDelay" value="1000"/>
+	</bean>
+
+	<bean class="org.springframework.scheduling.quartz.CronTriggerFactoryBean" id="cronTrigger">
+		<property name="jobDetail" ref="hajJob"/>
+		<property name="cronExpression" value="0 0 3,15 * * ?"/>
+	</bean>
+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobDetails">
+			<list>
+				<ref bean="hajJob"/>
+			</list>
+		</property>
+		<property name="triggers">
+			<list>
+				<ref bean="cronTrigger"/>
+			</list>
+		</property>
+	</bean>
+
+</beans>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMapConfig      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+
+	<!-- cache is disabled for fast QA data changes -->
+	 <settings cacheModelsEnabled="false"
+		lazyLoadingEnabled="false" />  
+	<!-- DTO -->	
+	<typeAlias alias="BaseDto" type="com.SAPTCO.common.dto.BaseDto" />
+	
+	<!-- beans -->
+	<typeAlias alias="ChannelBean" type="com.SAPTCO.common.ibatis.mapperBeans.ChannelBean"/>
+	<typeAlias alias="StationBean" type="com.SAPTCO.common.ibatis.mapperBeans.StationBean"/>
+  
+    <sqlMap resource="com/SAPTCO/common/ibatis/mapperXML/TR.xml"/>
+	
+</sqlMapConfig>

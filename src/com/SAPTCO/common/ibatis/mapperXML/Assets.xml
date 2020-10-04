@@ -1,0 +1,236 @@
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD iBatis Mapper 3.0 //EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.SAPTCO.common.ibatis.mapperInterface.Assets">
+    
+    
+    <insert id="insertAsset" parameterType="Asset">
+		INSERT INTO ASSETS
+		    (ASSET_NUMBER,
+			ASSET_TYPE,
+			PLATE_NUMBER,
+			CHASSIS_NUMBER,
+			SEATS,
+			SECTOR_DESC,
+			ASSET_LOCATION,
+			LICENSE_EXPIRY_DATE,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY,
+			ASSET_CATEGORY,
+			SYSTEM_ID)
+
+		VALUES ( 
+		    #{assetNumber,jdbcType=VARCHAR,javaType=String},
+			#{assetType,jdbcType=VARCHAR,javaType=String},
+			#{plateNumber,jdbcType=VARCHAR,javaType=String},
+			#{chassisNumber,jdbcType=VARCHAR,javaType=String},
+			#{seats,jdbcType=NUMERIC,javaType=Long},
+			#{sectorDesc,jdbcType=VARCHAR,javaType=String},
+			#{assetLocation,jdbcType=VARCHAR,javaType=String},
+			#{licenseExpDate,jdbcType=VARCHAR,javaType=String},
+			SYSDATE,
+			#{createdBy,jdbcType=NUMERIC,javaType=Long},
+			NULL,
+			NULL,
+			#{assetCategory,jdbcType=NUMERIC,javaType=Long},
+			#{systemId} )
+	</insert>
+   
+    <resultMap id="findAssetByIdResult" type="Asset"> 
+		<result property="assetNumber" column="ASSET_NUMBER"/>
+		<result property="assetType" column="ASSET_TYPE"/>
+		<result property="plateNumber" column="PLATE_NUMBER"/>
+		<result property="chassisNumber" column="CHASSIS_NUMBER"/>
+		<result property="seats" column="SEATS"/>	
+		
+		<result property="sectorDesc" column="SECTOR_DESC"/>
+		<result property="assetLocation" column="ASSET_LOCATION"/>
+		<result property="licenseExpDate" column="LICENSE_EXPIRY_DATE"/>
+		<result property="assetCategory" column="ASSET_CATEGORY"/>
+		<result property="systemId" column="SYSTEM_ID"/>	
+	</resultMap>
+	
+    <select id="findAssetById" resultMap="findAssetByIdResult" parameterType="Asset" >
+        SELECT ASSET_NUMBER ,
+				ASSET_TYPE ,
+				PLATE_NUMBER ,
+				CHASSIS_NUMBER ,
+				SEATS ,
+				SECTOR_DESC ,
+				ASSET_LOCATION ,
+				LICENSE_EXPIRY_DATE ,
+				ASSET_CATEGORY ,
+				SYSTEM_ID 
+				FROM ASSETS WHERE ASSET_NUMBER = #{assetNumber} AND PLATE_NUMBER = #{plateNumber} 
+        
+    </select>
+    
+    <update id="updateAsset"  parameterType="Asset">
+        UPDATE ASSETS SET
+            
+            ASSET_TYPE = #{assetType,jdbcType=VARCHAR},
+			CHASSIS_NUMBER  = #{chassisNumber,jdbcType=VARCHAR},
+			SEATS = #{seats,jdbcType=NUMERIC},
+			SECTOR_DESC = #{sectorDesc,jdbcType=VARCHAR},
+			ASSET_LOCATION = #{assetLocation,jdbcType=VARCHAR},
+			LICENSE_EXPIRY_DATE = #{licenseExpDate,jdbcType=VARCHAR},
+			UPDATE_DATE = SYSDATE,
+			UPDATE_BY = #{updatedBy,jdbcType=NUMERIC},
+			ASSET_CATEGORY = #{assetCategory,jdbcType=NUMERIC}
+        
+        WHERE ASSET_NUMBER = #{assetNumber,jdbcType=VARCHAR} AND PLATE_NUMBER = #{plateNumber,jdbcType=VARCHAR}
+    </update>
+    
+    
+    <!-- vehicle licence -->
+
+
+<resultMap id="findVehicleLicenceResult" type="VehicleLicence"> 
+		<result property="serialNo" column="SERIAL_NO"/>
+		<result property="tagNumber" column="TAG_NUMBER"/>
+		<result property="sectorId" column="SECTOR_ID"/>
+		<result property="sectorName" column="SECTOR_NAME"/>
+		<result property="FXplateNo" column="FX_PLATE_NO"/>	
+		
+		<result property="plateNumber" column="PLATE_NUMBER"/>
+		<result property="plateLetterLeft" column="PLATE_LETTER_LEFT"/>
+		<result property="plateLetterMiddle" column="PLATE_LETTER_MIDDLE"/>
+		<result property="plateLetterRight" column="PLATE_LETTER_RIGHT"/>
+		<result property="plateType" column="PLATE_TYPE_ID"/>	
+	    <result property="hijriExpDate" column="HIJRI_EXP_DATE"/>
+	    <result property="busSeats" column="BUS_SEATS"/>
+		<result property="licenseExpDate" column="LICENCE_EXP_DATE"/>
+		<result property="registerWASEL" column="REGISTER_WASEL_FLAG"/>
+	</resultMap>
+	
+    <select id="findAllVehicleLicence" resultMap="findVehicleLicenceResult" parameterType="VehicleLicence" >
+        SELECT  SERIAL_NO,
+				TAG_NUMBER,
+				SECTOR_ID,
+				SECTOR_NAME,
+				FX_PLATE_NO,
+				PLATE_NUMBER,
+				PLATE_LETTER_LEFT,
+				PLATE_LETTER_MIDDLE,
+				PLATE_LETTER_RIGHT,
+				PLATE_TYPE_ID,
+				HIJRI_EXP_DATE,
+				BUS_SEATS,
+				LICENCE_EXP_DATE,
+				REGISTER_WASEL_FLAG
+				
+				FROM VEHICLE_LICENCES WHERE IS_DELETED = 0 or  IS_DELETED =  null
+				
+        
+    </select>
+    
+    <select id="searchVehicleLicence" resultMap="findVehicleLicenceResult" parameterType="VehicleLicenceDto" >
+        SELECT  SERIAL_NO,
+				TAG_NUMBER,
+				SECTOR_ID,
+				SECTOR_NAME,
+				FX_PLATE_NO,
+				PLATE_NUMBER,
+				PLATE_LETTER_LEFT,
+				PLATE_LETTER_MIDDLE,
+				PLATE_LETTER_RIGHT,
+				PLATE_TYPE_ID,
+				HIJRI_EXP_DATE,
+				BUS_SEATS,
+				LICENCE_EXP_DATE,
+				REGISTER_WASEL_FLAG
+				
+				FROM VEHICLE_LICENCES 
+				WHERE (SERIAL_NO = #{serialNo,jdbcType=NUMERIC,javaType=Long} or #{serialNo,jdbcType=NUMERIC,javaType=Long}  is null)
+				and   (TAG_NUMBER = #{tagNumber,jdbcType=NUMERIC,javaType=Long} or #{tagNumber,jdbcType=NUMERIC,javaType=Long}  is null)
+				and  IS_DELETED = 0
+				
+        
+    </select>
+     <insert id="insertVehicleLicense" parameterType="VehicleLicence">
+		INSERT INTO VEHICLE_LICENCES
+		    (SERIAL_NO,
+				TAG_NUMBER,
+				SECTOR_ID,
+				SECTOR_NAME,
+				FX_PLATE_NO,
+				PLATE_NUMBER,
+				PLATE_LETTER_LEFT,
+				PLATE_LETTER_MIDDLE,
+				PLATE_LETTER_RIGHT,
+				PLATE_TYPE_ID,
+				BUS_SEATS,
+				LICENCE_EXP_DATE,
+				REGISTER_WASEL_FLAG,
+				HIJRI_EXP_DATE)
+
+		VALUES ( 
+		     #{serialNo,jdbcType=NUMERIC,javaType=Long},
+			 #{tagNumber,jdbcType=NUMERIC,javaType=Long},
+			 #{sectorId,jdbcType=NUMERIC,javaType=Long},
+			 #{sectorName,jdbcType=VARCHAR,javaType=String},
+			 #{FXplateNo,jdbcType=VARCHAR,javaType=String},
+			 #{plateNumber,jdbcType=NUMERIC,javaType=Long},
+			 #{plateLetterLeft,jdbcType=VARCHAR,javaType=String},
+			 #{plateLetterMiddle,jdbcType=VARCHAR,javaType=String},
+			 #{plateLetterRight,jdbcType=VARCHAR,javaType=String},
+			 #{plateType,jdbcType=NUMERIC,javaType=Long},
+			 #{busSeats,jdbcType=NUMERIC,javaType=Long},
+			 to_date( #{hijriExpDate,jdbcType=VARCHAR,javaType=String},'dd/mm/yyyy', 'nls_calendar=''Arabic Hijrah'''),
+			 #{registerWASEL,jdbcType=NUMERIC},
+			  #{hijriExpDate,jdbcType=VARCHAR,javaType=String}
+			)
+	</insert>
+	
+    <update id="updateVehicleLicence"  parameterType="VehicleLicence">
+        UPDATE VEHICLE_LICENCES SET
+            
+              	SECTOR_ID = #{sectorId,jdbcType=NUMERIC,javaType=Long},
+				SECTOR_NAME = #{sectorName,jdbcType=VARCHAR,javaType=String},
+				FX_PLATE_NO = #{FXplateNo,jdbcType=VARCHAR,javaType=String},
+				PLATE_NUMBER = #{plateNumber,jdbcType=NUMERIC,javaType=Long},
+				PLATE_LETTER_LEFT = #{plateLetterLeft,jdbcType=VARCHAR,javaType=String},
+				PLATE_LETTER_MIDDLE = #{plateLetterMiddle,jdbcType=VARCHAR,javaType=String},
+				PLATE_LETTER_RIGHT = #{plateLetterRight,jdbcType=VARCHAR,javaType=String},
+				PLATE_TYPE_ID = #{plateType,jdbcType=NUMERIC,javaType=Long},
+				BUS_SEATS = #{busSeats,jdbcType=NUMERIC,javaType=Long},
+				LICENCE_EXP_DATE =  to_date( #{hijriExpDate,jdbcType=VARCHAR,javaType=String},'dd/mm/yyyy', 'nls_calendar=''Arabic Hijrah'''),
+				HIJRI_EXP_DATE = #{hijriExpDate,jdbcType=VARCHAR,javaType=String}
+        
+        WHERE SERIAL_NO = #{serialNo,jdbcType=NUMERIC,javaType=Long}
+				AND TAG_NUMBER = #{tagNumber,jdbcType=NUMERIC,javaType=Long}
+    </update>
+
+     <update id="deleteVehicleLicence"  parameterType="VehicleLicence">
+        UPDATE VEHICLE_LICENCES SET
+            
+              IS_DELETED = 1
+        
+        WHERE SERIAL_NO = #{serialNo,jdbcType=NUMERIC,javaType=Long}
+				AND TAG_NUMBER = #{tagNumber,jdbcType=NUMERIC,javaType=Long}
+    </update>
+
+     
+     <resultMap id="getPlateTypeResult" type="PlateType"> 
+		<result property="id" column="PLATE_TYPE_ID"/>
+		<result property="localeName" column="LOCALE_NAME"/>
+		<result property="foreignName" column="FOREIGN_NAME"/>
+		
+	</resultMap>
+	
+    <select id="getPlateType" resultMap="getPlateTypeResult"  >
+        SELECT  PLATE_TYPE_ID,
+				LOCALE_NAME,
+				FOREIGN_NAME
+				
+				FROM PLATE_TYPE
+    </select>
+    
+     <select id="validateExistedAsset" resultType="Integer" parameterType="String" >
+        SELECT count(*) 
+				FROM ASSETS WHERE ASSET_NUMBER = #{assetNumber,jdbcType=VARCHAR,javaType=String} 
+        
+    </select>
+    
+</mapper>

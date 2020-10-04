@@ -1,0 +1,210 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    
+	<ui:define name="title">Home</ui:define>
+   	<ui:define name="content">
+   		<f:loadBundle basename="#{systemHelper.boundle}" var="msgs" />
+   		<h:panelGrid style="#{systemHelper.pageDirection}" width="100%" border="0" styleClass="formBody100" cellpadding="0" cellspacing="0">
+			<a4j:status onstart="#{rich:component('statPane')}.show()" onstop="#{rich:component('statPane')}.hide()" />
+			
+			<!--title-->
+			<h:panelGrid id="titleGrid" border="0" cellpadding="0" cellspacing="0" styleClass="title_formTB_bg">
+            	#{msgs['Branches.title']}
+			</h:panelGrid>
+			
+			<!--error load group-->
+			<h:panelGrid id="errorsGrid" styleClass="messages" columns="2">
+				<rich:messages id="lookupMessages" layout="table" errorClass="error"
+					infoClass="info" style="height:55"/>
+		        <rich:popupPanel style="height:20px" id="statPane" domElementAttachment="parent"
+		        	autosized="true">
+		            <h:graphicImage library="images" name="ai.gif" alt="ai"/>
+		            	Please wait...
+		        </rich:popupPanel>
+			</h:panelGrid>
+			
+			
+			<h:form id="branchesForm">
+				<!-- search criteria -->
+				<rich:dataTable styleClass="newTable">
+			            
+			            <f:facet name="header">
+			                <rich:columnGroup>
+			                    <rich:column colspan="5" > 
+			                        <h:outputText value="#{msgs['Branches.searchCriteria']}"/>
+			                    </rich:column>  
+			                </rich:columnGroup>
+			            </f:facet>
+			            <!--branch code search-->
+			            <rich:column>
+			            	<f:facet name="header">
+							     <h:panelGroup>
+							        <h:outputText value="#{msgs['Branches.branchCode']}" />
+									<br /><br />
+									<h:inputText id="searchBranchCode" value="#{branchesBB.branchesDto.searchBranches.code}">
+									   <a4j:ajax event="keyup"  render="branchesTable" listener="#{branchesBB.branchesListner}" />
+									</h:inputText>
+							     </h:panelGroup>
+							</f:facet>
+			            </rich:column>
+			            
+			            <!--branch Ar Name search-->
+			            <rich:column>
+			            	<f:facet name="header">
+							     <h:panelGroup>
+							        <h:outputText value="#{msgs['Branches.branchArName']}" />
+									<br /><br />
+									<h:inputText id="searchBranchArName" value="#{branchesBB.branchesDto.searchBranches.localeName}">
+									   <a4j:ajax event="keyup"  render="branchesTable" listener="#{branchesBB.branchesListner}" />
+									</h:inputText>
+							     </h:panelGroup>
+							</f:facet>
+			            </rich:column>
+			            
+			            <!--branch En Name search-->
+			            <rich:column>
+			            	<f:facet name="header">
+							     <h:panelGroup>
+							        <h:outputText value="#{msgs['Branches.branchEnName']}" />
+									<br /><br />
+									<h:inputText id="searchBranchEnName" value="#{branchesBB.branchesDto.searchBranches.foreignName}">
+									   <a4j:ajax event="keyup"  render="branchesTable" listener="#{branchesBB.branchesListner}" />
+									</h:inputText>
+							     </h:panelGroup>
+							</f:facet>
+			            </rich:column>
+			            
+			            <!--branch Type search-->
+			            <rich:column>
+			            	<f:facet name="header">
+							     <h:panelGroup>
+							        <h:outputText value="#{msgs['Branches.branchType']}" />
+									<br /><br />
+									<rich:select id="searchBranchType" disabled="true">
+									</rich:select>
+							     </h:panelGroup>
+							</f:facet>
+			            </rich:column>
+			            
+			            <!--branch Active? search-->
+			            <rich:column>
+			            	<f:facet name="header">
+							     <h:panelGroup>
+							        <h:outputText value="#{msgs['Branches.branchActive']}" />
+									<br /><br />
+									<h:selectBooleanCheckbox id="searchBranchIsActive" disabled="true">
+									</h:selectBooleanCheckbox>
+							     </h:panelGroup>
+							</f:facet>
+			            </rich:column>
+			            
+			        </rich:dataTable>
+			        <h:panelGrid id="actionGrid" columns="1" styleClass="searchactionTB_Bg" cellspacing="0" cellpadding="0" border="0">
+						<a4j:commandButton styleClass="Btn_S_Normal" value="#{msgs.action_add}" action="#{branchesBB.addNewBranch}"/>
+				    </h:panelGrid>
+			        
+			        <!--delete group-->
+			        <rich:popupPanel modal="false" header="#{msgs.deleteMessege}" id="confirmPane"
+			        	domElementAttachment="parent" width="200" height="80">
+			            <h:panelGrid columns="2" id="deleteGrid">
+			            	<h:inputHidden value="#{branchesBB.branchesDto.branchesObj.branchId}"/>
+			            </h:panelGrid>
+			            <a4j:commandButton styleClass="Btn_S_Normal" value="#{msgs.action_delete}"
+			            	action="#{branchesBB.deleteBranch}" execute="confirmPane" 
+			            	oncomplete="#{rich:component('confirmPane')}.hide(); document.getElementById('branchesForm:refreshBranchesTable').click();"/>
+			            <a4j:commandButton styleClass="Btn_S_Normal" value="#{msgs.action_cancel}"
+			            	onclick="#{rich:component('confirmPane')}.hide(); return false;" />
+			            <a4j:commandButton id="refreshBranchesTable" render="branchesForm:branchesTable" style="display:none"/>
+			        </rich:popupPanel>
+			        
+					<!--branches table search result-->
+					<rich:dataTable id="branchesTable" binding="#{branchesBB.branchesTable}" var="branch"  rows="20" styleClass="newTable" >
+						<f:facet name="noData">
+			                #{msgs.no_data}
+			            </f:facet>
+			            
+			            <f:facet name="header">
+			                <rich:columnGroup>
+			                    <rich:column colspan="6" > 
+			                        <h:outputText value="#{msgs['Branches.tableTitle']}"/>
+			                    </rich:column>  
+			                </rich:columnGroup>
+			            </f:facet>
+			            
+			            <!--branch code-->
+			            <rich:column>
+			            	<f:facet name="header">
+			            	#{msgs['Branches.branchCode']}
+							</f:facet>
+							<h:outputText value="#{branch.code}"/>
+			            </rich:column>
+			            
+			            <!--branch Ar Name-->
+			            <rich:column>
+			            	<f:facet name="header">
+			            	#{msgs['Branches.branchArName']}
+			            	</f:facet>
+			                <h:outputText value="#{branch.localeName}"/>
+			            </rich:column>
+			            
+			            <!--branch En Name-->
+			            <rich:column>
+			            	<f:facet name="header">#{msgs['Branches.branchEnName']}</f:facet>
+			                <h:outputText value="#{branch.foreignName}"/>
+			            </rich:column>
+			            
+			            <!--branch Type-->
+			            <rich:column>
+			            	<f:facet name="header">#{msgs['Branches.branchType']}</f:facet>
+			                <h:outputText value="#{branch.typeId.localeName}"/>
+			            </rich:column>
+			            
+			            <!--branch Active?-->
+			            <rich:column>
+			            	<f:facet name="header">#{msgs['Branches.branchActive']}</f:facet>
+			                 <a4j:commandLink styleClass="no-decor" disabled="true" rendered="#{branch.isactive ? 'true' : 'false'}">
+			                    <h:graphicImage library="images" name="checked.jpg" style="border:none"/>
+			                 </a4j:commandLink>
+			                 <a4j:commandLink styleClass="no-decor" disabled="true" rendered="#{branch.isactive ? 'false' : 'true'}">
+			                    <h:graphicImage library="images" name="unchecked.jpg" style="border:none"/>
+			                 </a4j:commandLink>
+			            </rich:column>
+			            
+			            <!--actions-->
+			            <rich:column>
+			            	<a4j:commandLink id="updateBranchButton" styleClass="no-decor" action="#{branchesBB.mangeEditBranch}" >
+			                    <h:graphicImage library="images" name="edit2.gif" alt="#{msgs.action_edit}" style="border:none" />
+			                    <f:setPropertyActionListener target="#{branchesBB.branchesDto.branchesObj}" value="#{branch}" />
+		               		</a4j:commandLink>
+		               		
+			            	<h:outputLabel id="fake" value=" " style="width:20px"/>
+			            				            		
+			            	<a4j:commandLink id="deleteBranchButton" styleClass="no-decor" render="deleteGrid"
+			                    oncomplete="#{rich:component('confirmPane')}.show();">
+			                    <h:graphicImage library="images" name="delete.gif" alt="#{msgs.action_delete}" style="border:none"/>
+			                    <f:setPropertyActionListener target="#{branchesBB.branchesDto.branchesObj.branchId}" value="#{branch.branchId}" />
+		               		</a4j:commandLink>
+			            </rich:column>
+			            
+			            
+			            <f:facet name="footer">
+			                <h:panelGrid id="addGrid" columns="2" styleClass="searchactionTB_Bg" cellspacing="0" cellpadding="0" border="0">
+			                	<rich:dataScroller for="branchesTable"/>
+					        </h:panelGrid>
+		            	</f:facet>
+			            
+			        </rich:dataTable>
+			 
+		        
+			</h:form>
+		</h:panelGrid>
+	</ui:define>
+</ui:composition>

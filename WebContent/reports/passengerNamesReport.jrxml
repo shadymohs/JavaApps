@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="passengerNamesReport" language="groovy" printOrder="Horizontal" pageWidth="800" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="760" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" resourceBundle="com.SAPTCO.common.resources.messages.reportMessages" whenResourceMissingType="Empty">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="logopath" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="channelCode" class="java.lang.String"/>
+	<parameter name="system_name" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="p_branch_desc" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="tripCode" class="java.lang.String"/>
+	<parameter name="tripDate" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+                       R.RESERVATION_NUMBER RES_NUMBER,
+                       TKT.TICKET_NUMBER    TICKET_NUMBER,
+                       C.NAME               PASS_NAME,
+                       C.POI_NUMBER         PASS_POI,
+                       POI.LOCALE_NAME      POI_TYPE,
+                       N.LOCALE_NAME        NATIONALITY,
+                       S1.LOCALE_NAME       SOURCE_L,
+                       S2.LOCALE_NAME       DESTINATION_L,
+                       T.TRIP_DATE          TRIP_DATE,
+                       TKT.TICKET_BARCODE,
+                       TT.TICKET_TYPE_ID,
+                       TT.LOCALE_NAME,
+                       TT.FOREIGN_NAME
+
+                  FROM TICKET             TKT,
+                       CUSTOMER           C,
+                       RESERVATION        R,
+                       RESERVATION_TICKET RT,
+                       NATIONALITY        N,
+                       POI_TYPE           POI,
+                       TICKET_TYPE        TT,
+                       STATION            S1,
+                       STATION            S2,
+                       TRIP               T
+
+                 WHERE TKT.TRIP_NUMBER = T.TRIP_NUMBER
+                   AND TKT.PASSENGER_ID = C.PASSENGER_ID
+                   AND TKT.TICKET_NUMBER = RT.TICKET_NUMBER
+                   AND RT.RESERVATION_NUMBER = R.RESERVATION_NUMBER
+                   AND R.RESERVATION_SEQ = RT.RESERVATION_SEQ
+                   AND TKT.TICKET_STATUS_ID = 5
+                   AND C.NATIONALITY_ID = N.NATIONALITY_ID
+                   AND C.POI_TYPE_ID = POI.POI_TYPE_ID
+                   AND TKT.LINE_TICKET_TYPE_ID = TT.TICKET_TYPE_ID
+                   AND TKT.FROM_STATION_ID = S1.STATION_ID
+                   AND TKT.TO_STATION_ID = S2.STATION_ID
+AND T.TRIP_CODE  in (
+                     (SELECT REGEXP_SUBSTR((select value from system_configuration where CODE = 'YMN_TRP_COD'),'[^,]+', 1, LEVEL) PRV_VALUES FROM DUAL
+                         CONNECT BY REGEXP_SUBSTR((select value from system_configuration where CODE = 'YMN_TRP_COD'), '[^,]+', 1, LEVEL) IS NOT NULL)
+                                   )
+
+                   AND T.TRIP_CODE =  $P{tripCode}
+  AND T.TRIP_DATE >= TO_DATE( TO_CHAR( TO_DATE( $P{tripDate}, 'DD-MM-YYYY') , 'DD/MM/YYYY') || ' 00:00' ,  'DD/MM/YYYY HH24:MI')
+                   AND T.TRIP_DATE < TO_DATE( TO_CHAR( TO_DATE($P{tripDate}, 'DD-MM-YYYY') , 'DD/MM/YYYY') || ' 00:00' ,  'DD/MM/YYYY HH24:MI') + 1
+
+                   AND R.RESERVATION_STATUS_ID IN (1, 2)
+                    and tkt.MAIN_TICKET_NUMBER is null]]>
+	</queryString>
+	<field name="RES_NUMBER" class="java.lang.String"/>
+	<field name="TICKET_NUMBER" class="java.lang.String"/>
+	<field name="PASS_NAME" class="java.lang.String"/>
+	<field name="PASS_POI" class="java.lang.String"/>
+	<field name="POI_TYPE" class="java.lang.String"/>
+	<field name="NATIONALITY" class="java.lang.String"/>
+	<field name="SOURCE_L" class="java.lang.String"/>
+	<field name="DESTINATION_L" class="java.lang.String"/>
+	<field name="TRIP_DATE" class="java.sql.Timestamp"/>
+	<field name="TICKET_BARCODE" class="java.lang.String"/>
+	<field name="TICKET_TYPE_ID" class="java.math.BigDecimal"/>
+	<field name="LOCALE_NAME" class="java.lang.String"/>
+	<field name="FOREIGN_NAME" class="java.lang.String"/>
+	<pageHeader>
+		<band height="107" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="93" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="284" y="40" width="178" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="16" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{passengerNamesReport}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" isUsingCache="true">
+				<reportElement x="579" y="0" width="168" height="40"/>
+				<imageExpression><![CDATA[$P{logopath}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="93" y="0" width="56" height="20"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="160" y="0" width="181" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_branch_desc}]]></textFieldExpression>
+			</textField>
+			<textField pattern="h:mm:ss a" isBlankWhenNull="true">
+				<reportElement x="0" y="20" width="93" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="372" y="0" width="181" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="16" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{system_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="93" y="20" width="56" height="20"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{time}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="643" y="64" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{tripCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="543" y="64" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{tripCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="643" y="84" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{tripDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="543" y="84" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{tripDate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement mode="Opaque" x="701" y="0" width="42" height="30" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{serialNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="557" y="0" width="144" height="30" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{passengerName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="362" y="0" width="100" height="30" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{toStation}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="279" y="0" width="83" height="30" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{ticketNum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="196" y="0" width="83" height="30" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{ticketType}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="17" y="0" width="179" height="30" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{ticketBarcode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="462" y="0" width="95" height="30" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{fromStation}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="56" splitType="Stretch">
+			<textField>
+				<reportElement x="701" y="0" width="42" height="50"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}.toString()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="557" y="0" width="144" height="50"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PASS_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="362" y="0" width="100" height="50"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESTINATION_L}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="279" y="0" width="83" height="50"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TICKET_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="196" y="0" width="83" height="50"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{LOCALE_NAME}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="Clip" hAlign="Center" vAlign="Middle">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="17" y="0" width="179" height="50"/>
+				<imageExpression><![CDATA[new com.keepdynamic.barcode.generator.jasperreports.BarCodeRenderer(com.keepdynamic.barcode.generator.jasperreports.BarcodeFactory.createLinear
+    (8, $F{TICKET_NUMBER},"",1.0f,50.0f,0.0f,0.0f,0.0f,0.0f,60,true,true))]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="462" y="0" width="95" height="50"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SOURCE_L}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="44"/>
+	</lastPageFooter>
+</jasperReport>

@@ -1,0 +1,107 @@
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="TR">
+
+	<resultMap class="ChannelBean" id="getChannelsResult">
+	    <result property="code" column="code"/>
+	    <result property="localeName" column="LOCALE_NAME"/>
+	    <result property="foreignName" column="FOREIGN_NAME"/>
+	</resultMap>
+	
+	<select id="getChannelsList" resultMap="getChannelsResult">
+	    select code,LOCALE_NAME,FOREIGN_NAME from CHANNEL order by CODE
+	</select>
+	
+	<resultMap class="StationBean" id="getStationsResult">
+	    <result property="id" column="STATION_ID"/>
+	    <result property="code" column="CODE"/>
+	    <result property="localeName" column="LOCALE_NAME"/>
+	    <result property="foreignName" column="FOREIGN_NAME"/>
+	</resultMap>
+	
+	<select id="getStations" resultMap="getStationsResult" parameterClass="Boolean">
+	    select STATION_ID,CODE,LOCALE_NAME,FOREIGN_NAME
+	    	from STATION where (#isVip# = 0 or is_vip = #isVip#) and INTERNET_FLAG = 1
+	    	order by CODE
+	</select>
+	
+	<select id="getStationList" resultMap="getStationsResult" >
+	    select STATION_ID,CODE,LOCALE_NAME,FOREIGN_NAME
+	    	from STATION 
+	    	order by CODE
+	</select>
+	
+	
+	<resultMap id="luggageDataByStickerResultQ" class="com.SAPTCO.common.ibatis.mapperBeans.LostLuggage">    
+	    <result property="tripNumber" column="TRIP_NUMBER"/>
+	    <result property="ticketNumber" column="TICKET_NUMBER"/>
+	    <result property="tripDate" column="TRIP_DATE"/>
+	    <result property="tripCode" column="TRIP_CODE"/>
+	    <result property="stickerNumber" column="STICKER_NUMBER"/>
+	    <result property="fromStation" column="FROM_STATION"/>
+	    <result property="toStation" column="TO_STATION"/>
+	    <result property="passengerName" column="NAME"/>
+	    <result property="contacteNumber" column="MOBILE_NUMBER"/>
+	    <result property="reservationNumber" column="RESERVATION_NUMBER"/>
+	    
+	</resultMap>
+	
+	<select id="getLuggageDataByStickerQuery" resultMap="luggageDataByStickerResultQ" parameterClass="String">
+	      SELECT
+                  RLS.RESERVATION_NUMBER,
+                  RLS.STICKER_NUMBER,
+                  RT.TICKET_NUMBER,
+                  T.TRIP_NUMBER,
+                  FS.LOCALE_NAME FROM_STATION,
+                  TS.LOCALE_NAME TO_STATION,
+                  CD.MOBILE_NUMBER,
+                  P.NAME,
+                  TR.TRIP_CODE,
+                  to_char(TR.TRIP_DATE,'yyyy-mm-dd hh:mm:ss') TRIP_DATE
+                  
+             FROM
+                  TR_PROD.RESERVATION_LUGGAGE_STICKERS RLS
+                  LEFT JOIN TR_PROD.RESERVATION_TICKET RT ON RLS.RESERVATION_NUMBER= RT.RESERVATION_NUMBER AND RLS.RESERVATION_SEQ =RT.RESERVATION_SEQ
+                  LEFT JOIN TR_PROD.TICKET T   ON RT.TICKET_NUMBER=T.TICKET_NUMBER
+                  LEFT JOIN TR_PROD.CONTACT_DETAILS CD   ON CD.BILL_NUMBER=T.SAPTCO_PNR
+                  LEFT JOIN TR_PROD.CUSTOMER P   ON P.PASSENGER_ID=T.PASSENGER_ID
+                  LEFT JOIN TR_PROD.TRIP  TR ON TR.TRIP_NUMBER = T.TRIP_NUMBER
+                  LEFT JOIN TR_PROD.STATION FS ON T.FROM_STATION_ID = FS.STATION_ID
+                  LEFT JOIN TR_PROD.STATION TS ON T.TO_STATION_ID = TS.STATION_ID
+                  
+              WHERE 
+                   RLS.STICKER_NUMBER =  #stickerNumber#  
+                   order by  RLS.RESERVATION_NUMBER,
+                  RLS.RESERVATION_SEQ asc
+	</select>
+	<select id="getLuggageDataByReservationQuery" resultMap="luggageDataByStickerResultQ" parameterClass="String">
+	      SELECT
+                  RLS.RESERVATION_NUMBER,
+                  RLS.STICKER_NUMBER,
+                  RT.TICKET_NUMBER,
+                  T.TRIP_NUMBER,
+                  FS.LOCALE_NAME FROM_STATION,
+                  TS.LOCALE_NAME TO_STATION,
+                  CD.MOBILE_NUMBER,
+                  P.NAME,
+                  TR.TRIP_CODE,
+                  to_char(TR.TRIP_DATE,'yyyy-mm-dd hh:mm:ss') TRIP_DATE
+                  
+             FROM
+                  TR_PROD.RESERVATION_LUGGAGE_STICKERS RLS
+                  LEFT JOIN TR_PROD.RESERVATION_TICKET RT ON RLS.RESERVATION_NUMBER= RT.RESERVATION_NUMBER AND RLS.RESERVATION_SEQ =RT.RESERVATION_SEQ
+                  LEFT JOIN TR_PROD.TICKET T   ON RT.TICKET_NUMBER=T.TICKET_NUMBER
+                  LEFT JOIN TR_PROD.CONTACT_DETAILS CD   ON CD.BILL_NUMBER=T.SAPTCO_PNR
+                  LEFT JOIN TR_PROD.CUSTOMER P   ON P.PASSENGER_ID=T.PASSENGER_ID
+                  LEFT JOIN TR_PROD.TRIP  TR ON TR.TRIP_NUMBER = T.TRIP_NUMBER
+                  LEFT JOIN TR_PROD.STATION FS ON T.FROM_STATION_ID = FS.STATION_ID
+                  LEFT JOIN TR_PROD.STATION TS ON T.TO_STATION_ID = TS.STATION_ID
+                  
+              WHERE 
+                   RLS.RESERVATION_NUMBER =  #reservationNumber#  
+                   order by  RLS.RESERVATION_NUMBER,
+                  RLS.RESERVATION_SEQ asc
+	</select>
+</sqlMap>

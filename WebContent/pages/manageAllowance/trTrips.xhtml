@@ -1,0 +1,191 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">TR trips</ui:define>
+   	<ui:define name="content">
+   		<h:form id="searchShipmentForm">
+			<rich:dataTable value="#{tRTripsBB.tRTripsDto.detailsList}" var="dtl" id="table" rows="20" style="width:100%;text-align:center;">
+				<f:facet name="noData">
+	                #{err['Messages.no_data']}
+	            </f:facet>
+	            <rich:column>
+	                <f:facet name="header">
+                		<h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.barcode']}"/>
+	                	<h:inputText value="#{tRTripsBB.tRTripsDto.tripNumber}"/>
+                	</f:facet>
+	                <h:outputText value="#{dtl.tripNumber}" />
+	            </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+                		<h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.trip_code']}"/>
+	                	<h:inputText value="#{tRTripsBB.tRTripsDto.tripCode}"/>
+                	</f:facet>
+	                <h:outputText value="#{dtl.tripCode}" />
+	            </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+                		<h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.trip_date']}"/>
+                		<rich:calendar value="#{tRTripsBB.tRTripsDto.tripDate}" datePattern="dd-MM-yyyy">
+	                		<f:converter converterId="CalDateStrConveter"/>
+	                	</rich:calendar>
+                	</f:facet>
+	                <h:outputText value="#{dtl.tripDate}" />
+	            </rich:column>
+	             <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['Label.Manag_Allowance.tr_trips.station']}
+	                </f:facet>
+	                <h:outputText value="#{dtl.label}"/>
+	            </rich:column>
+	             <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['Label.Manag_Allowance.tr_trips.driver1_name']}
+	                </f:facet>
+	                <h:outputText value="#{dtl.driver1Name}" />
+	            </rich:column>
+	             <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['Label.Manag_Allowance.tr_trips.driver2_name']}
+	                </f:facet>
+	                <h:outputText value="#{dtl.driver2Name}" />
+	            </rich:column>
+	            <rich:column>
+	            	<f:facet name="header">
+		            	<h:commandLink styleClass="no-decor" action="#{tRTripsBB.search}" title="#{msgs['Action.Search']}" rendered="#{baseBB.authorizeSearchAll}"
+		            		disabled="#{tRTripsBB.tRTripsDto.isManageMode}">
+		                    <h:graphicImage library="images" name="search.png" style="border:none" width="25" height="25"/>
+		                </h:commandLink>
+	            	</f:facet>
+	                <h:commandLink styleClass="no-decor" rendered="#{baseBB.authorizeUpdate}" action="#{tRTripsBB.edit}"
+	                	disabled="#{tRTripsBB.tRTripsDto.isManageMode || tRTripsBB.tRTripsDto.allowanceDetailBean.isIntegrated}">
+	                    <h:graphicImage library="images" name="edit2.gif" title="#{msgs['Action.edit']}" style="border:none" />
+	                    <f:setPropertyActionListener target="#{tRTripsBB.tRTripsDto.allowanceDetailBean}" value="#{dtl}"/>
+	                </h:commandLink>
+	            </rich:column>
+	            <f:facet name="footer">
+	            	<h:panelGrid width="100%" style="text-align:center;">
+	                	<rich:dataScroller for="table"/>
+                	</h:panelGrid>
+	            </f:facet>
+	        </rich:dataTable>
+		</h:form>
+		<h:form id="manageShipmentForm" rendered="#{tRTripsBB.tRTripsDto.isManageMode}">
+			<h:panelGrid columns="4" id="editGrid" cellspacing="0" cellpadding="0" border="0" style="width:100%;text-align:center;">
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.barcode']}"/> 
+                <h:outputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.tripNumber}"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.station']}"/> 
+                <h:outputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.label}"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.trip_code']}"/> 
+                <h:outputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.tripCode}"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.trip_date']}"/> 
+                <h:outputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.tripDate}"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.bus_number']}"/> 
+                <h:outputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.busNumber}"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.plate_number']}"/> 
+                <h:outputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.plateNumber}"/>
+			</h:panelGrid>
+            <h:panelGrid columns="3" cellspacing="0" cellpadding="0" border="0" style="width:100%;text-align:center;">
+                <h:outputLabel value=""/>
+                <h:outputLabel value="#{msgs['Label.Manag_Allowance.tr_trips.driver1']}" style="font-weight: bold;text-decoration: underline;"/>
+                <h:outputLabel value="#{msgs['Label.Manag_Allowance.tr_trips.driver2']}" style="font-weight: bold;text-decoration: underline;"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.driver1_number']}"/> 
+                <h:outputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.driver1Number}"/>
+                <h:outputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.driver1_name']}"/> 
+                <h:outputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.driver1Name}"/>
+                <h:outputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Name}"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.driver1_allowance']}"/> 
+                <h:outputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.driver1Allowance}" rendered="#{!baseBB.authorizeChangePrice || tRTripsBB.tRTripsDto.allowanceDetailBean.driver1Allowance != 0}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.driver1Allowance}" rendered="#{baseBB.authorizeChangePrice and tRTripsBB.tRTripsDto.allowanceDetailBean.driver1Allowance == 0}"/>
+                <h:outputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Allowance}"
+                	rendered="#{empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number || !baseBB.authorizeChangePrice || tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Allowance != 0}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Allowance}"
+                	rendered="#{!empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number and baseBB.authorizeChangePrice and tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Allowance == 0}"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.percentage']}"/> 
+                <h:outputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.percentage}"/>
+                <h:outputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.percentage2}" rendered="#{!empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="" rendered="#{empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                
+                <h:outputText value="#{msgs['Label.Manag_Allowance.financial_ele']}"/>
+                <h:selectOneMenu styleClass="dropDownStyle" value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.financialElementBean.id}"
+               	 	disabled="#{!empty tRTripsBB.tRTripsDto.allowanceDetailBean.id}" required="true" requiredMessage="#{err['allowance_type_req']}">
+             		<f:selectItem itemLabel="#{msgs['Messages.selectList']}" itemValue=""/>
+              		<f:selectItems value="#{tRTripsBB.financialElList}"/>
+              	</h:selectOneMenu>
+              	<h:outputLabel value=""/>
+              	
+			</h:panelGrid>
+            <h:panelGrid columns="3" cellspacing="0" cellpadding="0" border="0" style="width:100%;text-align:center;" rendered="false">
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.diesel']}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.diesel}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.diesel2}" rendered="#{!empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="" rendered="#{empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.housing']}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.housing}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.housing2}" rendered="#{!empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="" rendered="#{empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.staying']}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.staying}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.staying2}" rendered="#{!empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="" rendered="#{empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.visa']}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.visa}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.visa2}" rendered="#{!empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="" rendered="#{empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.borderInsurance']}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.borderInsurance}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.borderInsurance2}" rendered="#{!empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="" rendered="#{empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.borderStaying']}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.borderStaying}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.borderStaying2}" rendered="#{!empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="" rendered="#{empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.weeklyVacation']}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.weeklyVacation}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.weeklyVacation2}" rendered="#{!empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="" rendered="#{empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.internalStaying']}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.internalStaying}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.internalStaying2}" rendered="#{!empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="" rendered="#{empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.internationalStaying']}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.internationalStaying}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.internationalStaying2}" rendered="#{!empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="" rendered="#{empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.eventVacation']}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.eventVacation}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.eventVacation2}" rendered="#{!empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="" rendered="#{empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.ramadan']}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.ramadan}" rendered="#{tRTripsBB.tRTripsDto.allowanceDetailBean.driver1IsMuslim}"/>
+                <h:outputText value="" rendered="#{!tRTripsBB.tRTripsDto.allowanceDetailBean.driver1IsMuslim}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.ramadan2}" rendered="#{!empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number and tRTripsBB.tRTripsDto.allowanceDetailBean.driver2IsMuslim}"/>
+                <h:outputText value="" rendered="#{!empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number and !tRTripsBB.tRTripsDto.allowanceDetailBean.driver2IsMuslim}"/>
+                <h:outputText value="" rendered="#{empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.other']}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.other}"/>
+                <h:inputText value="#{tRTripsBB.tRTripsDto.allowanceDetailBean.other2}" rendered="#{!empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="" rendered="#{empty tRTripsBB.tRTripsDto.allowanceDetailBean.driver2Number}"/>
+			</h:panelGrid>
+            <h:panelGrid columns="4" style="width:100%;text-align:center;">
+            	<h:commandLink styleClass="no-decor" action="#{tRTripsBB.save}" title="#{msgs['Action.save']}" rendered="false">
+                    <h:graphicImage library="images" name="save.jpg" style="border:none" width="50" height="50"/>
+                </h:commandLink>
+                <h:commandLink styleClass="no-decor" action="#{tRTripsBB.cancel}" title="#{msgs['Action.cancel']}" immediate="true">
+                    <h:graphicImage library="images" name="return.png" style="border:none" width="25" height="25"/>
+                </h:commandLink>
+            	<h:commandButton value="#{msgs['Action.sendToHR']}" action="#{tRTripsBB.sendToHR}" styleClass="bigButtonStyle"
+            		rendered="#{baseBB.authorizeSendToHR and !tRTripsBB.tRTripsDto.allowanceDetailBean.isIntegrated and !empty tRTripsBB.tRTripsDto.allowanceDetailBean.id}"/>
+            	<h:outputText value="#{msgs['updator']}" rendered="#{tRTripsBB.tRTripsDto.allowanceDetailBean.isIntegrated}"/>
+            	<h:outputText value="#{tRTripsBB.updator}" rendered="#{tRTripsBB.tRTripsDto.allowanceDetailBean.isIntegrated}"/>
+            </h:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>

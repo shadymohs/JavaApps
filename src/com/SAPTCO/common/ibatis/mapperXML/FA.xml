@@ -1,0 +1,53 @@
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="FA">
+
+	<!-- return branches list -->
+	<resultMap id="getFixedAssetsResult" class="FixedAssets">
+		<result property="code" column="TAG_NUMBER"/>
+		<result property="localeName" column="DESCRIPTION"/>
+	</resultMap>
+  		
+	<select id="getFixedAssets" resultMap="getFixedAssetsResult" parameterClass="FADto">
+		SELECT DISTINCT ASST.TAG_NUMBER TAG_NUMBER,substr(ASST.DESCRIPTION,1,25) DESCRIPTION
+		FROM FA_ADDITIONS_ASSET_V ASST,
+	         FA_CATEGORIES_B CAT,
+	         FA_ASSET_KEYWORDS FAK,
+	         FA_DISTRIBUTION_HISTORY FD,
+	         GL_CODE_COMBINATIONS GL,
+	         FA_TRANSACTION_HISTORY_TRX_V TRX,
+	        FA_FINANCIAL_INQUIRY_COST_V A,
+	         FA_LOCATIONS LOC,
+	         PER_ALL_PEOPLE_F EMP 
+		WHERE 1=1
+	         AND ASST.ASSET_NUMBER=FD.ASSET_ID
+	         AND FD.CODE_COMBINATION_ID = GL.CODE_COMBINATION_ID
+	         AND FD.DATE_INEFFECTIVE IS NULL
+	            AND FD.LOCATION_ID = LOC.LOCATION_ID
+	             AND FD.DISTRIBUTION_ID = (SELECT MAX(TDD.DISTRIBUTION_ID) FROM FA_DISTRIBUTION_HISTORY TDD WHERE FD.ASSET_ID = TDD.ASSET_ID)               
+	         AND ASST.ASSET_KEY_CCID = FAK.CODE_COMBINATION_ID(+)
+	         AND ASST.ASSET_CATEGORY_ID = CAT.CATEGORY_ID
+	         AND TRX.ASSET_ID = FD.ASSET_ID
+	         AND TRX.TRANSACTION_HEADER_ID = (SELECT MAX(TRANSACTION_HEADER_ID) FROM FA_TRANSACTION_HISTORY_TRX_V TRX1 WHERE TRX1.ASSET_ID = TRX.ASSET_ID)     
+	         AND A.ASSET_ID =   ASST.ASSET_ID
+	         AND A.TRANSACTION_HEADER_ID_IN = (SELECT MAX (TRANSACTION_HEADER_ID_IN)FROM  FA_FINANCIAL_INQUIRY_COST_V A1 WHERE A1.ASSET_ID =A.ASSET_ID)
+	         AND NOT EXISTS (SELECT FAR.ASSET_ID FROM FA_RETIREMENTS_V FAR WHERE FAR.ASSET_ID = ASST.ASSET_NUMBER) 
+	         AND FD.ASSIGNED_TO = EMP.PERSON_ID(+)
+	         AND (EMP.EFFECTIVE_END_DATE = (SELECT MAX(EMPL.EFFECTIVE_END_DATE) FROM PER_ALL_PEOPLE_F EMPL WHERE EMPL.PERSON_ID = FD.ASSIGNED_TO) OR FD.ASSIGNED_TO IS NULL) 
+	         AND ASST.ATTRIBUTE2 = 'Yes'
+	         AND (ASST.TAG_NUMBER = null OR null IS NULL)
+	         AND (ASST.ASSET_NUMBER = null OR null IS NULL)
+	         AND (EMP.PERSON_ID  = null OR null IS NULL)
+	         AND (LOC.SEGMENT1 = null OR null IS NULL)
+	         AND (GL.SEGMENT3 &gt;= null OR null IS NULL)
+	         AND (GL.SEGMENT3 &lt;= null OR null IS NULL)
+		ORDER BY ASST.TAG_NUMBER
+	</select>
+	
+	<procedure id="excuteReceipts" parameterClass="String" resultClass="String">
+		{call   XX_SAPTCO_FIXED_ASSET.GENERATE_BARCODE_SEQ(#receiptNo#)}
+	</procedure>
+	
+</sqlMap>

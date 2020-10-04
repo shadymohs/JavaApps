@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource-config>
+
+	<resource class="org.richfaces.renderkit.html.gradientimages.HeaderInverseGradientImage">
+		<name>org.richfaces.renderkit.html.gradientimages.HeaderInverseGradientImage</name>
+	</resource>
+	<resource class="org.richfaces.renderkit.html.gradientimages.TabGradientImage">
+		<name>org.richfaces.renderkit.html.gradientimages.TabGradientImage</name>
+	</resource>
+	<resource class="org.richfaces.renderkit.html.images.ButtonBackgroundImage">
+		<name>org.richfaces.renderkit.html.images.ButtonBackgroundImage</name>
+	</resource>
+	<resource class="org.richfaces.renderkit.html.images.StandardButtonPressedBgImage">
+		<name>org.richfaces.renderkit.html.images.StandardButtonPressedBgImage</name>
+	</resource>
+	<resource class="org.richfaces.renderkit.html.gradientimages.ButtonInverseGradientImage">
+		<name>org.richfaces.renderkit.html.gradientimages.ButtonInverseGradientImage</name>
+	</resource>
+	<resource class="org.richfaces.renderkit.html.gradientimages.ButtonGradientImage">
+		<name>org.richfaces.renderkit.html.gradientimages.ButtonGradientImage</name>
+	</resource>
+	<resource class="org.richfaces.renderkit.html.images.InputErrorIcon">
+		<name>org.richfaces.renderkit.html.images.InputErrorIcon</name>
+	</resource>
+	<resource class="org.richfaces.renderkit.html.images.StandardButtonBgImage">
+		<name>org.richfaces.renderkit.html.images.StandardButtonBgImage</name>
+	</resource>
+	<resource class="org.richfaces.renderkit.html.gradientimages.MenuInverseGradientImage">
+		<name>org.richfaces.renderkit.html.gradientimages.MenuInverseGradientImage</name>
+	</resource>
+	<resource class="org.richfaces.renderkit.html.gradientimages.InputGradientImage">
+		<name>org.richfaces.renderkit.html.gradientimages.InputGradientImage</name>
+	</resource>
+	<resource class="org.richfaces.renderkit.html.gradientimages.HeaderGradientImage">
+		<name>org.richfaces.renderkit.html.gradientimages.HeaderGradientImage</name>
+	</resource>
+	<resource class="org.richfaces.renderkit.html.images.InputBackgroundImage">
+		<name>org.richfaces.renderkit.html.images.InputBackgroundImage</name>
+	</resource>
+	<resource class="org.ajax4jsf.javascript.AjaxScript">
+		<name>org.ajax4jsf.javascript.AjaxScript</name>
+	</resource>
+	<resource class="org.richfaces.renderkit.html.gradientimages.MenuGradientImage">
+		<name>org.richfaces.renderkit.html.gradientimages.MenuGradientImage</name>
+	</resource>
+	<resource class="org.richfaces.renderkit.html.gradientimages.TabInverseGradientImage">
+		<name>org.richfaces.renderkit.html.gradientimages.TabInverseGradientImage</name>
+	</resource>
+ 
+</resource-config>

@@ -1,0 +1,592 @@
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD iBatis Mapper 3.0 //EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.SAPTCO.common.ibatis.mapperInterface.Security">
+<!-- Branches -->
+	<resultMap id="getBranchesByCodeResult" type="Branch">     
+		<id property="id" column="BRANCH_ID"/>
+		<result property="code" column="BRANCH_CODE"/>
+		<result property="localeName" column="BRANCH_AR_DESC"/>
+		<result property="foreignName" column="BRANCH_EN_DESC"/>
+		<result property="isActive" column="BRANCH_IS_ACTIVE"/>
+		<result property="systemId" column="SYSTEM_ID"/>	
+	</resultMap>
+	
+	<select id="getBranchesByCode" resultMap="getBranchesByCodeResult" parameterType="Branches">
+		SELECT BRANCH_ID, BRANCH_CODE, BRANCH_AR_DESC, BRANCH_EN_DESC, BRANCH_IS_ACTIVE ,SYSTEM_ID
+		FROM SAP_BRANCHES
+		where 1=1
+		<if test="codeDesc != null">
+			and BRANCH_CODE = #{codeDesc} 
+		</if>
+		<if test="systemId != null">
+			and SYSTEM_ID = #{systemId} 
+		</if>
+		ORDER BY BRANCH_CODE
+	</select>
+
+	<insert id="insertBranch" parameterType="Branches">
+		INSERT INTO SAP_BRANCHES
+		VALUES ((SELECT NVL(MAX(BRANCH_ID),0)+1 FROM SAP_BRANCHES),
+			#{branchObj.code},#{branchObj.localeName},
+			#{branchObj.foreignName},#{branchObj.isActive},
+			SYSDATE,#{branchObj.createdBy},NULL,NULL,#{branchObj.systemId})
+	</insert>
+	
+	<update id="updateBranch" parameterType="Branches">
+		UPDATE SAP_BRANCHES
+		SET BRANCH_AR_DESC = #{branchObj.localeName},BRANCH_EN_DESC = #{branchObj.foreignName},
+			BRANCH_IS_ACTIVE = #{branchObj.isActive},
+			UPDATE_DATE = SYSDATE,UPDATE_BY = #{branchObj.updatedBy},
+			SYSTEM_ID = #{branchObj.systemId}
+			WHERE BRANCH_ID = #{branchObj.id}
+	</update>
+	
+	<!--...................................................................................................-->
+
+	<!--Pages -->
+	<resultMap id="getPagesByCodeResult" type="Page">
+		<id property="id" column="MENU_ID"/>
+		<result property="localeName" column="MENU_AR_DESC"/>
+		<result property="foreignName" column="MENU_EN_DESC"/>
+		<result property="menuUrl" column="MENU_URL"/>
+		<result property="isActive" column="MENU_IS_ACTIVE"/>
+		<result property="parentPage.id" column="PARENT_ID"/>
+		<result property="parentPage.localeName" column="PARENT_AR_DESC"/>
+		<result property="parentPage.foreignName" column="PARENT_EN_DESC"/>
+	</resultMap>
+	
+	<select id="getPagesByCode" resultMap="getPagesByCodeResult" parameterType="Pages">
+		SELECT M.PAGE_ID MENU_ID,M.MENU_AR_DESC,M.MENU_EN_DESC,M.MENU_URL,M.MENU_IS_ACTIVE,P.PAGE_ID PARENT_ID,
+			P.MENU_AR_DESC PARENT_AR_DESC,P.MENU_EN_DESC PARENT_EN_DESC
+		FROM SAP_SYSTEM_MENU M LEFT JOIN SAP_SYSTEM_MENU P ON(M.PARENT_ID = P.PAGE_ID)
+		<if test="codeDesc != null">
+			WHERE M.PAGE_ID = #{codeDesc} 
+		</if>
+		ORDER BY M.PAGE_ID
+	</select>
+
+	<insert id="insertPage" parameterType="Pages">
+		INSERT INTO SAP_SYSTEM_MENU 
+		VALUES ((SELECT NVL(MAX(MENU_ID),0)+1 FROM SAP_SYSTEM_MENU),
+			#{pageObj.parentId,jdbcType=NUMERIC},#{pageObj.code},#{pageObj.localeName},
+			#{pageObj.foreignName},#{pageObj.menuUrl},#{pageObj.isActive},
+			SYSDATE,#{pageObj.createdBy},NULL,NULL)
+	</insert>
+	
+	<update id="updatePage" parameterType="Pages">
+		UPDATE SAP_SYSTEM_MENU 
+		SET MENU_AR_DESC = #{pageObj.localeName},MENU_EN_DESC = #{pageObj.foreignName},
+			MENU_URL = #{pageObj.menuUrl},
+			MENU_IS_ACTIVE = #{pageObj.isActive},
+			UPDATE_DATE = SYSDATE,UPDATE_BY = #{pageObj.updatedBy}
+			WHERE MENU_ID = #{pageObj.menuId}
+	</update>
+	
+	<select id="deletePage" statementType="CALLABLE" resultType="Pages" parameterType="Pages">
+		{call SECURITY_PKG.DELETE_PAGE(#{pageObj.menuId,mode=IN,jdbcType=NUMERIC},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+	<select id="getParentPage" resultMap="getPagesByCodeResult">
+		SELECT MENU_ID,MENU_AR_DESC,MENU_EN_DESC
+		FROM SAP_SYSTEM_MENU
+		WHERE PARENT_ID IS NULL AND MENU_IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/>
+	</select>
+	
+	<resultMap type="Privelege" id="pagePrivilegeResult">
+		<id property="id" column="PRIVILEGE_ID"/>
+		<result property="code" column="PRIVILEGE_CODE"/>
+		<result property="localeName" column="PRIVILEGE_AR_DESC"/>
+		<result property="foreignName" column="PRIVILEGE_EN_DESC"/>
+	</resultMap>
+	
+	<select id="getAllPagePrivelege" parameterType="Pages" resultMap="pagePrivilegeResult">
+		SELECT PRIVILEGE_ID,PRIVILEGE_CODE,PRIVILEGE_AR_DESC,PRIVILEGE_EN_DESC
+		FROM SAP_SYSTEM_PRIVILEGE
+		WHERE PRIVILEGE_IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/>
+		ORDER BY PRIVILEGE_CODE
+	</select>
+	
+	<select id="getCurrentPagePrivelege" parameterType="Pages" resultMap="pagePrivilegeResult">
+		SELECT PRIVILEGE_ID FROM SAP_MENU_PRIVILEGE WHERE MENU_ID = #{pageObj.id}
+	</select>
+	
+	<select id="updatePagePrivelege" statementType="CALLABLE" resultType="Pages" parameterType="Pages">
+		{call SECURITY_PKG.UPDATE_MENU_PRIVILEGE(#{pageObj.menuId,mode=IN,jdbcType=NUMERIC},
+			#{selectedPrivilegeString,mode=IN,jdbcType=VARCHAR},
+			#{createdBy,mode=IN,jdbcType=NUMERIC},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+	<!--...................................................................................................-->
+
+	<!--Program groups -->
+	<resultMap id="searchProgramGroupResult" type="ProgramGroup">     
+		<id property="id" column="PROGRAM_GROUP_ID"/>
+		<result property="code" column="P_G_CODE"/>
+		<result property="localeName" column="P_G_AR_DESC"/>
+		<result property="foreignName" column="P_G_EN_DESC"/>
+		<result property="isActive" column="P_G_IS_ACTIVE"/>		
+	</resultMap>
+	
+	<select id="searchProgramGroups" resultMap="searchProgramGroupResult" parameterType="ProgramGroups">
+		SELECT PROGRAM_GROUP_ID, P_G_CODE, P_G_AR_DESC, P_G_EN_DESC, P_G_IS_ACTIVE 
+		FROM SAP_PROGRAM_GROUP 
+		<if test="codeDesc != null">
+			WHERE P_G_CODE = #{codeDesc} 
+		</if>
+		ORDER BY P_G_CODE
+	</select>	
+
+	<insert id="insertProgramGroups" parameterType="ProgramGroupsDto">
+		INSERT INTO SAP_PROGRAM_GROUP
+		VALUES ((SELECT NVL(MAX(PROGRAM_GROUP_ID),0)+1 FROM SAP_PROGRAM_GROUP),
+			#{programGroupsObj.code},#{programGroupsObj.localeName},
+			#{programGroupsObj.foreignName},#{programGroupsObj.isActive},
+			SYSDATE,#{programGroupsObj.createdBy},NULL,NULL)
+	</insert>
+	
+	<update id="updateProgramGroups" parameterType="ProgramGroups">
+		UPDATE SAP_PROGRAM_GROUP
+		SET P_G_AR_DESC = #{programGroupsObj.localeName},
+			P_G_EN_DESC = #{programGroupsObj.foreignName},
+			P_G_IS_ACTIVE = #{programGroupsObj.isActive},
+			UPDATE_DATE = SYSDATE,UPDATE_BY = #{programGroupsObj.updatedBy}
+			WHERE PROGRAM_GROUP_ID = #{programGroupsObj.id}
+	</update>
+	
+	<resultMap type="ProgramMenu" id="searchProgramGroupPagesResult">
+		<id property="id" column="P_G_M_ID"/>
+		<result property="systemMenu.code" column="MENU_CODE"/>
+		<result property="systemMenu.localeName" column="MENU_AR_DESC"/>
+		<result property="systemMenu.foreignName" column="MENU_EN_DESC"/>
+	</resultMap>
+	
+	<select id="getProgramGroupPages" resultMap="searchProgramGroupPagesResult" parameterType="ProgramGroupsDto">
+		SELECT PG.P_G_M_ID, SM.PAGE_ID MENU_CODE, SM.MENU_AR_DESC, SM.MENU_EN_DESC 
+		FROM SAP_SYSTEM_MENU SM, SAP_PROGRAM_GROUP_MENU PG
+		WHERE SM.PAGE_ID = PG.MENU_ID AND SM.MENU_IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/>
+		AND PG.PROGRAM_GROUP_ID = #{programGroupsObj.id}
+			<if test="code != null">
+				AND SM.MENU_ID = #{code}
+			</if>
+		ORDER BY SM.MENU_ID
+	</select>
+	
+	<select id="getProgramGroupUnselectedPages" resultMap="getPagesByCodeResult" parameterType="ProgramGroupsDto">
+		SELECT SM.PAGE_ID MENU_ID, SM.PAGE_ID MENU_CODE, SM.MENU_AR_DESC, SM.MENU_EN_DESC 
+		FROM SAP_SYSTEM_MENU SM 
+		WHERE SM.PAGE_ID NOT IN 
+		(SELECT PG.MENU_ID FROM SAP_PROGRAM_GROUP_MENU PG WHERE PG.PROGRAM_GROUP_ID = #{programGroupsObj.id})
+		AND SM.MENU_IS_ACTIVE = 1  
+		ORDER BY SM.PAGE_ID
+	</select>		
+		
+	<select id="insertProgramGroupMenu" statementType="CALLABLE" resultType="ProgramGroupsDto" parameterType="ProgramGroupsDto">
+		{call SECURITY_PKG.INSERT_PROGRAM_GROUP_MENU(#{programGroupsObj.id,mode=IN,jdbcType=NUMERIC},
+			#{selectedPagesString,mode=IN,jdbcType=VARCHAR},
+			#{createdBy,mode=IN,jdbcType=NUMERIC},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+	<select id="deleteProgramGroups" statementType="CALLABLE" resultType="ProgramGroupsDto" parameterType="ProgramGroupsDto">
+		{call SECURITY_PKG.delete_program_group(
+			#{programGroupsObj.id,mode=IN,jdbcType=NUMERIC},
+			#{procResult,mode=OUT,jdbcType=VARCHAR})}
+	</select>
+	
+	<select id="deleteProgramGroupMenu" statementType="CALLABLE" resultType="ProgramGroup" parameterType="ProgramGroup">
+		{call SECURITY_PKG.DELETE_PROGRAM_GROUP_MENU(#{menuProgramObj.menuProgramId,mode=IN,jdbcType=NUMERIC},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+	<select id="getAllProgramGroupPagePrivelege" parameterType="ProgramGroupsDto" resultMap="pagePrivilegeResult">
+		SELECT PRIVILEGE_ID,PRIVILEGE_CODE,PRIVILEGE_AR_DESC,PRIVILEGE_EN_DESC
+		FROM SAP_SYSTEM_PRIVILEGE
+		WHERE PRIVILEGE_ID IN (SELECT PRIVILEGE_ID FROM SAP_MENU_PRIVILEGE WHERE MENU_ID =
+			(SELECT MENU_ID FROM SAP_PROGRAM_GROUP_MENU WHERE P_G_M_ID = #{menuProgramObj.systemMenu.code}))
+			AND PRIVILEGE_IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/>
+		ORDER BY PRIVILEGE_CODE
+	</select>
+	
+	<select id="getCurrentProgramGroupPagePrivelege" parameterType="ProgramGroupsDto" resultMap="pagePrivilegeResult">
+		SELECT PRIVILEGE_ID FROM SAP_P_G_M_P WHERE PROGRAM_MENU_ID = #{menuProgramObj.systemMenu.code}
+	</select>
+	
+	<select id="updateProgramGroupPagePrivelege" statementType="CALLABLE" resultType="ProgramGroupsDto" parameterType="ProgramGroupsDto">
+		{call SECURITY_PKG.UPDATE_GROUP_MENU(#{menuProgramObj.id,mode=IN,jdbcType=NUMERIC},
+			#{selectedPrivilegeString,mode=IN,jdbcType=VARCHAR},
+			#{createdBy,mode=IN,jdbcType=NUMERIC},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+	<!--...................................................................................................-->
+
+	<!--Users -->
+	<resultMap type="User" id="searchUsersResult">
+		<id property="id" column="USER_ID"/>
+		<result property="userName" column="USER_NAME"/>
+		<result property="isActive" column="USER_IS_ACTIVE"/>
+		<result property="expireDateString" column="EXPIRE_DATE"/>
+		<result property="userInf.userFullName" column="USER_FULL_NAME"/>
+		<result property="userInf.userType" column="USER_TYPE"/>
+		<result property="userInf.id" column="USER_INF_ID"/>
+	</resultMap>
+	
+	<resultMap type="UserInf" id="searchUsersInfResult">
+		<id property="id" column="USER_INF_ID"/>
+		<result property="userFullName" column="USER_FULL_NAME"/>
+		<result property="isActive" column="USER_IS_ACTIVE"/>
+		<result property="hrBranch" column="HR_BRANCH"/>
+		<result property="hrPosition" column="HR_POSITION"/>
+		<result property="hireDate" column="HIRE_DATE"/>
+		<result property="terminationDate" column="TERMINATION_DATE"/>
+		<result property="userMail" column="USER_MAIL"/>
+		<result property="mobNum" column="USER_MOB1"/>
+		<result property="mobNum2" column="USER_MOB2"/>
+		<result property="hrDepartment" column="HR_DEPARTMENT"/>
+		<result property="hrReligion" column="HR_RELIGION"/>
+		<result property="hrBranchCode" column="HR_BRANCH_CODE"/>
+		<result property="hrJobCode" column="HR_JOB_CODE"/>
+		<result property="hrJobDesc" column="HR_JOB_DESC"/>
+		<result property="hrSectorCode" column="HR_SECTOR_CODE"/>
+		<result property="hrSectorDesc" column="HR_SECTOR_DESC"/>
+		<result property="posCode" column="POS_CODE"/>
+	</resultMap>
+	
+	<resultMap type="DriversBean" id="searchDriverResult">
+		<id property="id" column="USER_INF_ID"/>
+		<result property="userFullName" column="USER_FULL_NAME"/>
+		<result property="isActive" column="USER_IS_ACTIVE"/>
+		<result property="hrBranch" column="HR_BRANCH"/>
+		<result property="hrPosition" column="HR_POSITION"/>
+		<result property="hireDate" column="HIRE_DATE"/>
+		<result property="terminationDate" column="TERMINATION_DATE"/>
+		<result property="userMail" column="USER_MAIL"/>
+		<result property="mobNum" column="USER_MOB1"/>
+		<result property="mobNum2" column="USER_MOB2"/>
+		<result property="hrDepartment" column="HR_DEPARTMENT"/>
+		<result property="hrReligion" column="HR_RELIGION"/>
+		<result property="hrBranchCode" column="HR_BRANCH_CODE"/>
+		<result property="hrJobCode" column="HR_JOB_CODE"/>
+		<result property="hrJobDesc" column="HR_JOB_DESC"/>
+		<result property="hrSectorCode" column="HR_SECTOR_CODE"/>
+		<result property="hrSectorDesc" column="HR_SECTOR_DESC"/>
+		<result property="posCode" column="POS_CODE"/>
+	</resultMap>
+	
+	<select id="saveDriver" statementType="CALLABLE" resultType="DriversDto" parameterType="DriversDto">
+		{call SECURITY_PKG.save_driver(
+		#{driverObj.id,mode=INOUT,jdbcType=NUMERIC},
+			#{driverObj.userFullName,mode=INOUT,jdbcType=VARCHAR},
+			#{driverObj.empPosition,mode=INOUT,jdbcType=NUMERIC},
+			#{driverObj.hireDate,mode=INOUT,jdbcType=VARCHAR},
+			#{driverObj.userMail,mode=INOUT,jdbcType=VARCHAR},
+			#{driverObj.mobNum,mode=INOUT,jdbcType=VARCHAR},
+			#{driverObj.mobNum2,mode=INOUT,jdbcType=VARCHAR},			
+			#{driverObj.isActive,mode=INOUT,jdbcType=NUMERIC},
+			#{driverObj.terminationDate,mode=INOUT,jdbcType=VARCHAR},
+			#{driverObj.hrBranch,mode=INOUT,jdbcType=VARCHAR},
+			#{driverObj.hrPosition,mode=INOUT,jdbcType=VARCHAR},
+			#{driverObj.hrReligion,mode=INOUT,jdbcType=VARCHAR},
+			#{driverObj.hrDepartment,mode=INOUT,jdbcType=VARCHAR},
+			#{driverObj.hrBranchCode,mode=INOUT,jdbcType=VARCHAR},
+			#{driverObj.hrJobCode,mode=INOUT,jdbcType=VARCHAR},
+			#{driverObj.hrJobDesc,mode=INOUT,jdbcType=VARCHAR},
+			#{driverObj.hrSectorCode,mode=INOUT,jdbcType=VARCHAR},
+			#{driverObj.hrSectorDesc,mode=INOUT,jdbcType=VARCHAR},	
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+	<select id="getUserById" statementType="CALLABLE" resultType="Users" parameterType="Users">
+		{call SECURITY_PKG.get_user_by_id(#{userObj.id,mode=IN,jdbcType=NUMERIC},
+			#{userObj.userName,mode=OUT,jdbcType=VARCHAR},
+			#{userObj.isActive,mode=OUT,jdbcType=NUMERIC},
+			#{userObj.expireDate,mode=OUT,jdbcType=VARCHAR},
+			#{userObj.userInf.userFullName,mode=OUT,jdbcType=VARCHAR},
+			#{userObj.userInf.userType,mode=OUT,jdbcType=VARCHAR},
+			#{userObj.userInf.id,mode=OUT,jdbcType=NUMERIC},
+			#{userBranches,mode=OUT,javaType=ResultSet,jdbcType=CURSOR,resultMap=searchUsersResult})}
+	</select>
+	
+	<resultMap type="KAUSTdriver" id="kaustExceptios">
+	    <id property="id" column="EXCEPTION_ID"/>
+	    <result property="exceptionFromDate" column="START_DATE"/>
+	    <result property="exceptionToDate" column="END_DATE"/> 
+	    <result property="isActive" column="IS_ACTIVE"/>
+	    <result property="dailyRate" column="DAILY_RATE"/>
+	     <result property="KAUSTAllowanceType.foreignName" column="EN_ALLOW_TYPE"/>
+	    <result property="KAUSTAllowanceType.localeName" column="AR_ALLOW_TYPE"/>
+	</resultMap> 
+                       
+	<resultMap type="KaustAdditionalAllow" id="kaustAdditional">
+	    <id property="id" column="KAUST_ADDITIONAL_ALLOW_ID"/>
+	    <result property="year" column="YEAR"/>
+	    <result property="month" column="MONTH"/>
+	    <result property="totalAddValue" column="ALLOW_VALUE"/>
+	    <result property="KAUSTAllowanceType.foreignName" column="EN_ALLOW_TYPE"/>
+	    <result property="KAUSTAllowanceType.localeName" column="AR_ALLOW_TYPE"/>
+	</resultMap> 
+	
+	<select id="getDriverById" statementType="CALLABLE" resultType="DriversDto" parameterType="DriversDto">
+		{call SECURITY_PKG.get_driver_by_id(
+		#{driverObj.id,mode=INOUT,jdbcType=NUMERIC},
+			#{driverObj.branchId.id,mode=OUT,jdbcType=NUMERIC},
+			#{driverObj.userFullName,mode=OUT,jdbcType=VARCHAR},
+			#{driverObj.empPosition,mode=OUT,jdbcType=NUMERIC},
+			#{driverObj.hireDate,mode=OUT,jdbcType=VARCHAR},
+			#{driverObj.userMail,mode=OUT,jdbcType=VARCHAR},
+			#{driverObj.mobNum,mode=OUT,jdbcType=VARCHAR},
+			#{driverObj.mobNum2,mode=OUT,jdbcType=VARCHAR},			
+			#{driverObj.isActive,mode=OUT,jdbcType=NUMERIC},
+			#{driverObj.terminationDate,mode=OUT,jdbcType=VARCHAR},
+			#{driverObj.hrBranch,mode=OUT,jdbcType=VARCHAR},
+			#{driverObj.hrPosition,mode=OUT,jdbcType=VARCHAR},
+			#{driverObj.hrReligion,mode=OUT,jdbcType=VARCHAR},
+			#{driverObj.hrDepartment,mode=OUT,jdbcType=VARCHAR},
+			#{driverObj.hrBranchCode,mode=OUT,jdbcType=NUMERIC},
+			#{driverObj.hrJobCode,mode=OUT,jdbcType=NUMERIC},
+			#{driverObj.hrJobDesc,mode=OUT,jdbcType=VARCHAR},
+			#{driverObj.hrSectorCode,mode=OUT,jdbcType=VARCHAR},
+			#{driverObj.hrSectorDesc,mode=OUT,jdbcType=VARCHAR},
+			#{driverObj.posCode,mode=OUT,jdbcType=VARCHAR},				
+			#{driverObj.dailyRate,mode=OUT,jdbcType=NUMERIC},
+			#{driverObj.isActive,mode=OUT,jdbcType=NUMERIC},
+			#{driverObj.kaustExceptions,mode=OUT,javaType=ResultSet,jdbcType=CURSOR,resultMap=kaustExceptios},		
+		    #{driverObj.kaustAdditionals,mode=OUT,javaType=ResultSet,jdbcType=CURSOR,resultMap=kaustAdditional},		
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+	<select id="getUsersByName" resultMap="searchUsersResult" parameterType="Users">
+		SELECT UR.USER_ID,UR.USER_NAME,UR.USER_IS_ACTIVE,TO_CHAR(UR.EXPIRE_DATE,<include refid="driverAllowance.Date_Format"/>) EXPIRE_DATE,
+			UF.USER_FULL_NAME,UF.USER_TYPE,UF.USER_INF_ID
+		FROM SAP_USERS UR INNER JOIN SAP_USER_INF UF ON(UR.USER_INF_ID = UF.USER_INF_ID)
+		WHERE UR.USER_IS_DELETED = 0 AND (UR.EXPIRE_DATE IS NULL OR UR.EXPIRE_DATE &gt; SYSDATE)
+			<if test="userObj.userName != null">
+				AND UR.USER_NAME = #{userObj.userName}
+			</if>
+		ORDER BY UR.USER_NAME
+	</select>
+	<!-- 
+	<select id="searchDrivers" resultMap="searchDriverResult" parameterType="DriversBean">
+		SELECT * FROM SAP_USER_INF  UR WHERE POS_CODE ='P_800'
+		
+			<if test="id != null">
+				AND UR.USER_INF_ID = #{driverObj.id}
+			</if>
+			<if test="userFullName != null">
+				AND UR.USER_FULL_NAME = #{driverObj.userFullName}
+			</if>
+		ORDER BY UR.USER_FULL_NAME
+	</select>
+	 -->
+	<select id="searchDrivers" statementType="CALLABLE" resultType="DriversDto" parameterType="DriversDto">
+		{call SECURITY_PKG.search_drivers(
+		#{driverObj.id,mode=IN,jdbcType=NUMERIC},
+		#{driverObj.userFullName,mode=IN,jdbcType=VARCHAR},
+		#{driversList,mode=OUT,javaType=ResultSet,jdbcType=CURSOR,resultMap=searchDriverResult}
+		)}
+	</select>
+	
+	<select id="insertUser" statementType="CALLABLE" resultType="Users" parameterType="Users">
+		{call SECURITY_PKG.ADD_NEW_USER(#{userObj.id,mode=IN,jdbcType=NUMERIC},
+			#{userObj.userInf.id,mode=IN,jdbcType=NUMERIC},#{userObj.userInf.userFullName,mode=IN,jdbcType=VARCHAR},
+			#{userObj.userInf.userType,jdbcType=VARCHAR},#{userObj.userInf.userMail,mode=IN,jdbcType=VARCHAR},
+			#{userObj.userInf.mobNum,mode=IN,jdbcType=VARCHAR},#{userObj.userInf.mobNum2,mode=IN,jdbcType=VARCHAR},
+			#{userObj.isActive,mode=IN,jdbcType=NUMERIC},#{userObj.userName,mode=IN,jdbcType=VARCHAR},
+			<include refid="driverAllowance.User_Password"/>,0,
+			#{createdBy,mode=IN,jdbcType=NUMERIC},null,TO_DATE(#{userObj.expireDateString,mode=IN,jdbcType=DATE},<include refid="driverAllowance.Date_Format"/>) ,
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+	<update id="updateUser" parameterType="Users">
+		UPDATE SAP_USERS SET USER_IS_ACTIVE = #{userObj.isActive},EXPIRE_DATE = TO_DATE(#{userObj.expireDateString,mode=IN,jdbcType=DATE},
+			<include refid="driverAllowance.Date_Format"/>) , UPDATE_BY = #{updatedBy} , UPDATE_DATE = SYSDATE
+		WHERE USER_ID = #{userObj.id}
+	</update>
+	
+	<update id="deleteUser" parameterType="Users">
+		UPDATE SAP_USERS SET USER_IS_DELETED = <include refid="driverAllowance.STATUS_ACTIVE"/>,
+			USER_IS_ACTIVE = <include refid="driverAllowance.STATUS_DEACTIVE"/> ,  UPDATE_BY = #{updatedBy} , UPDATE_DATE = SYSDATE
+		WHERE USER_ID = #{userObj.id}
+	</update>
+	
+	<resultMap type="UserBranch" id="userBranchesResult">
+		<id property="id" column="USER_BRANCH_ID"/>
+		<result property="isActive" column="IS_ACTIVE"/>
+		<result property="fromDateString" column="FROM_DATE"/>
+		<result property="toDateString" column="TO_DATE"/>
+		<result property="branchId.id" column="BRANCH_ID"/>
+		<result property="branchId.code" column="BRANCH_CODE"/>
+		<result property="branchId.localeName" column="BRANCH_AR_DESC"/>
+		<result property="branchId.foreignName" column="BRANCH_EN_DESC"/>
+		<result property="programId.id" column="PROGRAM_GROUP_ID"/>
+		<result property="programId.code" column="P_G_CODE"/>
+		<result property="programId.localeName" column="P_G_AR_DESC"/>
+		<result property="programId.foreignName" column="P_G_EN_DESC"/>
+	</resultMap>
+	
+	<select id="getUserBranches" resultMap="userBranchesResult" parameterType="Users">
+		SELECT UB.USER_BRANCH_ID,UB.IS_ACTIVE,TO_CHAR(UB.FROM_DATE,<include refid="driverAllowance.Date_Format"/>) FROM_DATE,
+			TO_CHAR(UB.TO_DATE,<include refid="driverAllowance.Date_Format"/>) TO_DATE,BR.BRANCH_ID,BR.BRANCH_CODE,BR.BRANCH_AR_DESC,
+			BR.BRANCH_EN_DESC,PG.PROGRAM_GROUP_ID,PG.P_G_CODE,PG.P_G_AR_DESC,PG.P_G_EN_DESC
+		FROM SAP_USER_BRANCHES UB INNER JOIN SAP_BRANCHES BR ON(UB.BRANCH_ID = BR.BRANCH_ID)
+			INNER JOIN SAP_PROGRAM_GROUP PG ON(UB.PROGRAM_ID = PG.PROGRAM_GROUP_ID) INNER JOIN SAP_USERS UR ON(UB.USER_ID = UR.USER_ID)
+		WHERE UR.USER_ID = #{userObj.id} AND (UB.TO_DATE IS NULL OR UB.TO_DATE > SYSDATE) AND
+			BR.BRANCH_IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/> AND PG.P_G_IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/> AND
+			UR.USER_IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/> AND UR.USER_IS_DELETED = <include refid="driverAllowance.STATUS_DEACTIVE"/> AND
+			(UR.EXPIRE_DATE IS NULL OR UR.EXPIRE_DATE > SYSDATE)
+		ORDER BY BR.BRANCH_CODE,PG.P_G_CODE
+	</select>
+	
+	<insert id="insertUserBranch" parameterType="Users">
+		INSERT INTO SAP_USER_BRANCHES
+		VALUES((SELECT NVL(MAX(USER_BRANCH_ID),0)+1 FROM SAP_USER_BRANCHES),#{userObj.id},#{userBranchObj.branchId.id},SYSDATE,
+			#{createdBy},NULL,NULL,#{userBranchObj.programId.id},TO_DATE(#{userBranchObj.fromDateString},<include refid="driverAllowance.Date_Format"/>)
+			,TO_DATE(#{userBranchObj.toDateString,jdbcType=DATE},<include refid="driverAllowance.Date_Format"/>),#{userBranchObj.isActive})
+	</insert>
+	
+	<update id="editUserBranch" parameterType="Users">
+		UPDATE SAP_USER_BRANCHES SET IS_ACTIVE = #{userBranchObj.isActive} , UPDATE_BY = #{updatedBy} ,PROGRAM_ID = #{userBranchObj.programId.id},
+			UPDATE_DATE = SYSDATE , TO_DATE = TO_DATE(#{userBranchObj.toDateString,jdbcType=DATE},<include refid="driverAllowance.Date_Format"/>)
+		WHERE USER_BRANCH_ID = #{userBranchObj.id} 
+	</update>
+	
+	<select id="getBranchesUser" resultMap="getBranchesByCodeResult" parameterType="Users">
+		SELECT BRANCH_ID,BRANCH_CODE,BRANCH_AR_DESC,BRANCH_EN_DESC
+		FROM SAP_BRANCHES
+		WHERE BRANCH_IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/> 
+		
+	</select>
+	
+	<select id="getProgramsUser" resultMap="searchProgramGroupResult" parameterType="Users">
+		SELECT PROGRAM_GROUP_ID, P_G_CODE, P_G_AR_DESC, P_G_EN_DESC
+		FROM SAP_PROGRAM_GROUP
+		WHERE P_G_IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/>
+		ORDER BY P_G_CODE
+	</select>
+	
+	<resultMap id="employeeResult" type="UserInf">     
+		<id property="id" column="USER_INF_ID"/>
+		<result property="userFullName" column="USER_FULL_NAME"/>
+	</resultMap>
+	
+	<select id="getEmployees" resultMap="employeeResult" parameterType="Users">
+		SELECT USER_INF_ID,USER_FULL_NAME FROM SAP_USER_INF
+		WHERE USER_IS_ACTIVE = <include refid="driverAllowance.STATUS_ACTIVE"/> AND USER_TYPE = <include refid="driverAllowance.User_Internal"/>
+			AND USER_FULL_NAME LIKE '%'||#{userFullName}||'%'
+			AND USER_INF_ID NOT IN (SELECT USER_INF_ID FROM SAP_USERS)
+		ORDER BY USER_INF_ID
+	</select>
+	
+	
+	
+	<select id="saveKaustDriverAllow" statementType="CALLABLE" resultType="DriversDto" parameterType="DriversDto">
+		{call KAUST_DRIVER_ALLOW_PKG.SAVE_DRIVER_ALLOW(
+		    #{driverObj.id,mode=INOUT,jdbcType=NUMERIC},
+			#{driverObj.dailyRate,mode=INOUT,jdbcType=NUMERIC},
+			#{driverObj.isActive,mode=INOUT,jdbcType=NUMERIC},
+			#{createdBy,mode=IN,jdbcType=NUMERIC},
+			#{driverObj.KAUSTAllowanceType.id,mode=IN,jdbcType=NUMERIC},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+	<select id="saveAllowException" statementType="CALLABLE" resultType="DriversDto" parameterType="DriversDto">
+		{call KAUST_DRIVER_ALLOW_PKG.SAVE_ALLOW_EXCEPTION(
+		    #{driverObj.id,mode=INOUT,jdbcType=NUMERIC},
+			#{driverObj.driverKAUST.exceptionFromDate,mode=INOUT,jdbcType=VARCHAR},
+			#{driverObj.driverKAUST.exceptionToDate,mode=INOUT,jdbcType=VARCHAR},
+			#{driverObj.driverKAUST.dailyRate,mode=INOUT,jdbcType=NUMERIC},
+			#{createdBy,mode=IN,jdbcType=NUMERIC},
+			#{driverObj.driverKAUST.KAUSTAllowanceType.id,mode=IN,jdbcType=NUMERIC},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+	<select id="saveAdditionalAllow" statementType="CALLABLE" resultType="DriversDto" parameterType="DriversDto">
+		{call KAUST_DRIVER_ALLOW_PKG.SAVE_ADDITIONAL_ALLOW(
+		    #{driverObj.id,mode=IN,jdbcType=NUMERIC},
+			#{driverObj.kaustAdditionalAllow.year,mode=IN,jdbcType=NUMERIC},
+		    #{driverObj.kaustAdditionalAllow.month,mode=IN,jdbcType=NUMERIC},
+			#{systemId,mode=IN,jdbcType=NUMERIC},
+			#{branchId,mode=IN,jdbcType=NUMERIC},
+			#{createdBy,mode=IN,jdbcType=NUMERIC},
+			#{driverObj.kaustAdditionalAllow.KAUSTAllowanceType.id,mode=IN,jdbcType=NUMERIC},
+			#{driverObj.kaustAdditionalAllow.totalAddValue,mode=IN,jdbcType=NUMERIC},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+	<select id="createMonthlyAllow" statementType="CALLABLE" resultType="DriversDto" parameterType="DriversDto">
+		{call KAUST_DRIVER_ALLOW_PKG.CREATE_MONTHLY_DRIVER_ALLOW(
+			#{year,mode=IN,jdbcType=NUMERIC},
+		    #{month,mode=IN,jdbcType=NUMERIC},
+			#{systemId,mode=IN,jdbcType=NUMERIC},
+			#{branchId,mode=IN,jdbcType=NUMERIC},
+			#{createdBy,mode=IN,jdbcType=NUMERIC},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+	<select id="deleteMonthlyAllow" statementType="CALLABLE" resultType="DriversDto" parameterType="DriversDto">
+		{call KAUST_DRIVER_ALLOW_PKG.DELETE_MONTHLY_DRIVER_ALLOW(
+			#{year,mode=IN,jdbcType=NUMERIC},
+		    #{month,mode=IN,jdbcType=NUMERIC},
+			#{systemId,mode=IN,jdbcType=NUMERIC},
+			#{branchId,mode=IN,jdbcType=NUMERIC},
+			#{createdBy,mode=IN,jdbcType=NUMERIC},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+	<select id="integrateMonthlyAllow" statementType="CALLABLE" resultType="DriversDto" parameterType="DriversDto">
+		{call KAUST_DRIVER_ALLOW_PKG.INTEGRATE_DRIVER_ALLOW(
+			#{year,mode=IN,jdbcType=NUMERIC},
+		    #{month,mode=IN,jdbcType=NUMERIC},
+			#{systemId,mode=IN,jdbcType=NUMERIC},
+			#{branchId,mode=IN,jdbcType=NUMERIC},
+			#{createdBy,mode=IN,jdbcType=NUMERIC},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+	<select id="deleteAllowException" statementType="CALLABLE" resultType="DriversDto" parameterType="DriversDto">
+		{call KAUST_DRIVER_ALLOW_PKG.DELETE_DRIVER_EXCEPTION(
+		    #{driverObj.driverKAUST.id,mode=IN,jdbcType=NUMERIC},
+			#{driverObj.id,mode=IN,jdbcType=NUMERIC},
+			#{createdBy,mode=IN,jdbcType=NUMERIC},
+			#{branchId,mode=IN,jdbcType=NUMERIC},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+	<select id="deleteAdditionalAllow" statementType="CALLABLE" resultType="DriversDto" parameterType="DriversDto">
+		{call KAUST_DRIVER_ALLOW_PKG.DELETE_ADDITIONAL_ALLOW(
+		    #{driverObj.kaustAdditionalAllow.id,mode=IN,jdbcType=NUMERIC},
+			#{driverObj.id,mode=IN,jdbcType=NUMERIC},
+			#{createdBy,mode=IN,jdbcType=NUMERIC},
+			#{branchId,mode=IN,jdbcType=NUMERIC},
+			#{procResult,mode=OUT,jdbcType=VARCHAR,javaType=String})}
+	</select>
+	
+	<resultMap id="getKaustAllownaceTypes" type="KaustAllowType">     
+		<id property="id" column="KAUST_ALLOW_TYPE_ID"/>
+		<result property="code" column="CODE"/>
+		<result property="localeName" column="LOCALE_NAME"/>
+		<result property="foreignName" column="FOREIGN_NAME"/>
+		<result property="branch.id" column="BRANCH_ID"/>	
+	</resultMap>
+
+
+	<select id="getAllKaustAllowTypes" resultMap="getKaustAllownaceTypes" >
+		SELECT KAUST_ALLOW_TYPE_ID ,
+				CODE ,
+				LOCALE_NAME ,
+				FOREIGN_NAME ,
+				BRANCH_ID  FROM KAUST_ALLOW_TYPE
+	</select>
+	
+	<select id="getKaustAllowTypeByBranch" resultMap="getKaustAllownaceTypes" parameterType="Branches">
+		SELECT KAUST_ALLOW_TYPE_ID ,
+				CODE ,
+				LOCALE_NAME ,
+				FOREIGN_NAME ,
+				BRANCH_ID  
+				FROM KAUST_ALLOW_TYPE
+				WHERE BRANCH_ID = #{branchObj.id}
+	</select>
+</mapper>

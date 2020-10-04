@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">Vehicle License</ui:define>
+   	<ui:define name="content">
+  		<h:form id="manageVLForm">
+            <h:panelGrid columns="4" id="editGrid" cellspacing="0" cellpadding="0" border="0" style="width:100%;text-align:center;">
+               <h:panelGroup>
+               		<h:outputText value="#{msgs['vehicleLicense.serialNo']}"/>
+                	<h:outputText style="color:red" value="*" />
+                </h:panelGroup>
+                <h:panelGroup id="serialNo">
+	                <h:inputText maxlength="20" id="serialNoInput" value="#{vehicleLicenceBB.vehicleLicenceDto.vehicleLicenceObj.serialNo}" 
+	                disabled="#{!empty vehicleLicenceBB.vehicleLicenceDto.vehicleLicenceObj.serialNo}"
+	                	required="true" requiredMessage="#{err['Messages.required_valid']}">
+	                </h:inputText>
+                </h:panelGroup>
+                
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['vehicleLicense.tagNumber']}"/>
+                	<h:outputText style="color:red" value="*" />
+                </h:panelGroup>
+                <h:panelGroup id="tagNumber">
+	                <h:inputText maxlength="20" id="tagNumberInput" value="#{vehicleLicenceBB.vehicleLicenceDto.vehicleLicenceObj.tagNumber}" 
+	                disabled="#{!empty vehicleLicenceBB.vehicleLicenceDto.vehicleLicenceObj.tagNumber}"
+	                	required="true" requiredMessage="#{err['Messages.required_valid']}">
+	                </h:inputText>
+	               
+                </h:panelGroup>
+                 <h:panelGroup>
+                	<h:outputText value="#{msgs['vehicleLicense.sectorId']}"/>
+                	
+                </h:panelGroup>
+                <h:inputText id="sectorIdInput" value="#{vehicleLicenceBB.vehicleLicenceDto.vehicleLicenceObj.sectorId}" maxlength="5"
+                	/>
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['vehicleLicense.sectorName']}"/>
+                
+                </h:panelGroup>
+                <h:inputText id="sectorNameInput" value="#{vehicleLicenceBB.vehicleLicenceDto.vehicleLicenceObj.sectorName}" maxlength="50"
+                	/>
+                	
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['vehicleLicense.plateNumber']}"/>
+                	<h:outputText style="color:red" value="*" />
+                </h:panelGroup>
+                <h:inputText id="enNameInput" value="#{vehicleLicenceBB.vehicleLicenceDto.vehicleLicenceObj.plateNumber}" maxlength="50"
+                	required="true" requiredMessage="#{err['Messages.required_valid']}"/>
+                	
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['vehicleLicense.plateLetterRight']}"/>
+                	<h:outputText style="color:red" value="*" />
+                </h:panelGroup>
+                <h:inputText id="rInput" value="#{vehicleLicenceBB.vehicleLicenceDto.vehicleLicenceObj.plateLetterRight}" maxlength="50"
+                	required="true" requiredMessage="#{err['Messages.required_valid']}"/>
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['vehicleLicense.busSeats']}"/>
+                	<h:outputText style="color:red" value="*" />
+                </h:panelGroup>
+                <h:inputText id="busseatInput" value="#{vehicleLicenceBB.vehicleLicenceDto.vehicleLicenceObj.busSeats}" maxlength="50"
+                	required="true" requiredMessage="#{err['Messages.required_valid']}"/>
+               
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['vehicleLicense.plateLetterMiddle']}"/>
+                	<h:outputText style="color:red" value="*" />
+                </h:panelGroup>
+                <h:inputText id="mInput" value="#{vehicleLicenceBB.vehicleLicenceDto.vehicleLicenceObj.plateLetterMiddle}" maxlength="50"
+                	required="true" requiredMessage="#{err['Messages.required_valid']}"/>
+                 <h:panelGroup>
+                	<h:outputText value="#{msgs['vehicleLicense.plateType']}"/>
+                	<h:outputText style="color:red" value="*" />
+                </h:panelGroup>	
+                <h:selectOneMenu value="#{vehicleLicenceBB.vehicleLicenceDto.vehicleLicenceObj.plateType}" 
+                      required="true" requiredMessage="#{err['Messages.required_valid']}">
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{vehicleLicenceBB.plateTypeList}"/>
+				</h:selectOneMenu>
+				<h:panelGroup>
+                	<h:outputText value="#{msgs['vehicleLicense.plateLetterLeft']}"/>
+                	<h:outputText style="color:red" value="*" />
+                </h:panelGroup>
+                <h:inputText id="lInput" value="#{vehicleLicenceBB.vehicleLicenceDto.vehicleLicenceObj.plateLetterLeft}" maxlength="50"
+                	required="true" requiredMessage="#{err['Messages.required_valid']}"/>
+                	
+				<h:outputText value="#{msgs['vehicleLicense.licenseExpDate']}"/>
+                <h:panelGroup>
+                <h:inputText id="hijriExpDateInput" value="#{vehicleLicenceBB.vehicleLicenceDto.vehicleLicenceObj.hijriExpDate}" maxlength="10" />
+                <h:outputText  value=" Ex:01/01/1445 " />
+               </h:panelGroup>
+               <!-- <rich:calendar id="licenseExpDateInput" datePattern="dd-MM-yyyy" 
+		        	enableManualInput="true" showWeeksBar="false" value="#{vehicleLicenceBB.vehicleLicenceDto.vehicleLicenceObj.licenseExpDate}">
+		        </rich:calendar> --> 
+
+            </h:panelGrid>
+            
+           
+           
+            <h:panelGrid columns="2" style="width:100%;text-align:center;">
+            	<h:commandLink styleClass="no-decor" action="#{vehicleLicenceBB.saveListner}" title="#{msgs['Action.save']}">
+                    <h:graphicImage library="images" name="save.jpg" style="border:none" width="50" height="50"/>
+                </h:commandLink>
+                <h:commandLink styleClass="no-decor" action="vehicleLicense.xhtml" title="#{msgs['Action.cancel']}" immediate="true">
+                    <h:graphicImage library="images" name="return.png" style="border:none" width="100" height="100"/>
+                </h:commandLink>
+            </h:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>

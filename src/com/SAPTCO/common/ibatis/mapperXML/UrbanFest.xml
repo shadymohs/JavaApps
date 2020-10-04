@@ -1,0 +1,23 @@
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="UrbanFest">
+    
+    <resultMap class="StationBean" id="getStationsResult">
+	    <result property="id" column="LOCATION_ID"/>
+	    <result property="code" column="LOCATION_CODE"/>
+	    <result property="localeName" column="LOC_DESC_AR"/>
+	    <result property="foreignName" column="LOC_DESC_EN"/>
+	</resultMap>
+	
+	<select id="getStationList" resultMap="getStationsResult" >
+	    select LOCATION_CODE,
+				LOCATION_ID,
+				LOC_DESC_AR,
+				LOC_DESC_EN
+	    	from URBAN_LOCATION 
+	    	order by LOCATION_CODE
+	</select>
+	
+</sqlMap>

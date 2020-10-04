@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">luggage properties</ui:define>
+   	<ui:define name="content">
+   	
+   	 <h:form id="manageForm">
+		 
+		    <h:panelGrid columns="2" styleClass="customTB95" cellpadding="1" border="1"
+				 style="margin: 0 auto;" cellspacing="1" >
+			<h:panelGroup>
+			<h:outputText  value="#{msgs['lostLuggage.propertyType']}" />
+			<h:outputText value="*" style="color:red;" />
+			</h:panelGroup>	
+			<h:selectOneMenu required="true" styleClass="dropDownStyle" value="#{luggagePropertiesBB.propertyType}">
+             		 <f:selectItem
+				        itemValue="1"
+				        itemLabel="#{msgs['Label.color']}"/>
+				    <f:selectItem
+				        itemValue="2"
+				        itemLabel="#{msgs['Label.class']}"/>
+				    <f:selectItem
+				        itemValue="3"
+				        itemLabel="#{msgs['Label.size']}"/>
+              </h:selectOneMenu>
+             <h:outputText  value="" />
+             <h:outputText  value="" />
+             
+             <h:outputText value="#{msgs['Label.color']}"/>
+                <h:selectOneMenu value="#{luggagePropertiesBB.propertyDto.id}" >
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{luggagePropertiesBB.colorList}"/>
+				</h:selectOneMenu>
+			
+				<h:outputText value="#{msgs['Label.class']}"/>
+                <h:selectOneMenu value="#{luggagePropertiesBB.propertyDto.id}" >
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{luggagePropertiesBB.luggageClassList}"/>
+				</h:selectOneMenu>
+				
+				<h:outputText value="#{msgs['Label.size']}"/>
+                <h:selectOneMenu value="#{luggagePropertiesBB.propertyDto.id}"  >
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{luggagePropertiesBB.sizeList}"/>
+				</h:selectOneMenu>
+				
+				<!-- <h:outputText value="#{msgs['lostLuggage.Id']}"/> 
+		       <h:inputText value="#{luggagePropertiesBB.propertyDto.id}"/> -->
+		      
+		         <h:panelGroup  >
+		       <h:outputText value="#{msgs['lostLuggage.localName']}"/>
+		       <h:inputText value="#{luggagePropertiesBB.propertyDto.localeName}"/>
+				
+		       <h:outputText value="#{msgs['lostLuggage.foreignName']}"/>
+		       <h:inputText value="#{luggagePropertiesBB.propertyDto.foreignName}"/>
+		       </h:panelGroup>
+		       
+            </h:panelGrid>  
+            
+              <h:panelGrid  columns="3" styleClass="customTB95" cellpadding="1" border="1"
+				 style="margin: 0 auto;" cellspacing="1"  >
+		            <h:commandButton styleClass="buttonStyle" 
+		         	         action="#{luggagePropertiesBB.update}" value="#{msgs['Action.edit']} "/>
+		            
+		         	<h:commandButton styleClass="buttonStyle" 
+		         	         action="#{luggagePropertiesBB.save}" value="#{msgs['Action.save']} "/>
+		         	         
+		         	<h:commandButton styleClass="buttonStyle" 
+		         	         action="#{luggagePropertiesBB.delete}" value="#{msgs['Action.delete']} "/>   
+         	 </h:panelGrid>    
+         	     
+	</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="FA" language="groovy" pageWidth="144" pageHeight="72" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="144" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" resourceBundle="com.SAPTCO.common.resources.messages.reportMessages" whenResourceMissingType="Empty">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="receiptNo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT INVENTORY_ITEM_ID, INVENTORY_ITEM_CODE, ITEM_DESCRIPTION, RECEIPT_NUMBER, ITEM_BARCODE,
+length(ITEM_BARCODE) LENGTH
+FROM
+XX_FIXED_ASSET_BARCODE_DATA
+WHERE RECEIPT_NUMBER = $P{receiptNo}
+ORDER BY ITEM_BARCODE]]>
+	</queryString>
+	<field name="INVENTORY_ITEM_ID" class="java.math.BigDecimal"/>
+	<field name="INVENTORY_ITEM_CODE" class="java.lang.String"/>
+	<field name="ITEM_DESCRIPTION" class="java.lang.String"/>
+	<field name="RECEIPT_NUMBER" class="java.lang.String"/>
+	<field name="ITEM_BARCODE" class="java.lang.String"/>
+	<field name="LENGTH" class="java.math.BigDecimal"/>
+	<variable name="variable1" class="java.lang.String"/>
+	<detail>
+		<band height="72" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="60" width="144" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true" isStrikeThrough="false" pdfFontName="Arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ITEM_BARCODE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="30" width="144" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true" isStrikeThrough="false" pdfFontName="Arial" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ITEM_DESCRIPTION}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="FillFrame" hAlign="Center" vAlign="Middle">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="42" width="144" height="18">
+					<printWhenExpression><![CDATA[$F{LENGTH} >= (new BigDecimal("13"))]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[new com.keepdynamic.barcode.generator.jasperreports.BarCodeRenderer(com.keepdynamic.barcode.generator.jasperreports.BarcodeFactory.createLinear(
+                    8,$F{ITEM_BARCODE},"",1.0f,40.0f,0.0f,0.0f,0.0f,0.0f,25,true,true))]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame" hAlign="Center" vAlign="Middle">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" mode="Transparent" x="4" y="42" width="140" height="18">
+					<printWhenExpression><![CDATA[$F{LENGTH} == (new BigDecimal("12"))]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[new com.keepdynamic.barcode.generator.jasperreports.BarCodeRenderer(com.keepdynamic.barcode.generator.jasperreports.BarcodeFactory.createLinear(
+                    8,$F{ITEM_BARCODE},"",1.0f,40.0f,0.0f,0.0f,0.0f,0.0f,25,true,true))]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame" hAlign="Center" vAlign="Middle">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" mode="Transparent" x="9" y="42" width="135" height="18">
+					<printWhenExpression><![CDATA[$F{LENGTH} == (new BigDecimal("11")) || $F{LENGTH} == (new BigDecimal("10"))]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[new com.keepdynamic.barcode.generator.jasperreports.BarCodeRenderer(com.keepdynamic.barcode.generator.jasperreports.BarcodeFactory.createLinear(
+                    8,$F{ITEM_BARCODE},"",1.0f,40.0f,0.0f,0.0f,0.0f,0.0f,25,true,true))]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame" hAlign="Center" vAlign="Middle">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" mode="Transparent" x="14" y="42" width="130" height="18">
+					<printWhenExpression><![CDATA[$F{LENGTH} == (new BigDecimal("9")) || $F{LENGTH} == (new BigDecimal("8"))]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[new com.keepdynamic.barcode.generator.jasperreports.BarCodeRenderer(com.keepdynamic.barcode.generator.jasperreports.BarcodeFactory.createLinear(
+                    8,$F{ITEM_BARCODE},"",1.0f,40.0f,0.0f,0.0f,0.0f,0.0f,25,true,true))]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame" hAlign="Center" vAlign="Middle">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" mode="Transparent" x="22" y="42" width="122" height="18">
+					<printWhenExpression><![CDATA[$F{LENGTH} == (new BigDecimal("7")) || $F{LENGTH} == (new BigDecimal("6")) || $F{LENGTH} == (new BigDecimal("5"))]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[new com.keepdynamic.barcode.generator.jasperreports.BarCodeRenderer(com.keepdynamic.barcode.generator.jasperreports.BarcodeFactory.createLinear(
+                    8,$F{ITEM_BARCODE},"",1.0f,40.0f,0.0f,0.0f,0.0f,0.0f,25,true,true))]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame" hAlign="Center" vAlign="Middle">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" mode="Transparent" x="24" y="42" width="120" height="18">
+					<printWhenExpression><![CDATA[$F{LENGTH} == (new BigDecimal("4"))]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[new com.keepdynamic.barcode.generator.jasperreports.BarCodeRenderer(com.keepdynamic.barcode.generator.jasperreports.BarcodeFactory.createLinear(
+                    8,$F{ITEM_BARCODE},"",1.0f,40.0f,0.0f,0.0f,0.0f,0.0f,25,true,true))]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame" hAlign="Center" vAlign="Middle">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" mode="Transparent" x="29" y="42" width="115" height="18">
+					<printWhenExpression><![CDATA[$F{LENGTH} == (new BigDecimal("3"))]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[new com.keepdynamic.barcode.generator.jasperreports.BarCodeRenderer(com.keepdynamic.barcode.generator.jasperreports.BarcodeFactory.createLinear(
+                    8,$F{ITEM_BARCODE},"",1.0f,40.0f,0.0f,0.0f,0.0f,0.0f,25,true,true))]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame" hAlign="Center" vAlign="Middle">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" mode="Transparent" x="34" y="42" width="110" height="18">
+					<printWhenExpression><![CDATA[$F{LENGTH} == (new BigDecimal("2"))]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[new com.keepdynamic.barcode.generator.jasperreports.BarCodeRenderer(com.keepdynamic.barcode.generator.jasperreports.BarcodeFactory.createLinear(
+                    8,$F{ITEM_BARCODE},"",1.0f,40.0f,0.0f,0.0f,0.0f,0.0f,25,true,true))]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame" hAlign="Center" vAlign="Middle">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" mode="Transparent" x="39" y="42" width="105" height="18">
+					<printWhenExpression><![CDATA[$F{LENGTH} == (new BigDecimal("1"))]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[new com.keepdynamic.barcode.generator.jasperreports.BarCodeRenderer(com.keepdynamic.barcode.generator.jasperreports.BarcodeFactory.createLinear(
+                    8,$F{ITEM_BARCODE},"",1.0f,40.0f,0.0f,0.0f,0.0f,0.0f,25,true,true))]]></imageExpression>
+			</image>
+		</band>
+	</detail>
+</jasperReport>

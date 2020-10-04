@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMapConfig      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+
+	<!-- cache is disabled for fast QA data changes -->
+	 <settings cacheModelsEnabled="false"
+		lazyLoadingEnabled="false" />  
+
+  
+   <!-- DTO -->	
+	<typeAlias alias="BaseDto" type="com.SAPTCO.common.dto.BaseDto" />
+	<typeAlias alias="JndrReportDto" type="com.SAPTCO.urbanFest.dto.JndrReportDto" />
+	
+	
+	<!-- beans -->
+	<typeAlias alias="StationBean" type="com.SAPTCO.common.ibatis.mapperBeans.StationBean"/>
+	
+    <sqlMap resource="com/SAPTCO/common/ibatis/mapperXML/UrbanFest.xml"/>
+	
+</sqlMapConfig>

@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">Integrated Allowance Report</ui:define>
+   	<ui:define name="content">
+   	
+   <h:form id="tripsScheduleBB">
+			<h:panelGrid columns="4" cellspacing="0" cellpadding="0" border="0" id="searchGrid" style="width:100%;text-align:center;">
+				              	
+              	<h:outputText value="#{msgs['Label.trip_type']}" />
+				<h:selectOneMenu styleClass="dropDownStyle" value="#{tripsScheduleBB.tripType}">
+					<a4j:ajax execute="@this" render="fromStation,toStation" event="change" listener="#{tripsScheduleBB.getStationByTripType}"/>
+         			<f:selectItem itemLabel="" itemValue=""/>
+         			<f:selectItem itemLabel="#{msgs['Label.normal_trip']}" itemValue="1"/>
+         			<f:selectItem itemLabel="#{msgs['Label.vip_trip']}" itemValue="2"/>
+              	</h:selectOneMenu>
+              	
+                <h:outputText value="#{msgs['Label.mobile']}"/>
+                <h:inputText value="#{tripsScheduleBB.mobile}" required="true" requiredMessage="#{err['Messages.required_mobile']}"/>
+              	              	
+				<h:outputText value="#{msgs['Label.from_station']}" />
+				<h:selectOneMenu styleClass="dropDownStyle" value="#{tripsScheduleBB.fromStation}" id="fromStation">
+         			<f:selectItems value="#{tripsScheduleBB.stationsList}"/>
+              	</h:selectOneMenu>
+              	
+              	<h:outputText value="#{msgs['Label.to_station']}" />
+				<h:selectOneMenu styleClass="dropDownStyle" value="#{tripsScheduleBB.toStation}" id="toStation">
+         			<f:selectItems value="#{tripsScheduleBB.stationsList}"/>
+              	</h:selectOneMenu>
+              	
+			</h:panelGrid>	
+			<h:panelGrid id="printGrid" columns="1" cellspacing="0" cellpadding="0" border="0" style="width:100%;text-align:center;">
+				<h:commandLink styleClass="no-decor" action="#{tripsScheduleBB.send}" id="saveButton" title="#{msgs['Action.save']}">
+                    <h:graphicImage library="images" name="save.jpg" style="border:none" width="50" height="50"/>
+                </h:commandLink>
+			</h:panelGrid>
+		</h:form>
+    
+   	</ui:define>
+</ui:composition>

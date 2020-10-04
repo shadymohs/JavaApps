@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">manage Drivers</ui:define>
+   	<ui:define name="content">
+  		<h:form id="manageDriversForm">
+            <h:panelGrid columns="4" id="editGrid" var="reqD" cellspacing="0" cellpadding="0" border="0" style="width:100%;text-align:center;">
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['Label.Drivers.driver_id']}"/>
+                	<h:outputText style="color:red" value="*" />
+                </h:panelGroup>
+               <h:panelGroup>
+	                <h:outputText maxlength="20" id="codeInput" value="#{driversBB.driversDto.driverObj.id}" disabled="#{!empty driversBB.driversDto.driverObj.id}">	                	
+	                </h:outputText>
+	           </h:panelGroup>	                
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['Label.Drivers.driver_name']}"/>
+                	<h:outputText style="color:red" value="*" />
+                </h:panelGroup>
+                <h:panelGroup>
+                <h:inputText  value="#{driversBB.driversDto.driverObj.userFullName}"  maxlength="50" required="true" requiredMessage="#{err['Error.Drivers.required_full_name']}"/>
+                </h:panelGroup>	               
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['Label.Drivers.hr_position']}"/>                	
+                </h:panelGroup>
+                <h:panelGroup>
+                <h:inputText id="arNameInput" value="#{driversBB.driversDto.driverObj.hrPosition}" maxlength="50"
+                	/>
+                </h:panelGroup>
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['Label.Drivers.hr_branch']}"/>
+                	<h:outputText style="color:red" value="*" />
+                </h:panelGroup>
+                <h:panelGroup>
+                <h:inputText id="enNameInput" value="#{driversBB.driversDto.driverObj.hrBranch}" maxlength="50"     	/>
+                </h:panelGroup>
+                <h:panelGroup>
+                <h:outputText value="#{msgs['Messages.active']}"/>
+                </h:panelGroup>
+                <h:panelGroup>
+                <h:selectBooleanCheckbox id="activeInput" value="#{driversBB.driversDto.driverObj.isActive}"/>
+                </h:panelGroup>            	
+            
+                <h:panelGroup> 
+                	<h:outputText value="#{msgs['Label.Drivers.hire_date']}"/>                	
+                </h:panelGroup>
+                <h:panelGroup>
+                <h:outputText  
+		        	 value="#{driversBB.driversDto.driverObj.hireDate}">
+		        	
+		        </h:outputText >
+		        </h:panelGroup>                 
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['Label.Drivers.termination_date']}"/>                	
+                </h:panelGroup>
+                <h:panelGroup>                
+                <h:outputText   value="#{driversBB.driversDto.driverObj.terminationDate}">		        	
+		        </h:outputText>
+		        </h:panelGroup>   
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['Label.Drivers.mail']}"/>
+                	
+                </h:panelGroup>
+                <h:panelGroup>
+                <h:inputText id="managerNameInput" value="#{driversBB.driversDto.driverObj.userMail}" maxlength="50"
+                	/>
+                </h:panelGroup>
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['Label.Drivers.mobile1']}"/>
+                	
+                </h:panelGroup>
+                <h:panelGroup>
+                <h:inputText id="managerMobileInput" value="#{driversBB.driversDto.driverObj.mobNum}" maxlength="50"
+                	/>
+                </h:panelGroup>
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['Label.Drivers.mobile2']}"/>
+                	
+                </h:panelGroup>
+                <h:panelGroup>
+                <h:inputText id="managerPhoneInput" value="#{driversBB.driversDto.driverObj.mobNum2}" maxlength="50"
+                	/>
+                </h:panelGroup>
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['Label.Drivers.hr_department']}"/>
+                	
+                </h:panelGroup>
+                <h:panelGroup>
+                <h:inputText id="managerFaxInput" value="#{driversBB.driversDto.driverObj.hrDepartment}" maxlength="50"
+                	/>
+                </h:panelGroup>
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['Label.Drivers.hr_religion']}"/>
+                	
+                </h:panelGroup>
+                <h:panelGroup>
+                <h:inputText id="managerEmailInput" value="#{driversBB.driversDto.driverObj.hrReligion}" maxlength="50"
+                	/>       
+                </h:panelGroup>        
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['Label.Drivers.hr_job_desc']}"/>
+                	
+                </h:panelGroup>
+                <h:panelGroup>
+                <h:inputText id="contactPersonPhoneInput" value="#{driversBB.driversDto.driverObj.hrJobDesc}" maxlength="50"
+                	/>
+                </h:panelGroup>
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['Label.Drivers.hr_sector_desc']}"/>
+                	
+                </h:panelGroup>
+                <h:panelGroup>
+                <h:inputText id="contactPersonEmailInput" value="#{driversBB.driversDto.driverObj.hrSectorDesc}" maxlength="50"/>                
+                </h:panelGroup>
+            </h:panelGrid>
+                
+            <h:panelGrid columns="2" style="width:100%;text-align:center;">
+            	<h:commandLink styleClass="no-decor" action="#{driversBB.saveListner}" title="#{msgs['Action.save']}">
+		                    <h:graphicImage library="images" name="save.jpg" style="border:none" width="50" height="50"/>
+		                </h:commandLink>   
+            	
+                <h:commandLink styleClass="no-decor" action="#{driversBB.cancel}" title="#{msgs['Action.cancel']}" immediate="true">
+                    <h:graphicImage library="images" name="return.png" style="border:none" width="100" height="100"/>                    										                                        
+                </h:commandLink>
+            </h:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>

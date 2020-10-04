@@ -1,0 +1,610 @@
+/*
+  Running Squiz Matrix
+  Developed by Squiz - http://www.squiz.net
+  MySource, MySource Matrix and Squiz.net are registered Trademarks of Squiz Pty Ltd
+  Page generated: 16 September 2012 21:36:25
+*/
+
+
+/*
+ * Common CSS
+ */
+
+body {
+    margin: 0;
+    line-height: 1.231;
+    background-color: #d5d2ca;
+    text-align: center;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+    font-family: "Calibri", "Arial", sans-serif;
+    color: #222;
+}
+
+.floatLeft {
+    float: left;   
+}
+
+.floatRight {
+    float: right;   
+}
+
+.float-left {
+    float: left; 
+    margin: 0 10px 0;  
+}
+
+.float-right {
+    float: right; 
+    margin: 0 10px 0;  
+}
+
+
+.clearRight {
+    clear: right;   
+}
+
+.clearLeft {
+    clear: left;   
+}
+
+.clearBoth {
+    clear: both;   
+}
+
+#global-nav-items ul,
+#global-nav-items ol,
+#global-nav-items li,
+#breadcrumb ul,
+#breadcrumb ol,
+#breadcrumb li,
+#left-column ul,
+#left-column ol,
+#left-column li,
+#right-column ul,
+#right-column ol,
+#right-column li {
+    list-style: none;
+    margin: 0;
+    padding: 0;    
+}
+
+
+/*
+ * Remove text-shadow in selection highlight: h5bp.com/i
+ * These selection declarations have to be separate
+ */
+
+::-moz-selection { background: #6a4061; color: #fff; text-shadow: none; }
+::selection { background: #6a4061; color: #fff; text-shadow: none; }
+
+/* =============================================================================
+   Links
+   ========================================================================== */
+
+a { color: #6a4061; text-decoration: none; }
+a:visited { color: #6a4061; }
+a:hover { color: #6a4061; text-decoration: underline; }
+a:focus { outline: thin dotted; }
+
+a.mainLink {
+    font-weight: bold;
+    margin-top: 4px;
+    display: block;
+}
+
+a.mainLink:before {
+    content:"\00bb\00a0\00a0";
+}
+
+/* =============================================================================
+   Layout
+   ========================================================================== */
+
+#main {
+    padding-bottom: 28px;
+}
+   
+/** 
+ Min and Max width based on optimised 1024, max 1280
+ Max: 1280 - 64 (browser chroming) = 1216; 
+ Min: 1024 - 64 (browser chroming/ipad) = 960; 
+ **/
+#container-outer {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+    max-width: 1216px;
+    min-width: 960px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* =============================================================================
+   Header
+   ========================================================================== */
+
+#header {
+    height: 120px;
+}
+
+#header a {
+    display: block;
+    padding-left: 28px;
+    padding-top: 16px;
+}
+
+#feature {
+    width: 357px;
+    height: 357px;
+    background: transparent url("http://www.daff.gov.au/design/css/common.css/feature.png") no-repeat;
+    position: absolute;
+    top: -66px;
+    right: -42px;
+}
+   
+/* =============================================================================
+   Menus
+   ========================================================================== */
+
+#global-nav-items {
+    background-color: #000;
+    line-height: 28px;
+}
+
+ul#global-top-nav {
+    z-index: 3;
+    position: relative;   
+}
+
+ul#global-top-nav li a {
+    display: block;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+    padding-left: 9px;
+    padding-right: 9px;
+    font-size: 1.1em;
+}
+
+ul#global-top-nav li:hover a {
+    background-color: #e6e6e6;
+    color: #6a4061;
+}
+
+ul#global-top-nav li ul {
+    display: none;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    opacity: 0.9;
+    filter:Alpha(opacity=90); /* IE8 and lower */
+    position: absolute;
+    -moz-box-shadow: 5px 5px 5px #888;
+    -webkit-box-shadow: 5px 5px 5px #888;
+    box-shadow: 5px 5px 5px #888;
+}
+
+body.ie7 ul#global-top-nav li ul {
+    top: 28px;
+}
+
+ul#global-top-nav li:hover ul li {
+    display: block;
+    min-width: 135px;
+}
+
+ul#global-top-nav li:hover ul li a {
+    color: #000;   
+    font-size: 1em;
+    font-style: normal;
+    padding: 4px;
+    line-height: 18px;
+    display: block;
+    background-color: transparent;
+}
+
+ul#global-top-nav li:hover ul li a:hover {
+    background-color: #6a4061;
+    color: #fff;
+}
+
+/** Dropdown menu **/
+ul#global-top-nav li:hover ul {
+    display: block;
+}
+
+#tools {
+    line-height: 28px;   
+}
+
+/* =============================================================================
+   Main Content area
+   ========================================================================== */
+   
+#main {
+    background-color: #fff;
+    position: relative;
+    min-height: 560px;
+	border-style:solid;
+	border-width:1.25px;
+}
+
+/** This is an existing div id to generate space for the right column **/
+#page_content_rightbox {
+    margin-right: 0px;
+}
+#page_content_rightbox div.data {margin-bottom:1em; display: inline-block;}
+#page_content_rightbox div.data p {margin:.5px 0 0 10px;}
+div.data p img {margin-left:0;}
+
+#home_page_content_rightbox {
+    margin-right: 250px;
+}
+
+
+/** Need to re-define the appearance of list items, this was reset **/
+#page_content ul,
+#page_content_rightbox ul {
+      
+}
+.img-block {display: inline-block; line-height: 100%;}
+
+span.nobr {white-space:nowrap;}
+
+/* =============================================================================
+   ICONS
+   ========================================================================== */
+
+span.icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+    background-image: url('icons.png');
+    text-indent: -9000px;
+}
+   
+span.magnifying-glass {
+    background-position: 0px 0px;
+}
+
+span.phone {
+    background-position: -16px 0px;
+}
+
+span.rss {
+    background-position: -16px -16px;
+}
+
+span.info {
+    background-position: 0px -16px;
+}
+
+span.increase-line {
+    background-position: 0px -32px;
+}
+
+span.decrease-line {
+    background-position: -16px -32px;
+}
+
+span.arrow{
+    background-position: 0px -48px;
+}
+
+span.link {
+    background-position: -16px -48px;
+}
+
+span.section {
+    background-position: 0px -63px;
+    height: 20px;
+
+}
+
+body.ie7 #phone-icon-footer {
+    text-indent: 0;
+}
+
+
+/* =============================================================================
+   Breadcrumb
+   ========================================================================== */
+   
+#breadcrumb {
+    font-size: .9em;
+    padding: 5px 0 5px 0;
+    margin-right: 250px;
+}
+
+#breadcrumb ul li {
+    float: left;
+    color: #284e36;
+}
+
+#breadcrumb ul li a {
+    color: #284e36;   
+}
+
+#main #breadcrumb ul li {
+   white-space: nowrap;
+}
+
+#tools {
+    margin-left: 28px;   
+}
+
+#tools a {
+    color: #222;
+}
+
+#line-spacing {
+    position: relative;
+    padding-right: 36px;
+}
+
+#line-spacing a {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+body.ie7 #line-spacing a {
+    width: 16px;
+    display: block;
+    height: 16px;
+    overflow: hidden;
+    cursor: pointer;
+}
+body.ie7 #line-spacing a span.icon {
+    padding-top: 40px;
+    text-indent: 0px;
+}
+
+#line-spacing a.first {
+    right: 16px;   
+}
+
+/* =============================================================================
+   Right Column
+   ========================================================================== */
+   
+#quick-search {
+    width: 220px;
+    z-index: 2;
+    right: 28px;
+    position: absolute;
+}
+
+#quick-search input.query {
+    height: 16px;
+    border: 0;
+    float: left;
+    padding: 2px;
+    width: 165px;
+}
+
+#quick-search input.submit {
+    border: 0;
+    float: left;
+    width: 25px;
+    height: 20px;
+    font-weight: bold;
+    font-size: 1.1em;
+    text-align: center;
+    background: #d5d2ca;
+    padding: 0;
+}
+
+#quick-search .site-selection {
+    line-height: 28px;
+    min-height: 28px;
+}
+
+#quick-search .site-selection label {
+    color: #fff;
+    padding-left: 6px;
+    padding-right: 8px;
+}
+
+#quick-search-inner {
+    position: relative;
+    height: 178px;
+    background-color: #333;
+}
+
+#quick-search-inner form {
+    position: absolute;
+    bottom: 0;
+    padding: 12px;
+    padding-bottom: 6px;
+}
+                                                         
+#right-column {
+    float: right;
+    width: 220px;
+    margin-top: 190px;
+}
+
+/** This will turn the right column div into a spacer so content flows around it **/ 
+.no-column {
+    float: right;
+    width: 250px;
+    margin-top: 0;
+    height: 190px; /* 178px (quick search height) + 12px margin */    
+}
+
+#right-column .right-box,
+#left-column .left-box {
+    background: #eae8e4;
+    margin-bottom: 11px;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+#right-column .calendar {
+    width: 200px;
+    float: right;
+    background: #0000ff;
+    margin: 5px;
+    padding: 0 5px; 
+}
+#right-column .calendar h2 {
+    font-size: 0.8em;
+    color: #00ff00;
+}
+
+#right-column .right-box h2,
+#left-column .left-box h2 {
+    font-size: 1.1em;
+    margin: 0;
+    padding: 10px;
+    line-height: 1em;
+    color: #000;
+    font-weight: bold;
+}
+
+#right-column .right-box h2 span.icon,
+#left-column .left-box h2 span.icon {
+    float: left;
+    margin-right: 6px;
+}
+
+#right-column .right-box ul,
+#left-column .left-box ul {
+    margin-left: 10px;
+    padding-bottom: 16px;
+}
+
+/** Extra indenting to line up with icon placement **/
+#right-column .right-box ul.indented,
+#left-column .left-box ul.indented {
+    margin-left: 32px;
+}
+
+#right-column .right-box li,
+#left-column .left-box li {
+    margin-bottom: 4px;   
+}
+
+#freedom-of-information li a,
+#subscription-lists li a {
+    font-weight: bold;   
+}
+
+#right-column .right-box,
+#left-column .left-box {
+    background: #e9e8ee;
+    background: -moz-linear-gradient(top, #e7e6ed 0%, #f3f3f6 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e7e6ed), color-stop(100%,#f3f3f6)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #e7e6ed 0%,#f3f3f6 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #e7e6ed 0%,#f3f3f6 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #e7e6ed 0%,#f3f3f6 100%); /* IE10+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e7e6ed', endColorstr='#f3f3f6',GradientType=0 ); /* IE6-7 */
+    /*-ms-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e7e6ed', endColorstr='#f3f3f6',GradientType=0 ); /* IE 7+ */
+    background: linear-gradient(top, #e7e6ed 0%,#f3f3f6 100%); /* W3C */
+}
+
+#right-column #latest-news ul {
+    margin-bottom: 8px;
+    margin-top: 8px;
+    margin-left: 10px;
+}
+
+#latest-news ul li {
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+#right-column #latest-info ul {
+    margin-left: 10px;
+}
+
+#latest-info ul li {
+    clear: left;
+    margin-bottom: 6px;
+    margin-top: 6px;
+}
+
+#latest-info p {
+    margin-top: 0;   
+}
+
+#latest-info a {
+    font-weight: bold;   
+}
+
+#latest-info .info-img {
+    float: left;
+    margin-right: 11px;
+    -moz-box-shadow: 4px 4px 4px #b9b9bd;
+    -webkit-box-shadow: 4px 4px 4px #b9b9bd;
+    box-shadow: 4px 4px 4px #b9b9bd;
+}
+
+
+/* =============================================================================
+   Footer
+   ========================================================================== */
+
+#footer a {
+    color: #222;
+    text-decoration: none;
+}
+
+#footer a:hover {
+    text-decoration: underline;   
+}
+
+#additional-links {
+    padding-top: 11px;
+    clear: both;
+    text-align: center;
+    padding-bottom: 28px;
+}
+
+#additional-links ul {
+    border-top: 1px solid #857d6f;
+    width: 97%;
+    padding-top: 11px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#additional-links ul li {
+    display: inline-block;
+    padding-right: 11px;
+    margin-left: 11px;
+}
+
+body.ie7 #additional-links ul li {
+    display: inline;
+}
+
+#additional-links ul li a {
+    font-weight: bold;
+    color: #222;
+}
+
+#additional-links ul li.last {
+    border: 0;   
+}
+#content-wrapper div.azlist h3 {margin: 8px 0 8px 0;}
+#content-wrapper div.azlist h3 a {text-decoration: none; color: #000; }
+
+div.azlist div {margin-left: 1em;}
+
+/* =============================================================================
+   Printable version
+   ========================================================================== */
+   
+@media print {
+    .noPrint {display: none;}
+    #page_content_rightbox {margin-right: 0;}
+    
+}

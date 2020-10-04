@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">tickets reports</ui:define>
+   	<ui:define name="content">
+	
+		<h:form id="reportForm">
+		 
+		  <h:panelGrid columns="4" styleClass="customTB95" cellpadding="1" border="1"
+				 style="margin: 0 auto;" cellspacing="1" >
+				<h:outputText value="#{msgs['Messages.date_from']}"/>
+				<rich:calendar id="fromDateInput" datePattern="dd-MM-yyyy" requiredMessage="#{err['Messages.required_Date']}"
+		        	enableManualInput="true" showWeeksBar="false" value="#{jndrReportsBB.jndrReportDto.fromDate}">
+		        </rich:calendar>
+		        <h:outputText value="#{msgs['Messages.date_to']}"/>
+				<rich:calendar id="toDateInput" datePattern="dd-MM-yyyy"  requiredMessage="#{err['Messages.required_Date']}"
+		        	enableManualInput="true" showWeeksBar="false" value="#{jndrReportsBB.jndrReportDto.toDate}">
+		        </rich:calendar>
+		        
+		       <h:outputText value="#{msgs['Label.from_station']}"/>
+                <h:selectOneMenu value="#{jndrReportsBB.jndrReportDto.fromStationId}"  >
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{jndrReportsBB.stationList}"/>
+				</h:selectOneMenu>
+				
+             <h:outputText value="#{msgs['Label.to_station']}"/>
+                <h:selectOneMenu value="#{jndrReportsBB.jndrReportDto.toStationId}"  >
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{jndrReportsBB.stationList}"/>
+				</h:selectOneMenu>
+				
+            </h:panelGrid>  
+          
+           <h:panelGrid id="printGrid" columns="2" cellspacing="0" cellpadding="0" border="0" style="width:100%;text-align:center;">
+				<h:outputText value="#{msgs['Reports.totalReport']}"/>
+				<h:commandLink styleClass="no-decor" action="#{jndrReportsBB.viewTicketsReport}" title="#{msgs['Action.print']}" >  
+                    <h:graphicImage library="images" name="pdf.png" style="border:none" width="40" height="40"/>
+                </h:commandLink>
+                <h:outputText value="#{msgs['Reports.detailsReport']}"/>
+                <h:commandLink styleClass="no-decor" action="#{jndrReportsBB.viewTicketsDetailReport}" title="#{msgs['Action.print']}" >  
+                    <h:graphicImage library="images" name="pdf.png" style="border:none" width="40" height="40"/>
+                </h:commandLink>
+              
+			</h:panelGrid>	
+	</h:form>
+		
+	</ui:define>
+</ui:composition>

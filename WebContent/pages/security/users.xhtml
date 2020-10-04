@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">Users</ui:define>
+   	<ui:define name="content">
+   		<h:form id="usersForm">
+				<rich:dataTable value="#{usersBB.usersTable}" var="ur" id="table" rows="20" styleClass="newTable" style="width:100%;text-align:center;">
+					<f:facet name="noData">
+		                #{err['Messages.no_data']}
+		            </f:facet>
+		            <rich:column>
+		                <f:facet name="header">
+	                		<h:outputText value="#{msgs['Login.userName']}"/>
+		                	<h:inputText value="#{usersBB.usersDto.userObj.userName}"/>
+	                	</f:facet>
+		                <h:outputText value="#{ur.userName}" />
+		            </rich:column>
+		            <rich:column>
+		                <f:facet name="header">
+		                	#{msgs['Users.user_fullName']}
+		                </f:facet>
+		                <h:outputText value="#{ur.userInf.userFullName}" />
+		            </rich:column>
+		            <rich:column>
+		                <f:facet name="header">
+		                	#{msgs['Users.user_type']}
+		                </f:facet>
+		                <h:selectOneMenu value="#{ur.userInf.userType}" styleClass="dropDownStyle" disabled="true">
+		                	<f:selectItem itemLabel="#{msgs['Users.internal_type']}" itemValue="I"/>
+		                	<f:selectItem itemLabel="#{msgs['Users.external_type']}" itemValue="E"/>
+	                	</h:selectOneMenu>
+		            </rich:column>
+		            <rich:column>
+		                <f:facet name="header">
+		                	#{msgs['Messages.expire_date']}
+		                </f:facet>
+		                <h:outputText value="#{ur.expireDateString}" />
+		            </rich:column>
+		            <rich:column>
+		            	<f:facet name="header">
+		            		<h:commandButton styleClass="buttonStyle" value="#{msgs['Action.Search']}"
+		            			rendered="#{baseBB.authorizeSearchAll}" action="#{usersBB.usersSearchListner}"/>
+		            	</f:facet>
+		                <h:commandLink styleClass="no-decor" rendered="#{baseBB.authorizeUpdate}" action="#{usersBB.editListner}">
+		                    <h:graphicImage library="images" name="edit2.gif" alt="#{msgs['Action.edit']}" style="border:none" />
+		                </h:commandLink>
+		                <h:outputText/>
+		                <h:commandLink styleClass="no-decor" rendered="#{baseBB.authorizeDelete}" action="#{usersBB.deleteListner}"
+		                	onclick="deleteRecord(#{msgs['Messages.deleteMessege']}); return false;)">
+		                    <h:graphicImage library="images" name="delete.gif" alt="#{msgs['Action.delete']}" style="border:none"/>
+		                </h:commandLink>
+		                <h:outputText/>
+		                <h:commandButton styleClass="buttonStyle" value="#{msgs['Users.branches']}" action="#{usersBB.openUserBranches}" rendered="#{ur.isActive}">
+		                    <f:setPropertyActionListener target="#{usersBB.usersDto.userObj}" value="#{ur}"/>
+		                </h:commandButton>
+		            </rich:column>
+		            <f:facet name="footer">
+		                <h:panelGrid id="addGrid" columns="2" styleClass="searchactionTB_Bg" cellspacing="0" cellpadding="0" border="0">
+							<h:commandButton value="#{msgs['Action.add']}" rendered="#{baseBB.authorizeAdd}"
+								action="#{usersBB.addListner}" styleClass="buttonStyle"/>
+		                	<rich:dataScroller for="table"/>
+				        </h:panelGrid>
+		            </f:facet>
+		        </rich:dataTable>
+			</h:form>
+			<h:form id="manageUsersForm">
+				<h:panelGrid columns="4" id="editGrid" styleClass="customTB95" cellspacing="0" cellpadding="0" border="0" rendered="#{usersBB.manageMode}" style="width:100%;text-align:center;">
+	            	<h:panelGroup>
+	                	<h:outputText value="#{msgs['Login.userName']}"/>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <h:inputText maxlength="20" id="userNameInput" value="#{usersBB.usersDto.userObj.userName}" disabled="#{!empty usersBB.usersDto.userObj.id}"
+		                 required="true" requiredMessage="#{err['Users.required_userName']}"/>
+	                <h:outputText value="#{msgs['Messages.expire_date']}" />
+	                <rich:calendar id="toDateInput" datePattern="dd-MM-yyyy" value="#{usersBB.usersDto.userObj.expireDate}"
+		                enableManualInput="true" showWeeksBar="false"/>
+	                <h:outputText value="#{msgs['Messages.active']}"/>
+	                <h:selectBooleanCheckbox id="activeInput" value="#{usersBB.usersDto.userObj.isActive}"/>
+	                <h:panelGroup>
+	                	<h:outputText value="#{msgs['Users.user_type']}"/>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <h:selectOneMenu id="userTypeInput" value="#{usersBB.usersDto.userObj.userInf.userType}" styleClass="dropDownStyle"
+                		disabled="#{!empty usersBB.usersDto.userObj.id}" onchange="checkUserType();" required="true" requiredMessage="#{err['Users.required_userType']}">
+	                	<f:selectItem itemLabel="#{msgs['Messages.selectList']}" itemValue=""/>
+	                	<f:selectItem itemLabel="#{msgs['Users.internal_type']}" itemValue="I"/>
+	                	<f:selectItem itemLabel="#{msgs['Users.external_type']}" itemValue="E"/>
+                	</h:selectOneMenu>
+	                <h:panelGroup id="searchEmployee" style="display:none">
+	                	<h:outputText value="#{msgs['Employees.empNum']}"/>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <h:inputText id="employeeInput" maxlength="10" value="#{usersBB.usersDto.userObj.userInf.id}" style="display:none"/>
+	                <h:panelGroup id="userFullNameMessage" style="display:none">
+	                	<h:outputText value="#{msgs['Users.user_fullName']}"/>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <h:inputText maxlength="50" id="userFullNameInput" value="#{usersBB.usersDto.userObj.userInf.userFullName}"/>
+	                <h:outputText id="mailMessage" value="#{msgs['Users.user_mail']}" style="display:none"/>
+                	<h:inputText id="mailInput" value="#{usersBB.usersDto.userObj.userInf.userMail}" style="display:none"/>
+	                <h:outputText id="mobil1Message" value="#{msgs['Users.user_mob1']}" style="display:none"/>
+                	<h:inputText id="mobil1Input" value="#{usersBB.usersDto.userObj.userInf.mobNum}" style="display:none"/>
+	                <h:outputText id="mobil2Message" value="#{msgs['Users.user_mob2']}" style="display:none"/>
+                	<h:inputText id="mobil2Input" value="#{usersBB.usersDto.userObj.userInf.mobNum2}" style="display:none"/>
+	            </h:panelGrid>
+                <h:panelGrid id="addEditButtonGrid" columns="3" styleClass="searchactionTB_Bg" cellspacing="0" cellpadding="0" border="0" rendered="#{usersBB.manageMode}">
+		            <h:commandButton styleClass="buttonStyle" value="#{msgs['Action.save']}" action="#{usersBB.saveListner}" id="saveButton"/>
+		            <h:commandButton styleClass="buttonStyle" style="width:100px;" value="#{msgs['Action.reset_password']}" action="#{usersBB.resetPassword}" rendered="#{!empty usersBB.usersDto.userObj.id}"/>
+		            <h:commandButton styleClass="buttonStyle" value="#{msgs['Action.cancel']}" immediate="true" action="#{usersBB.cancelManage}"/>
+		        </h:panelGrid>
+			</h:form>
+	</ui:define>
+</ui:composition>

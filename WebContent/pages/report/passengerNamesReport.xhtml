@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">Passenger Names Report</ui:define>
+   	<ui:define name="content">
+   	
+   <h:form id="passengerNamesReportForm">
+			<h:panelGrid columns="4" cellspacing="0" cellpadding="0" border="0" id="searchGrid" style="width:100%;text-align:center;">
+				<h:outputText value="#{msgs['foundLostLuggage.tripDate']}"/>
+				<rich:calendar id="fromDateInput" datePattern="dd-MM-yyyy" required="true" requiredMessage="#{err['Messages.required_Date']}"
+		        	enableManualInput="true" showWeeksBar="false" value="#{passengerNamesReportBB.tripDate}">
+		        </rich:calendar>
+				
+                <h:outputText value="#{msgs['foundLostLuggage.tripNumber']}"/>
+                <h:inputText value="#{passengerNamesReportBB.tripCode}"  required="true" requiredMessage="#{err['Messages.required_valid']}" />
+			</h:panelGrid>	
+			
+			
+			<h:panelGrid id="printGrid" columns="2" cellspacing="0" cellpadding="0" border="0" style="width:100%;text-align:center;">
+				
+				<h:commandLink styleClass="no-decor" action="#{passengerNamesReportBB.viewReport}" title="#{msgs['Action.print']}" >  
+                    <h:graphicImage library="images" name="pdf.png" style="border:none" width="40" height="40"/>
+                </h:commandLink>
+              
+			</h:panelGrid>				   
+		</h:form>
+    
+   	</ui:define>
+</ui:composition>

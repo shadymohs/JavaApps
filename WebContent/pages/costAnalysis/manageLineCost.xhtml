@@ -1,0 +1,184 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title"> Manage Line Cost </ui:define>
+   	<ui:define name="content">
+			<h:form id="manageLineCostForm">
+	            <h:panelGrid columns="4" id="editGrid" style="width:100%;text-align:center;" cellspacing="0" cellpadding="0" border="0">
+	                <!-- line -->
+	                <h:panelGroup>
+               		<h:outputText value="#{msgs['BusType.line']}"/>
+                	<h:outputText style="color:red" value="*" />
+                  </h:panelGroup>
+                 	<h:selectOneMenu value="#{lineCostBB.lineCostDto.lineCostBean.line.id}" required="true" >
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{lineCostBB.lineList}"/>
+				  </h:selectOneMenu>
+	                <!-- start date -->
+	                <h:panelGroup>
+	                	<h:outputText value="#{msgs['BusType.fromDate']}"/>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <rich:calendar id="startDateInput" datePattern="dd-MM-yyyy" required="true" requiredMessage="#{err['Messages.required_fromDate']}"
+		        	enableManualInput="true" showWeeksBar="false" value="#{lineCostBB.lineCostDto.lineCostBean.startDate}">
+		            </rich:calendar>
+	                <!-- end date -->
+	                <h:panelGroup>
+	                	<h:outputText value="#{msgs['BusType.toDate']}"/>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <rich:calendar id="endDateInput" datePattern="dd-MM-yyyy" required="true" requiredMessage="#{err['Messages.required_toDate']}"
+		        	enableManualInput="true" showWeeksBar="false" value="#{lineCostBB.lineCostDto.lineCostBean.endDate}">
+		            </rich:calendar>
+	                <!-- perHour cost amount -->
+	                 <h:panelGroup>
+	                	<h:outputText value="#{msgs['BusType.perHourCost']}"/>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <h:inputText id="perHourCostInput" value="#{lineCostBB.lineCostDto.lineCostBean.perHourCost}" maxlength="50"
+	                	required="true" />
+	                <!-- perKM cost amount -->
+	                 <h:panelGroup>
+	                	<h:outputText value="#{msgs['BusType.perKMCost']}"/>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <h:inputText id="perKMCostInput" value="#{lineCostBB.lineCostDto.lineCostBean.perKMCost}" maxlength="50"
+	                	required="true" />
+	               
+	            </h:panelGrid>
+                
+           
+		        <h:panelGrid columns="2" style="width:100%;text-align:center;">
+	            	<h:commandLink styleClass="no-decor" action="#{lineCostBB.saveListner}" id="saveButton" title="#{msgs['Action.save']}">
+	                    <h:graphicImage library="images" name="save.jpg" style="border:none" width="50" height="50"/>
+	                </h:commandLink>
+	                <h:commandLink styleClass="no-decor" action="lineCost.xhtml" title="#{msgs['Action.cancel']}" immediate="true">
+	                    <h:graphicImage library="images" name="return.png" style="border:none" width="100" height="100"/>
+	                </h:commandLink>
+               </h:panelGrid>
+		</h:form>
+		
+	<!-- line cost details  -->
+  <h:form id="lineCostDetailForm">
+   <rich:dataTable value="#{lineCostBB.lineCostDto.lineCostDetailList}" var="pg" id="table" rows="20" styleClass="newTable" style="width:100%;text-align:center;">
+					<f:facet name="noData">
+		                #{err['Messages.no_data']}
+		            </f:facet>
+		           <rich:column>
+		                <f:facet name="header">
+	                		<h:outputText value="#{msgs['BusType.tripCode']}"/>
+	                	</f:facet>
+		                <h:outputText value="#{pg.tripCode}" />
+		            </rich:column>
+		            <rich:column>
+		                <f:facet name="header">
+		                	#{msgs['Messages.date_from']}
+		                </f:facet>
+		                <h:outputText value="#{pg.startDateAsString}" />
+		            </rich:column>
+		             <rich:column>
+		                <f:facet name="header">
+		                	#{msgs['Messages.date_to']}
+		                </f:facet>
+		                <h:outputText value="#{pg.endDateAsString}" />
+		            </rich:column>
+		            <rich:column>
+		                <f:facet name="header">
+		                	#{msgs['BusType.perHourCost']}
+		                </f:facet>
+		                <h:outputText value="#{pg.perHourCost}" />
+		            </rich:column>
+		             <rich:column>
+		                <f:facet name="header">
+		                	#{msgs['BusType.perKMCost']}
+		                </f:facet>
+		                <h:outputText value="#{pg.perKMCost}" />
+		            </rich:column>
+		           
+		            <rich:column>
+		            	<h:commandLink styleClass="no-decor" rendered="#{baseBB.authorizeUpdate}" action="#{lineCostBB.editListnerDetail}"  immediate="true">
+	                    <h:graphicImage library="images" name="edit2.gif" alt="#{msgs['Action.edit']}" style="border:none" />
+	                    <f:setPropertyActionListener target="#{lineCostBB.lineCostDto.lineCostDetailBean}" value="#{pg}"/>
+	                    
+		                    <f:param value="#{pg.lineCostDtlId}" name="lineCostDtlId"/>
+		                    <f:param value="#{pg.lineCostId}" name="lineCostId"/>
+		                    <f:param value="#{pg.startDateAsString}" name="startDate"/>
+		                    <f:param value="#{pg.endDateAsString}" name="endDate"/>
+		                    <f:param value="#{pg.tripCode}" name="tripCode"/>
+		                    <f:param value="#{pg.perHourCost}" name="perHourCost"/>
+		                    <f:param value="#{pg.perKMCost}" name="perKMCost"/>
+	                    </h:commandLink>		               
+		                <h:outputText/>
+		            </rich:column>
+		            
+		            <f:facet name="footer">
+		                <h:panelGrid id="addGrid" columns="2" styleClass="searchactionTB_Bg" cellspacing="0" cellpadding="0" border="0"  width="100%" style="text-align:center;">
+		                	<rich:dataScroller for="table" />
+								<h:commandLink styleClass="no-decor" action="#{lineCostBB.addListnerDetail}" title="#{msgs['Action.add']}" immediate="true" rendered="#{baseBB.authorizeAdd}">
+		                    		<h:graphicImage library="images" name="add.jpg" style="border:none" width="20" height="20"/>
+		                		</h:commandLink>
+				        </h:panelGrid>
+		            </f:facet>
+		  </rich:dataTable>
+    </h:form>
+    
+    
+    <h:form id="manageLineCostDetailForm"   rendered="#{lineCostBB.lineCostDto.isManageMode}">
+	            <h:panelGrid columns="4" id="editGrid" style="width:100%;text-align:center;" cellspacing="0" cellpadding="0" border="0">
+	              
+	                <!-- start date -->
+	                <h:panelGroup>
+	                	<h:outputText value="#{msgs['BusType.fromDate']}"/>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <rich:calendar id="startDateInput" datePattern="dd-MM-yyyy" required="true" requiredMessage="#{err['Messages.required_fromDate']}"
+		        	enableManualInput="true" showWeeksBar="false" value="#{lineCostBB.lineCostDto.lineCostDetailBean.startDate}">
+		            </rich:calendar>
+	                <!-- end date -->
+	                <h:panelGroup>
+	                	<h:outputText value="#{msgs['BusType.toDate']}"/>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <rich:calendar id="endDateInput" datePattern="dd-MM-yyyy" required="true" requiredMessage="#{err['Messages.required_toDate']}"
+		        	enableManualInput="true" showWeeksBar="false" value="#{lineCostBB.lineCostDto.lineCostDetailBean.endDate}">
+		            </rich:calendar>
+	                <!-- perHour cost amount -->
+	                 <h:panelGroup>
+	                	<h:outputText value="#{msgs['BusType.perHourCost']}"/>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <h:inputText id="perHourCostInput" value="#{lineCostBB.lineCostDto.lineCostDetailBean.perHourCost}" maxlength="50"
+	                	required="true" />
+	                <!-- perKM cost amount -->
+	                 <h:panelGroup>
+	                	<h:outputText value="#{msgs['BusType.perKMCost']}"/>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <h:inputText id="perKMCostInput" value="#{lineCostBB.lineCostDto.lineCostDetailBean.perKMCost}" maxlength="50"
+	                	required="true" />
+	                 <!-- trip code -->
+	                  <h:panelGroup>
+	                	<h:outputText value="#{msgs['BusType.tripCode']}"/>
+	                	<h:outputText style="color:red" value="*" />
+	                </h:panelGroup>
+	                <h:inputText id="tripCodeInput" value="#{lineCostBB.lineCostDto.lineCostDetailBean.tripCode}" maxlength="50"
+	                	required="true" />
+	            </h:panelGrid>
+           
+		        <h:panelGrid columns="2" style="width:100%;text-align:center;">
+	            	<h:commandLink styleClass="no-decor" action="#{lineCostBB.saveDetailListner}" id="saveButton" title="#{msgs['Action.save']}">
+	                    <h:graphicImage library="images" name="save.jpg" style="border:none" width="50" height="50"/>
+	                </h:commandLink>
+	              
+               </h:panelGrid>
+		</h:form>
+		
+	</ui:define>
+</ui:composition>

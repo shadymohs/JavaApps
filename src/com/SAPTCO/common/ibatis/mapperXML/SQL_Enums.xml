@@ -1,0 +1,18 @@
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD iBatis Mapper 3.0 //EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="driverAllowance">
+
+    <sql id="STATUS_ACTIVE">1</sql>
+    <sql id="STATUS_DEACTIVE">0</sql>
+    <sql id="Date_Format">'DD-MM-YYYY'</sql>
+    <sql id="Time_Format">'HH24:MI'</sql>
+    <sql id="User_Internal">'I'</sql>
+    <sql id="User_External">'E'</sql>
+	<sql id="User_Password">'zVvrJncvDJI='</sql>
+	<sql id="Busses_Type">'U'</sql>
+	<sql id="Drivers_Code">10068,9064,1090</sql>
+	<sql id="VEICHLE_TYPE">6</sql>
+	<sql id="SAPTCO_CUSTOMER_ID">1</sql>
+	<sql id="PAYMENT_TYPE">8</sql>
+	
+</mapper>

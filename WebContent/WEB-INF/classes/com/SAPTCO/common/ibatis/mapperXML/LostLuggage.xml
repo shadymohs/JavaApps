@@ -1,0 +1,748 @@
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="LostLuggage">
+
+    <resultMap id="getSystemConfigResult" class="com.SAPTCO.common.ibatis.mapperBeans.SystemConfiguration">
+	    <result property="id" column="SYSTEM_CONFIGURATION_ID"/>
+	    <result property="code" column="CODE"/>
+	    <result property="foreignName" column="FOREIGN_NAME"/>
+	    <result property="localeName" column="LOCALE_NAME"/>
+	  	<result property="isActive" column="IS_ACTIVE"/>
+        <result property="constantValue" column="VALUE"/>
+  </resultMap> 
+  
+   <select id="getSystemConfigList" resultMap="getSystemConfigResult">  
+    select SYSTEM_CONFIGURATION_ID ,
+			CODE ,
+			FOREIGN_NAME ,
+			LOCALE_NAME ,
+			VALUE ,
+			IS_ACTIVE  from SYSTEM_CONFIGURATION
+  </select>
+  
+  <resultMap id="getLostLuggageClassResult" class="com.SAPTCO.common.ibatis.mapperBeans.LostLuggageClass">
+    <result property="id" column="LOST_LUGGAGE_CLASS_ID"/>
+    <result property="foreignName" column="FOREIGN_NAME"/>
+    <result property="localeName" column="LOCALE_NAME"/>
+  </resultMap> 
+
+  <select id="getLostLuggageClassList" resultMap="getLostLuggageClassResult">
+		select LOST_LUGGAGE_CLASS_ID ,FOREIGN_NAME,LOCALE_NAME
+			from LOST_LUGGAGE_CLASS
+  </select>
+  
+  <resultMap id="getLostLuggageColorResult" class="com.SAPTCO.common.ibatis.mapperBeans.LostLuggageColor">
+    <result property="id" column="LOST_LUGGAGE_COLOR_ID"/>
+    <result property="foreignName" column="FOREIGN_NAME"/>
+    <result property="localeName" column="LOCALE_NAME"/>
+  </resultMap> 
+
+  <select id="getLostLuggageColorList" resultMap="getLostLuggageColorResult">
+		select LOST_LUGGAGE_COLOR_ID ,FOREIGN_NAME,LOCALE_NAME
+			from LOST_LUGGAGE_COLOR
+  </select>
+  
+  <resultMap id="getLostLuggageSizeResult" class="com.SAPTCO.common.ibatis.mapperBeans.LostLuggageSize">
+    <result property="id" column="LOST_LUGGAGE_SIZE_ID"/>
+    <result property="foreignName" column="FOREIGN_NAME"/>
+    <result property="localeName" column="LOCALE_NAME"/>
+  </resultMap> 
+
+  <select id="getLostLuggageSizeList" resultMap="getLostLuggageSizeResult">
+		select LOST_LUGGAGE_SIZE_ID ,FOREIGN_NAME,LOCALE_NAME
+			from LOST_LUGGAGE_SIZE
+  </select>
+
+  <parameterMap id="manageLuggagePropertiesParams" class="java.util.Map">
+		<parameter property="type" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="operation" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+	    
+	    <parameter property="Id" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="INOUT" />
+	    
+	    <parameter property="localName" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="foreignName" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="manageLuggageProperties" parameterMap="manageLuggagePropertiesParams"> 
+	{ call	LOST_LUGGAGE_PKG.MANAGE_LUGGAGE_PROPERTIES(?,?,?,?,?,?) }</procedure>
+	
+	
+  <resultMap id="getLostLuggageStatusResult" class="com.SAPTCO.common.ibatis.mapperBeans.LostLuggageStatus">
+    <result property="id" column="LOST_LUGGAGE_STATUS_ID"/>
+    <result property="localeName" column="LOCALE_NAME"/>
+    <result property="foreignName" column="FOREIGN_NAME"/>
+    <result property="showInComplaint" column="SHOW_IN_COMPLAINT"/>
+    <result property="showInLuggage" column="SHOW_IN_LOST_LUGGAGE"/>
+  </resultMap> 
+
+  <select id="getLostLuggageStatusList" resultMap="getLostLuggageStatusResult">
+		select LOST_LUGGAGE_STATUS_ID,
+				LOCALE_NAME,
+				FOREIGN_NAME,
+				SHOW_IN_COMPLAINT,
+				SHOW_IN_LOST_LUGGAGE
+	  from LOST_LUGGAGE_STATUS
+	  where LOST_LUGGAGE_STATUS_ID not in(9)
+  </select>
+
+ 
+	<resultMap id="luggageDataByStickerResult" class="LostLuggage">    
+	    <result property="tripNumber" column="TRIP_NUMBER"/>
+	    <result property="ticketNumber" column="TICKET_NUMBER"/>
+	    <result property="tripDate" column="TRIP_DATE"/>
+	    <result property="tripCode" column="TRIP_CODE"/>
+	    <result property="stickerNumber" column="STICKER_NUMBER"/>
+	    <result property="fromStation" column="FROM_STATION"/>
+	    <result property="toStation" column="TO_STATION"/>
+	    <result property="passengerName" column="NAME"/>
+	    <result property="contacteNumber" column="MOBILE_NUMBER"/>
+	    <result property="reservationNumber" column="RESERVATION_NUMBER"/>
+	    
+	</resultMap>
+	             
+	<parameterMap id="getLuggageDataByStickerParams" class="java.util.Map">
+		<parameter property="stickerNumber" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="reservationNumber" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		
+		<parameter property="result" jdbcType="ORACLECURSOR"
+			javaType="java.sql.ResultSet" mode="OUT" resultMap="luggageDataByStickerResult"/>
+       
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="getLuggageDataBySticker" parameterMap="getLuggageDataByStickerParams"> 
+	{ call	LOST_LUGGAGE_PKG.GET_LUGGAGE_BY_STICKER(?,?,?,?) }</procedure>
+	
+	          
+	<parameterMap id="manageLostLuggageParams" class="java.util.Map">
+		<parameter property="operation" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="lostLuggageId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="INOUT" />
+		<parameter property="stickerNumber" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="contactNumber" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		
+		<parameter property="lostLuggageClassId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="lostLuggageColorId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="lostLuggageSizeId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="lostLuggageStatusId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		
+		<parameter property="foundStationId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="linkedComplaintId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		
+		<parameter property="foundDate" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="currentLocation" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="specialMark" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="contentOfLuggage" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		
+		<parameter property="referenceNumber" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="line" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="remarks" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="branchId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="userId" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+        
+		<parameter property="tripNumber" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="tripCode" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="tripDate" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="ticketNumber" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="passengerName" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="manageLostLuggage" parameterMap="manageLostLuggageParams"> 
+	{ call	LOST_LUGGAGE_PKG.MANAGE_LOST_LUGGAGE(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }</procedure>
+	
+	
+	<resultMap id="MatchedComplaintResult" class="Complaint">    
+	    <result property="luggageComplaintId" column="LUGGAGE_COMPLAINT_ID"/>
+	    <result property="ticketNumber" column="TICKET_NUMBER"/>
+	    <result property="stickerNumber" column="STICKER_NUMBER"/>
+	    <result property="tripCode" column="TRIP_CODE"/>
+	    <result property="tripDate" column="TRIP_DATE"/>
+	    
+	    <result property="tripNumber" column="TRIP_NUMBER"/>
+	    <result property="contacteNumber" column="CONTACT_NUMBER"/>
+	    <result property="customerName" column="CUSTOMER_NAME"/>
+	    <result property="currentStatus.localeName" column="COMP_STATUS"/>
+	    <result property="currentStatus.id" column="LOST_LUGGAGE_STATUS_ID"/>
+	    <result property="luggageClass.id" column="LOST_LUGGAGE_CLASS_ID"/>
+	    <result property="luggageClass.localeName" column="LUG_CLASS"/>
+	    <result property="color.id" column="LOST_LUGGAGE_COLOR_ID"/>
+	    <result property="color.localeName" column="LUG_COLOR"/>
+	    <result property="size.id" column="LOST_LUGGAGE_SIZE_ID"/>
+	    <result property="size.localeName" column="LUG_SIZE"/>
+	    
+	    <result property="registeredInStation" column="REGISTERED_IN_STATION"/>
+	    <result property="linkedLuggageId" column="LINKED_LUGGAGE_ID"/>
+	    <result property="branch" column="BRANCH"/>
+	    <result property="specialMark" column="SPECIAL_MARK"/>
+	    <result property="luggageContent" column="CONTENT_OF_LUGGAGE"/>
+	    <result property="remarks" column="REMARKS"/>
+	</resultMap>
+	              
+                            
+	<parameterMap id="getMatchedComplaintParams" class="java.util.Map">
+	    <parameter property="luggageClassId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="colorId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="sizeId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="foundStationId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    
+		<parameter property="foundDate" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="specialMark" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="luggageContent" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="line" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="branch" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		
+		<parameter property="result" jdbcType="ORACLECURSOR"
+			javaType="java.sql.ResultSet" mode="OUT" resultMap="MatchedComplaintResult"/>
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="getMatchedComplaint" parameterMap="getMatchedComplaintParams"> 
+	{ call	LOST_LUGGAGE_PKG.SEARCH_FOR_MATCHED_COMPLAINT(?,?,?,?,?,?,?,?,?,?,?) }</procedure>
+	
+	
+	
+	<parameterMap id="manageComplaintParams" class="java.util.Map">
+		<parameter property="operation" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="luggageComplaintId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="INOUT" />
+		<parameter property="customerName" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="contactNumber" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="stickerNumber" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="ticketNumber" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		
+		<parameter property="lostLuggageClassId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="lostLuggageColorId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="lostLuggageSizeId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="lostLuggageStatusId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		
+		<parameter property="stationId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="linkedLuggageId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		
+		<parameter property="tripDate" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="tripCode" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="specialMark" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="contentOfLuggage" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		
+		
+		<parameter property="line" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="remarks" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="branchId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		
+		<parameter property="userId" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="manageComplaint" parameterMap="manageComplaintParams"> 
+	{ call	LOST_LUGGAGE_PKG.MANAGE_LOST_LUGGAGE_COMPLAINT(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }</procedure>
+	
+	
+	<resultMap id="matchedLuggageResult" class="LostLuggage">    
+	    <result property="lostLuggageId" column="LOST_LUGGAGE_ID"/>
+	    <result property="ticketNumber" column="TICKET_NUMBER"/>
+	    <result property="stickerNumber" column="STICKER_NUMBER"/>
+	    <result property="tripCode" column="TRIP_CODE"/>
+	    <result property="tripDate" column="TRIP_DATE"/>
+	    
+	    <result property="tripNumber" column="TRIP_NUMBER"/>
+	    <result property="contacteNumber" column="CONTACT_NUMBER"/>
+	    <result property="currentStatus.id" column="LOST_LUGGAGE_STATUS_ID"/>
+	    <result property="currentStatus.localeName" column="LUG_STATUS"/>
+	    <result property="luggageClass.id" column="LOST_LUGGAGE_CLASS_ID"/>
+	    <result property="luggageClass.localeName" column="LUG_CLASS"/>
+	    <result property="color.id" column="LOST_LUGGAGE_COLOR_ID"/>
+	    <result property="color.localeName" column="LUG_COLOR"/>
+	    <result property="size.id" column="LOST_LUGGAGE_SIZE_ID"/>
+	    <result property="size.localeName" column="LUG_SIZE"/>
+	 
+	    <result property="foundInStation" column="FOUND_IN_STATION_ID"/>
+	    <result property="foundDate" column="FOUND_DATE"/>
+	    <result property="currentLocation" column="CURRENT_LOCATION"/>
+	    <result property="refNumber" column="REFERENCE_NUMBER"/>
+	    <result property="linkedComplaintId" column="LINKED_COMPLAINT_ID"/>
+	    <result property="passengerName" column="CUSTOMER_NAME"/>
+	    <result property="branch" column="BRANCH"/>
+	    <result property="specialMark" column="SPECIAL_MARK"/>
+	    <result property="luggageContent" column="CONTENT_OF_LUGGAGE"/>
+	    <result property="remarks" column="REMARKS"/>
+	</resultMap>
+	                                 
+	<parameterMap id="getMatchedLuggageParams" class="java.util.Map">
+	    <parameter property="luggageClassId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="colorId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="sizeId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="sticker" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="ticket" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+	    <parameter property="stationId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    
+		<parameter property="date" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="specialMark" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="luggageContent" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="line" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="branch" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		
+		<parameter property="result" jdbcType="ORACLECURSOR"
+			javaType="java.sql.ResultSet" mode="OUT" resultMap="matchedLuggageResult"/>
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="getMatchedLuggage" parameterMap="getMatchedLuggageParams"> 
+	{ call	LOST_LUGGAGE_PKG.SEARCH_MATCHED_LOST_LUGGAGE(?,?,?,?,?,?,?,?,?,?,?,?,?) }</procedure>
+	
+	
+	<parameterMap id="linkComplaintToLuggageParams" class="java.util.Map">
+	    <parameter property="lostLuggageId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="complaintId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="remarks" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+	    <parameter property="userId" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                        
+	<procedure id="linkComplaintToLuggage" parameterMap="linkComplaintToLuggageParams"> 
+	{ call	LOST_LUGGAGE_PKG.LINK_LOST_LUGGAGE_TO_COMPLAINT(?,?,?,?,?) }</procedure>
+	
+	
+	
+	<parameterMap id="removeLinkLuggageToComplaintParams" class="java.util.Map">
+	    <parameter property="lostLuggageId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="complaintId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="remarks" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+	    <parameter property="userId" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                        
+	<procedure id="removeLinkLuggageToComplaint" parameterMap="removeLinkLuggageToComplaintParams"> 
+	{ call	LOST_LUGGAGE_PKG.REMOVE_LINK_LUGGAGE_TO_COMP(?,?,?,?,?) }</procedure>
+	
+	<parameterMap id="deliverAndCloseComplaintParams" class="java.util.Map">
+	    <parameter property="lostLuggageId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="complaintId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="remarks" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+	    <parameter property="userId" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                        
+	<procedure id="deliverAndCloseComplaint" parameterMap="deliverAndCloseComplaintParams"> 
+	{ call	LOST_LUGGAGE_PKG.DELIVER_CLOSE_COMPLAINT(?,?,?,?,?) }</procedure>
+	
+	
+	<parameterMap id="linkLuggageToComplaintParams" class="java.util.Map">
+	    <parameter property="lostLuggageId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="complaintId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="remarks" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+	    <parameter property="userId" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                        
+	<procedure id="linkLuggageToComplaint" parameterMap="linkLuggageToComplaintParams"> 
+	{ call	LOST_LUGGAGE_PKG.LINK_LOST_LUGGAGE_TO_COMPLAINT(?,?,?,?,?) }</procedure>
+	
+	<parameterMap id="searchAllComplaintsParams" class="java.util.Map">
+	    <parameter property="complaintId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="statusId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="stationId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    
+		<parameter property="fromDate" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="toDate" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="mobile" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		
+		<parameter property="onlyMyLuggage" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="userId" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="luggageClassId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="colorId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="sizeId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="result" jdbcType="ORACLECURSOR"
+			javaType="java.sql.ResultSet" mode="OUT" resultMap="MatchedComplaintResult"/>
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="searchAllComplaints" parameterMap="searchAllComplaintsParams"> 
+	{ call	LOST_LUGGAGE_PKG.SEARCH_ALL_COMPLAINT(?,?,?,?,?,?,?,?,?,?,?,?,?) }</procedure>
+	
+	<parameterMap id="searchAllLuggageParams" class="java.util.Map">
+	    <parameter property="luggageId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="statusId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="stationId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="fromDate" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="toDate" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="branch" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		
+	    <parameter property="onlyMyLuggage" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="userId" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="luggageClassId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="colorId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="sizeId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="sticker" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="result" jdbcType="ORACLECURSOR"
+			javaType="java.sql.ResultSet" mode="OUT" resultMap="matchedLuggageResult"/>
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="searchAllLuggage" parameterMap="searchAllLuggageParams"> 
+	{ call	LOST_LUGGAGE_PKG.SEARCH_ALL_LUGGAGE(?,?,?,?,?,?,?,?,?,?,?,?,?,?) }</procedure>
+	
+	<parameterMap id="searchLuggageToDeliverParams" class="java.util.Map">
+	    <parameter property="luggageId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="contactNum" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+	    <parameter property="stationId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    
+		<parameter property="fromDate" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="toDate" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="tripCode" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		
+		<parameter property="result" jdbcType="ORACLECURSOR"
+			javaType="java.sql.ResultSet" mode="OUT" resultMap="matchedLuggageResult"/>
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="searchLuggageToDeliver" parameterMap="searchLuggageToDeliverParams"> 
+	{ call	LOST_LUGGAGE_PKG.SEARCH_LUGGAGE_TO_DELIVER(?,?,?,?,?,?,?,?) }</procedure>
+	
+	
+	<parameterMap id="finishDeliverLuggageParams" class="java.util.Map">
+	    <parameter property="lostLuggageId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	   <parameter property="recipientName" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="recipientId" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+	    <parameter property="storeFee" jdbcType="FLOAT"
+			javaType="java.lang.Float" mode="IN" />
+		<parameter property="remarks" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		
+		<parameter property="recipientMobile" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="branchId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="userId" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		 <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="finishDeliverLuggage" parameterMap="finishDeliverLuggageParams"> 
+	{ call	LOST_LUGGAGE_PKG.FINISH_DELIVER_LUGGAGE(?,?,?,?,?,?,?,?,?) }</procedure>
+	
+	
+	<parameterMap id="transformToScrapParams" class="java.util.Map">
+	    <parameter property="lostLuggageId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="userId" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="remarks" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		
+		<parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="transformToScrap" parameterMap="transformToScrapParams"> 
+	{ call	LOST_LUGGAGE_PKG.TRANSFORM_TO_SCRAP(?,?,?,?) }</procedure>
+	
+	<parameterMap id="transformToAuctionParams" class="java.util.Map">
+	    <parameter property="lostLuggageId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="userId" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		 <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="transformToAuction" parameterMap="transformToAuctionParams"> 
+	{ call	LOST_LUGGAGE_PKG.TRANSFORM_TO_AUCTION(?,?,?) }</procedure>
+	
+	
+	<parameterMap id="getComplaintsToRepaymentParams" class="java.util.Map">
+	    <parameter property="stationId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="fromDate" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="toDate" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		
+		<parameter property="result" jdbcType="ORACLECURSOR"
+			javaType="java.sql.ResultSet" mode="OUT" resultMap="MatchedComplaintResult"/>
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="getComplaintsToRepayment" parameterMap="getComplaintsToRepaymentParams"> 
+	{ call	LOST_LUGGAGE_PKG.GET_COMPLAINTS_TO_REPAYMENT(?,?,?,?,?) }</procedure>
+	
+	<parameterMap id="moveToRepaymentParams" class="java.util.Map">
+	    <parameter property="complaintId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="userId" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		 <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="moveToRepayment" parameterMap="moveToRepaymentParams"> 
+	{ call	LOST_LUGGAGE_PKG.MOVE_TO_REPAYMENT(?,?,?) }</procedure>
+	
+	
+	<parameterMap id="repaymentAndCloseParams" class="java.util.Map">
+	    <parameter property="complaintId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="receiptNumber" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="repaymentValue" jdbcType="FLOAT"
+			javaType="java.lang.Float" mode="IN" />
+		<parameter property="userId" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="remarks" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		 <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="repaymentAndClose" parameterMap="repaymentAndCloseParams"> 
+	{ call	LOST_LUGGAGE_PKG.REPAYMENT_AND_CLOSE_COMPL(?,?,?,?,?,?) }</procedure>
+	
+	
+	<parameterMap id="getLuggageToStoreParams" class="java.util.Map">
+	    <parameter property="stationId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="fromDate" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="toDate" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="branch" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		
+		<parameter property="result" jdbcType="ORACLECURSOR"
+			javaType="java.sql.ResultSet" mode="OUT" resultMap="matchedLuggageResult"/>
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="getLuggageToStore" parameterMap="getLuggageToStoreParams"> 
+	{ call	LOST_LUGGAGE_PKG.GET_LUGGAGE_TO_STORE(?,?,?,?,?,?) }</procedure>
+	
+	<parameterMap id="getLuggageToScrapParams" class="java.util.Map">
+	    <parameter property="stationId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="fromDate" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="toDate" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="branch" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		
+		<parameter property="result" jdbcType="ORACLECURSOR"
+			javaType="java.sql.ResultSet" mode="OUT" resultMap="matchedLuggageResult"/>
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="getLuggageToScrap" parameterMap="getLuggageToScrapParams"> 
+	{ call	LOST_LUGGAGE_PKG.GET_LUGGAGE_TO_SCRAP(?,?,?,?,?,?) }</procedure>
+	
+	<parameterMap id="moveToMainStoreParams" class="java.util.Map">
+	    <parameter property="lostLuggageId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    <parameter property="branchId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="currentLocation" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="userId" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		 <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="moveToMainStore" parameterMap="moveToMainStoreParams"> 
+	{ call	LOST_LUGGAGE_PKG.TRANSFORM_TO_MAIN_STORE(?,?,?,?,?) }</procedure>
+	
+	<parameterMap id="manageTransferRequestParams" class="java.util.Map">
+	    <parameter property="operation" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+	    <parameter property="requestId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="INOUT" />
+	    <parameter property="luggageId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+	    
+		
+		<parameter property="userId" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="newStationId" jdbcType="BIGINT"
+			javaType="java.lang.Long" mode="IN" />
+		<parameter property="newLocation" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		
+		 <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                       
+                                         
+	<procedure id="manageTransferRequest" parameterMap="manageTransferRequestParams"> 
+	{ call	LOST_LUGGAGE_PKG.MANAGE_LUG_TRANSFER_REQUESTS(?,?,?,?,?,?,?) }</procedure>
+	
+	
+	
+              
+   <resultMap id="getLuggageTransferRequestResult" class="com.SAPTCO.common.ibatis.mapperBeans.TransferLugRequest">
+    <result property="requestId" column="REQUEST_ID"/>
+    <result property="luggage.lostLuggageId" column="LUGGAGE_ID"/>
+    <result property="user" column="USER_ID"/>
+    <result property="newStationId" column="NEW_STATION_ID"/>
+    <result property="newLocation" column="NEW_LOCATION"/>
+    
+    <result property="requestDate" column="REQUEST_DATE"/>
+    <result property="requestStatus.id" column="REQUEST_STATUS_ID"/>
+    <result property="requestStatus.localeName" column="REQUEST_STATUS"/>
+    <result property="updatedBy" column="ADMIN_ID"/>
+    <result property="updatedDate" column="UPDATE_DATE"/>
+    
+  </resultMap> 
+  
+       
+	<parameterMap id="getLuggageTransferRequestParams" class="java.util.Map">
+		<parameter property="fromDate" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="toDate" jdbcType="VARCHAR"
+			javaType="java.lang.String" mode="IN" />
+		<parameter property="result" jdbcType="ORACLECURSOR"
+			javaType="java.sql.ResultSet" mode="OUT" resultMap="getLuggageTransferRequestResult"/>
+        <parameter property="procResult" jdbcType="VARCHAR"
+            javaType="java.lang.String" mode="OUT" />
+	</parameterMap>
+	                          
+	<procedure id="getLuggageTransferRequest" parameterMap="getLuggageTransferRequestParams"> 
+	{ call	LOST_LUGGAGE_PKG.GET_LUG_TRANSFER_REQUEST(?,?,?,?) }</procedure>
+	
+	
+</sqlMap>

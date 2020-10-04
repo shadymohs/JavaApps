@@ -1,0 +1,286 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">KAUST Driver Allowance</ui:define>
+   	<ui:define name="content">
+
+    <h:form id="KAUSTForm">
+		
+		<h:panelGrid columns="4" styleClass="customTB95" cellpadding="1" border="1"
+				 style="margin: 0 auto;" cellspacing="1" >
+				 		
+		      <h:panelGroup>    
+			   <h:outputText value="#{msgs['kaust.driverNo']}"/>
+			   <h:outputText value="*" style="color:red;" />
+				</h:panelGroup>
+		       <h:inputText value="#{kaustAllowBB.driversDto.driverObj.id}"  required="true"  requiredMessage="#{err['kaust.driverNo_required']}" />  
+		  
+		   <h:outputText value="" />
+		   <h:commandButton styleClass="buttonStyle" action="#{kaustAllowBB.getDriverById}"  
+            value="#{msgs['Action.Search']}"  />
+            
+             
+         </h:panelGrid>  
+       </h:form>
+         
+    <h:form id="allowForm"  rendered="#{kaustAllowBB.displayException}">
+        <h:panelGrid columns="4" styleClass="customTB95" cellpadding="1" border="1"
+				 style="margin: 0 auto;width:100%" cellspacing="1" >    
+		   
+		    <h:outputText value="#{msgs['Label.Drivers.driver_name']}"/>
+			 <h:outputText value="#{kaustAllowBB.driversDto.driverObj.userFullName}" />
+			 
+			  <h:outputText value="#{msgs['Label.Drivers.hr_branch']}"/>
+			 <h:outputText value="#{kaustAllowBB.driversDto.driverObj.hrBranch}" />
+			 
+			  <h:outputText value="#{msgs['Label.Drivers.hr_position']}"/>
+			 <h:outputText value="#{kaustAllowBB.driversDto.driverObj.hrPosition}" />
+			
+			 <h:outputText value="#{msgs['Label.Drivers.hr_department']}"/>
+			 <h:outputText value="#{kaustAllowBB.driversDto.driverObj.hrDepartment}" />
+			 
+			 <h:outputText value="#{msgs['Label.Drivers.hr_job_desc']}"/>
+			 <h:outputText value="#{kaustAllowBB.driversDto.driverObj.hrJobDesc}" />
+			 
+			  <h:outputText value="#{msgs['Label.Drivers.hr_sector_desc']}"/>
+			 <h:outputText value="#{kaustAllowBB.driversDto.driverObj.hrSectorDesc}" />
+			
+		    <h:panelGroup>    
+			   <h:outputText value="#{msgs['kaust.dailyRate']}"/>
+			   <h:outputText value="*" style="color:red;" />
+			</h:panelGroup>
+			<h:inputText value="#{kaustAllowBB.driversDto.driverObj.dailyRate}"  required="true"  requiredMessage="#{err['kaust.dailyRate_required']}" />  
+			 
+			  <h:panelGroup>    
+			   <h:outputText value="#{msgs['kaust.kaustAllowanceType']}"/>
+			   <h:outputText value="*" style="color:red;" />
+			</h:panelGroup>
+			 <h:selectOneMenu value="#{kaustAllowBB.driversDto.driverObj.KAUSTAllowanceType.id}"  required="true" requiredMessage="#{err['kaust.type_required']}">
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{kaustAllowBB.kaustAllowanceTypeList}"/>
+				</h:selectOneMenu>
+				
+			 <h:outputText value="#{msgs['kaust.isActive']}"/>
+	         <h:selectBooleanCheckbox value="#{kaustAllowBB.driversDto.driverObj.isActive}"/>
+	              	
+		 
+		 </h:panelGrid>  
+		 
+		 <h:commandButton styleClass="buttonStyle" action="#{kaustAllowBB.saveKaustDriverAllow}"  
+            value="#{msgs['Action.save']}"  />		
+    </h:form>
+    
+    <h:form id="displayExceptionForm" rendered="#{kaustAllowBB.displayException}">
+		<rich:dataTable value="#{kaustAllowBB.driversDto.driverObj.kaustExceptions}" var="dtl" id="table" rows="20" style="width:100%;text-align:center;">
+			<f:facet name="noData">
+                #{err['Messages.no_data']}
+            </f:facet>
+            <rich:column>
+                <f:facet name="header">
+               		<h:outputText value="#{msgs['Messages.date_from']}"/>
+               	</f:facet>
+                <h:outputText value="#{dtl.exceptionFromDate}" />
+            </rich:column>
+            <rich:column>
+                <f:facet name="header">
+               		<h:outputText value="#{msgs['Messages.date_to']}"/>
+               	</f:facet>
+                <h:outputText value="#{dtl.exceptionToDate}" />
+            </rich:column>
+             <rich:column>
+                <f:facet name="header">
+               		<h:outputText value="#{msgs['kaust.dailyRate']}"/>
+               	</f:facet>
+                <h:outputText value="#{dtl.dailyRate}" />
+            </rich:column>
+             <rich:column>
+                <f:facet name="header">
+               		<h:outputText value="#{msgs['kaust.AllowType']}"/>
+               	</f:facet>
+                <h:outputText value="#{dtl.KAUSTAllowanceType.foreignName}" />
+            </rich:column>
+            <rich:column>
+                <f:facet name="header">
+               		<h:outputText value="#{msgs['kaust.AllowType']}"/>
+               	</f:facet>
+                <h:outputText value="#{dtl.KAUSTAllowanceType.localeName}" />
+            </rich:column>
+            <rich:column>
+                <h:commandLink styleClass="no-decor" rendered="#{baseBB.authorizeDelete}" action="#{kaustAllowBB.deleteException}"
+                	disabled="#{kaustAllowBB.addException}">                	
+                    <h:graphicImage library="images" name="delete.gif" title="#{msgs['Action.delete']}" style="border:none" width="15" height="15" />
+                    <f:setPropertyActionListener target="#{kaustAllowBB.driversDto.driverObj.driverKAUST.id}" value="#{dtl.id}"/>                  
+                </h:commandLink>
+            </rich:column>
+            <f:facet name="footer">
+            	<h:panelGrid width="100%" style="text-align:center;" columns="2">
+                	<rich:dataScroller for="table"/>
+                	<h:commandLink styleClass="no-decor" action="#{kaustAllowBB.addException}" title="#{msgs['Action.add']}">
+	                    <h:graphicImage library="images" name="add.jpg" style="border:none" width="25" height="25"/>
+	                </h:commandLink>
+               	</h:panelGrid>
+            </f:facet>
+        </rich:dataTable>
+	</h:form>
+
+     <h:form id="exceptionForm" rendered="#{kaustAllowBB.addException and kaustAllowBB.displayException}" >
+	   
+	       <h:panelGrid columns="6" cellspacing="0" cellpadding="0" border="0" id="searchGrid" style="width:100%;text-align:center;">
+				<h:panelGroup>    
+				   <h:outputText value="#{msgs['Messages.date_from']}"/>
+				   <h:outputText value="*" style="color:red;" />
+				</h:panelGroup>
+				<rich:calendar id="fromDateInput" datePattern="dd-MM-yyyy" required="true" requiredMessage="#{err['Messages.required_fromDate']}"
+		        	enableManualInput="true" showWeeksBar="false" value="#{kaustAllowBB.driversDto.driverObj.driverKAUST.exceptionFromDate}">
+	                		<f:converter converterId="CalDateStrConveter"/>
+		        </rich:calendar>
+				
+				<h:panelGroup>    
+				   <h:outputText value="#{msgs['Messages.date_to']}"/>
+				   <h:outputText value="*" style="color:red;" />
+				</h:panelGroup>
+				<rich:calendar id="toDateInput" datePattern="dd-MM-yyyy" required="true" requiredMessage="#{err['Messages.required_toDate']}"
+		        	enableManualInput="true" showWeeksBar="false" value="#{kaustAllowBB.driversDto.driverObj.driverKAUST.exceptionToDate}">
+	                		<f:converter converterId="CalDateStrConveter"/>
+		        </rich:calendar>
+		        <h:panelGroup>    
+				   <h:outputText value="#{msgs['kaust.dailyRate']}"/>
+				   <h:outputText value="*" style="color:red;" />
+				</h:panelGroup>
+				<h:inputText value="#{kaustAllowBB.driversDto.driverObj.driverKAUST.dailyRate}"  required="true"  requiredMessage="#{err['kaust.dailyRate_required']}" />  
+			 
+			   <h:panelGroup>    
+			   <h:outputText value="#{msgs['kaust.kaustAllowType']}"/>
+			   <h:outputText value="*" style="color:red;" />
+			</h:panelGroup>
+			 <h:selectOneMenu value="#{kaustAllowBB.driversDto.driverObj.driverKAUST.KAUSTAllowanceType.id}"  required="true" requiredMessage="#{err['kaust.allowType_required']}">
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{kaustAllowBB.kaustAllowTypeByBranchList}"/>
+				</h:selectOneMenu>
+		        
+		        <h:outputText value=""/>
+		        <h:commandButton styleClass="buttonStyle" action="#{kaustAllowBB.saveAllowException}"  
+                  value="#{msgs['Action.save']}"  />
+		        <h:outputText value=""/>
+		        <h:outputText value=""/>
+		        <h:commandButton styleClass="buttonStyle" action="#{kaustAllowBB.cancelAdd}" immediate="true"  
+                  value="#{msgs['Action.cancel']}"  />
+		   </h:panelGrid>	
+	</h:form>
+	
+	<h:form id="displayAdditionalForm" rendered="#{kaustAllowBB.displayAdditional}">
+		<rich:dataTable value="#{kaustAllowBB.driversDto.driverObj.kaustAdditionals}" var="dtl" id="table" rows="20" style="width:100%;text-align:center;">
+			<f:facet name="noData">
+                #{err['Messages.no_data']}
+            </f:facet>
+            <rich:column>
+                <f:facet name="header">
+               		<h:outputText value="#{msgs['kaust.year']}"/>
+               	</f:facet>
+                <h:outputText value="#{dtl.year}" />
+            </rich:column>
+            <rich:column>
+                <f:facet name="header">
+               		<h:outputText value="#{msgs['kaust.month']}"/>
+               	</f:facet>
+                <h:outputText value="#{dtl.month}" />
+            </rich:column>
+             <rich:column>
+                <f:facet name="header">
+               		<h:outputText value="#{msgs['kaust.additional']}"/>
+               	</f:facet>
+                <h:outputText value="#{dtl.totalAddValue}" />
+            </rich:column>
+             <rich:column>
+                <f:facet name="header">
+               		<h:outputText value="#{msgs['kaust.AllowType']}"/>
+               	</f:facet>
+                <h:outputText value="#{dtl.KAUSTAllowanceType.foreignName}" />
+            </rich:column>
+            <rich:column>
+                <f:facet name="header">
+               		<h:outputText value="#{msgs['kaust.AllowType']}"/>
+               	</f:facet>
+                <h:outputText value="#{dtl.KAUSTAllowanceType.localeName}" />
+            </rich:column>
+           
+            <rich:column>
+                <h:commandLink styleClass="no-decor" rendered="#{baseBB.authorizeDelete}" action="#{kaustAllowBB.deleteAdditional}"
+                	disabled="#{kaustAllowBB.addAdditional}">                	
+                    <h:graphicImage library="images" name="delete.gif" title="#{msgs['Action.delete']}" style="border:none" width="15" height="15" />
+                    <f:setPropertyActionListener target="#{kaustAllowBB.driversDto.driverObj.kaustAdditionalAllow.id}" value="#{dtl.id}"/>                  
+                </h:commandLink>
+            </rich:column>
+            <f:facet name="footer">
+            	<h:panelGrid width="100%" style="text-align:center;" columns="2">
+                	<rich:dataScroller for="table"/>
+                	<h:commandLink styleClass="no-decor" action="#{kaustAllowBB.addAdditional}" title="#{msgs['Action.add']}">
+	                    <h:graphicImage library="images" name="add.jpg" style="border:none" width="25" height="25"/>
+	                </h:commandLink>
+               	</h:panelGrid>
+            </f:facet>
+        </rich:dataTable>
+	</h:form>
+	
+	<h:form id="additionalForm" rendered="#{kaustAllowBB.addAdditional and kaustAllowBB.displayAdditional}" >
+	   
+	       <h:panelGrid columns="6" cellspacing="0" cellpadding="0" border="0" id="searchGrid" style="width:100%;text-align:center;">
+				
+				<h:panelGroup>    
+				    <h:outputText value="#{msgs['kaust.month']}"/>
+				   <h:outputText value="*" style="color:red;" />
+				</h:panelGroup>
+	        <h:selectOneMenu value="#{kaustAllowBB.driversDto.driverObj.kaustAdditionalAllow.month}" required="true" requiredMessage="#{err['kaust.month_req']}">
+	        	<f:selectItem itemLabel="#{msgs.jan}" itemValue="1"/>
+	        	<f:selectItem itemLabel="#{msgs.feb}" itemValue="2"/>
+	        	<f:selectItem itemLabel="#{msgs.mar}" itemValue="3"/>
+	        	<f:selectItem itemLabel="#{msgs.apr}" itemValue="4"/>
+	        	<f:selectItem itemLabel="#{msgs.may}" itemValue="5"/>
+	        	<f:selectItem itemLabel="#{msgs.jun}" itemValue="6"/>
+	        	<f:selectItem itemLabel="#{msgs.jul}" itemValue="7"/>
+	        	<f:selectItem itemLabel="#{msgs.aug}" itemValue="8"/>
+	        	<f:selectItem itemLabel="#{msgs.sep}" itemValue="9"/>
+	        	<f:selectItem itemLabel="#{msgs.oct}" itemValue="10"/>
+	        	<f:selectItem itemLabel="#{msgs.nov}" itemValue="11"/>
+	        	<f:selectItem itemLabel="#{msgs.dec}" itemValue="12"/>
+	        </h:selectOneMenu>
+	        <h:panelGroup>    
+				   <h:outputText value="#{msgs['kaust.year']}"/>
+				   <h:outputText value="*" style="color:red;" />
+				</h:panelGroup>
+	        <h:inputText value="#{kaustAllowBB.driversDto.driverObj.kaustAdditionalAllow.year}" required="true" requiredMessage="#{err['kaust.year_req']}"/>
+		  
+		  
+		        <h:panelGroup>    
+				  <h:outputText value="#{msgs['kaust.additional']}"/>
+				   <h:outputText value="*" style="color:red;" />
+				</h:panelGroup>
+				<h:inputText value="#{kaustAllowBB.driversDto.driverObj.kaustAdditionalAllow.totalAddValue}"  required="true"  requiredMessage="#{err['kaust.dailyRate_required']}" />  
+			 
+			   <h:panelGroup>    
+			   <h:outputText value="#{msgs['kaust.kaustAllowType']}"/>
+			   <h:outputText value="*" style="color:red;" />
+			</h:panelGroup>
+			 <h:selectOneMenu value="#{kaustAllowBB.driversDto.driverObj.kaustAdditionalAllow.KAUSTAllowanceType.id}"  required="true" requiredMessage="#{err['kaust.allowType_required']}">
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{kaustAllowBB.kaustAllowTypeByBranchList}"/>
+				</h:selectOneMenu>
+		        
+		        <h:outputText value=""/>
+		        <h:commandButton styleClass="buttonStyle" action="#{kaustAllowBB.saveAllowAdditional}"  
+                  value="#{msgs['Action.save']}"  />
+		        <h:outputText value=""/>
+		        <h:outputText value=""/>
+		        <h:commandButton styleClass="buttonStyle" action="#{kaustAllowBB.cancelAddAdditional}" immediate="true"  
+                  value="#{msgs['Action.cancel']}"  />
+		   </h:panelGrid>	
+	</h:form>
+   	</ui:define>
+</ui:composition>   	

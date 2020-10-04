@@ -1,0 +1,294 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">search luggage</ui:define>
+   	<ui:define name="content">
+	
+		<h:form id="searchForm">
+		 
+		  <h:panelGrid columns="4" styleClass="customTB95" cellpadding="1" border="1"
+				 style="margin: 0 auto;" cellspacing="1" >
+				<h:outputText value="#{msgs['complaint.dateFrom']}"/>
+				<rich:calendar id="fromDateInput" datePattern="dd-MM-yyyy" requiredMessage="#{err['Messages.required_Date']}"
+		        	enableManualInput="true" showWeeksBar="false" value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.fromDate}">
+		        </rich:calendar>
+		        <h:outputText value="#{msgs['complaint.dateTo']}"/>
+				<rich:calendar id="toDateInput" datePattern="dd-MM-yyyy"  requiredMessage="#{err['Messages.required_Date']}"
+		        	enableManualInput="true" showWeeksBar="false" value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.toDate}">
+		        </rich:calendar>
+		       
+		       <h:outputText value="#{msgs['complaint.status']}"/>
+                <h:selectOneMenu value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.currentStatus.id}"  >
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{lostLuggageBB.statusList}"/>
+				</h:selectOneMenu>
+		       
+		       <h:outputText value="#{msgs['foundLostLuggage.station']}"/>
+                <h:selectOneMenu value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.stationId}"  >
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{lostLuggageBB.stationList}"/>
+				</h:selectOneMenu>
+				
+				<h:outputText value="#{msgs['foundLostLuggage.branch']}"/>
+                <h:selectOneMenu value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.branchId}"  >
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{lostLuggageBB.branchesList}"/>
+				</h:selectOneMenu>
+				
+				<h:outputText value="#{msgs['foundLostLuggage.onlyMyLugg']}"/> 
+				<h:selectBooleanCheckbox id="onlyMyLuggage" value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.onlyMyLuggage}"/>
+				
+				<h:outputText value="#{msgs['Label.size']}"/>
+                <h:selectOneMenu value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.size.id}"  >
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{lostLuggageBB.sizeList}"/>
+				</h:selectOneMenu>
+				
+				<h:outputText value="#{msgs['Label.class']}"/>
+				<h:selectOneMenu value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.luggageClass.id}" >
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{lostLuggageBB.luggageClassList}"/>
+				</h:selectOneMenu>
+				
+				<h:outputText value="#{msgs['Label.color']}"/>
+                <h:selectOneMenu value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.color.id}" >
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{lostLuggageBB.colorList}"/>
+				</h:selectOneMenu>
+				 <h:outputText value="#{msgs['foundLostLuggage.stickerNumber']}"/>
+               <h:inputText value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.stickerNumber}" />
+               
+               <h:outputText value="#{msgs['foundLostLuggage.luggageId']}"/>
+               <h:inputText value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.lostLuggageId}" />
+               
+            </h:panelGrid>  
+            <h:outputText value=""/> 
+         	<h:commandButton styleClass="buttonStyle" action="#{lostLuggageBB.searchAllLuggage}" value="#{msgs['complaint.search']}"/>
+	</h:form>
+		
+		<h:form id="LostLuggageForm"  rendered="#{!empty lostLuggageBB.luggageList}">
+			<rich:dataTable value="#{lostLuggageBB.luggageList}" var="lug" id="table" rows="20" styleClass="newTable" style="width:100%;text-align:center;">
+				<f:facet name="noData">
+	                #{err['Complaint.no_lugg_data']}
+	            </f:facet>
+	           
+	            <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['foundLostLuggage.luggageId']}
+	                </f:facet>
+	                <h:outputText value="#{lug.lostLuggageId}" />
+	            </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['foundLostLuggage.currentLocation']}
+	                </f:facet>
+	                <h:outputText value="#{lug.currentLocation}" />
+	            </rich:column>
+	             <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['complaint.status']}
+	                </f:facet>
+	                <h:outputText value="#{lug.currentStatus.localeName}" />
+	            </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['foundLostLuggage.foundDate']}
+	                </f:facet>
+	                <h:outputText value="#{lug.foundDateAsString}" />
+	            </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['foundLostLuggage.refNumber']}
+	                </f:facet>
+	                <h:outputText value="#{lug.refNumber}" />
+	            </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['foundLostLuggage.station']}
+	                </f:facet>
+	                <h:outputText value="#{lug.foundInStation}" />
+	            </rich:column>
+	           
+	            <rich:column>
+	            	<f:facet name="header">
+	            		#{msgs['foundLostLuggage.details']}
+	            	</f:facet>
+	            	
+	              <h:commandLink styleClass="no-decor"  action="#{lostLuggageBB.showLuggage}"    immediate="true">
+	                    <h:graphicImage library="images" name="edit2.gif" alt="#{msgs['Action.edit']}" style="border:none" />
+	              </h:commandLink>
+	               <h:commandLink styleClass="no-decor"  action="#{lostLuggageBB.deleteLuggage}" rendered="#{lug.currentStatus.id==1 and baseBB.authorizeDelete}"  immediate="true">
+	                    <h:graphicImage library="images" name="delete.gif" alt="#{msgs['Action.delete']}" style="border:none" />
+	              </h:commandLink>
+	            </rich:column>
+	            
+	             <f:facet name="footer">
+		                <h:panelGrid id="addGrid" columns="2" styleClass="searchactionTB_Bg" cellspacing="0" cellpadding="0" border="0">
+		                	<rich:dataScroller for="table"/>
+				        </h:panelGrid>
+		         </f:facet>
+	        </rich:dataTable>
+		</h:form>
+		
+		
+		<h:form id="lostLuggageFoundForm" rendered="#{!empty lostLuggageBB.selectedLuggage.refNumber}" >
+		 <h3><h:outputText value="#{msgs['foundLostLuggage.titleDetails']}"/></h3>
+		  <h:panelGrid columns="4" styleClass="customTB95" cellpadding="1" border="1"
+				 style="margin: 0 auto;" cellspacing="1" >
+				 
+			   <h:outputText value="#{msgs['foundLostLuggage.luggageId']}"/>
+               <h:inputText value="#{lostLuggageBB.selectedLuggage.lostLuggageId}" />
+			   <h:outputText value="#{msgs['foundLostLuggage.currentLocation']}"/>
+		       <h:inputText value="#{lostLuggageBB.selectedLuggage.currentLocation}"/>  
+			   <h:outputText value="#{msgs['foundLostLuggage.foundDate']}"/>
+			   <h:inputText  value="#{lostLuggageBB.selectedLuggage.foundDateAsString}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.specialMark']}"/>
+		       <h:inputText  value="#{lostLuggageBB.selectedLuggage.specialMark}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.luggageContent']}"/>
+		       <h:inputText  value="#{lostLuggageBB.selectedLuggage.luggageContent}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.line']}"/>
+		       <h:inputText  value="#{lostLuggageBB.selectedLuggage.line}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.refNumber']}"/>
+		       <h:inputText  value="#{lostLuggageBB.selectedLuggage.refNumber}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.tripNumber']}"/>
+		       <h:inputText  value="#{lostLuggageBB.selectedLuggage.tripCode}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.station']}"/>
+               <h:inputText value="#{lostLuggageBB.selectedLuggage.foundInStation}"  />
+			   <h:outputText value="#{msgs['foundLostLuggage.passengerName']}"/>
+		       <h:outputText value="#{lostLuggageBB.selectedLuggage.passengerName}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.contacteNumber']}"/>
+		       <h:outputText value="#{lostLuggageBB.selectedLuggage.contacteNumber}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.stickerNumber']}"/>
+               <h:inputText value="#{lostLuggageBB.selectedLuggage.stickerNumber}" />
+               
+				<h:outputText value="#{msgs['Label.size']}"/>
+                <h:selectOneMenu value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.size.id}"  >
+					<f:selectItem itemLabel="#{lostLuggageBB.selectedLuggage.size.localeName}" />
+					<f:selectItems value="#{lostLuggageBB.sizeList}"/>
+				</h:selectOneMenu>
+				
+				<h:outputText value="#{msgs['Label.class']}"/>
+				 <h:selectOneMenu value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.luggageClass.id}" >
+					<f:selectItem itemLabel="#{lostLuggageBB.selectedLuggage.luggageClass.localeName}" />
+					<f:selectItems value="#{lostLuggageBB.luggageClassList}"/>
+				</h:selectOneMenu>
+				
+				<h:outputText value="#{msgs['Label.color']}"/>
+                 <h:selectOneMenu value="#{lostLuggageBB.lostLuggageDto.lostLuggageObj.color.id}" >
+					<f:selectItem  itemLabel="#{lostLuggageBB.selectedLuggage.color.localeName}"/>
+					<f:selectItems value="#{lostLuggageBB.colorList}"/>
+				</h:selectOneMenu>
+				
+            </h:panelGrid> 
+             <h:commandLink styleClass="no-decor" action="#{lostLuggageBB.downloadImageOfSelected}" title="#{msgs['Action.print']}">
+                    <h:graphicImage library="images" name="pdf.png" style="border:none" width="40" height="40"/>
+                </h:commandLink>
+            <h:outputText value=""/> 
+            <br /> 
+             <h:outputText value="#{msgs['foundLostLuggage.remarks']}"/>
+		     <h:inputTextarea  value="#{lostLuggageBB.selectedLuggage.remarks}"/>
+            <h:commandButton styleClass="bigButtonStyle" action="#{lostLuggageBB.updateLuggage}" rendered="#{lostLuggageBB.selectedLuggage.currentStatus.id==1}" value="#{msgs['Action.update']}"/>
+		    
+		    <h:commandButton styleClass="buttonStyle" action="#{lostLuggageBB.searchByFeature}" rendered="#{lostLuggageBB.selectedLuggage.currentStatus.id==1 || lostLuggageBB.selectedLuggage.currentStatus.id==2}" value="#{msgs['foundLostLuggage.searchByFeature']}"/>
+			 
+			 <h:commandButton styleClass="buttonStyle" action="#{lostLuggageBB.removeLink}" rendered="#{lostLuggageBB.selectedLuggage.currentStatus.id==11 and baseBB.authorizeRemoveLink}"  value="#{msgs['foundLostLuggage.removeLink']}"/>
+			
+		</h:form>
+		
+		
+		<h:form id="matchedComplaintsForm"  rendered="#{!empty lostLuggageBB.matchedComplaints}" >
+			<rich:dataTable value="#{lostLuggageBB.matchedComplaints}" var="br" id="table" rows="20" styleClass="newTable" style="width:100%;text-align:center;">
+				<f:facet name="noData">
+	                #{err['Complaint.no_data']}
+	            </f:facet>
+	           
+	            <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['Complaint.complaintId']}
+	                </f:facet>
+	                <h:outputText value="#{br.luggageComplaintId}" />
+	            </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['Complaint.customerName']}
+	                </f:facet>
+	                <h:outputText value="#{br.customerName}" />
+	            </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['Complaint.contactNumber']}
+	                </f:facet>
+	                <h:outputText value="#{br.contacteNumber}" />
+	            </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['Complaint.TripCode']}
+	                </f:facet>
+	                <h:outputText value="#{br.tripCode}" />
+	            </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['Complaint.TripDate']}
+	                </f:facet>
+	                <h:outputText value="#{br.tripDateAsString}" />
+	            </rich:column>
+	           <rich:column>
+	            	<f:facet name="header">
+	            		#{msgs['foundLostLuggage.details']}
+	            	</f:facet>
+	            	
+	              <h:commandLink styleClass="no-decor"  action="#{lostLuggageBB.showDetails}"   immediate="true">
+	                    <h:graphicImage library="images" name="edit2.gif" alt="#{msgs['Action.edit']}" style="border:none" />
+	              </h:commandLink>
+	            </rich:column>
+	          <f:facet name="footer">
+		                <h:panelGrid id="addGrid" columns="2" styleClass="searchactionTB_Bg" cellspacing="0" cellpadding="0" border="0">
+		                	<rich:dataScroller for="table"/>
+				        </h:panelGrid>
+		         </f:facet>
+	        </rich:dataTable>
+		</h:form>
+		
+		<h:form id="complaintForm"  rendered="#{!empty lostLuggageBB.linkedComplaint.customerName}">
+		  <h3><h:outputText value="#{msgs['complaint.titleDetails']}"/></h3>
+		  <h:panelGrid columns="4" styleClass="customTB95" cellpadding="1" border="1"
+				 style="margin: 0 auto;" cellspacing="1" >
+				
+			   <h:outputText value="#{msgs['Complaint.customerName']}"/>
+		       <h:outputText value="#{lostLuggageBB.linkedComplaint.customerName}"/>  
+			   <h:outputText value="#{msgs['Complaint.contactNumber']}"/>
+			   <h:outputText  value="#{lostLuggageBB.linkedComplaint.contacteNumber}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.specialMark']}"/>
+		       <h:outputText  value="#{lostLuggageBB.linkedComplaint.specialMark}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.luggageContent']}"/>
+		       <h:outputText  value="#{lostLuggageBB.linkedComplaint.luggageContent}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.line']}"/>
+		       <h:outputText  value="#{lostLuggageBB.linkedComplaint.line}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.tripNumber']}"/>
+		       <h:outputText  value="#{lostLuggageBB.linkedComplaint.tripNumber}"/>
+		       <h:outputText value="#{msgs['foundLostLuggage.station']}"/>
+               <h:outputText value="#{lostLuggageBB.linkedComplaint.registeredInStation}"  />
+				<h:outputText value="#{msgs['Label.size']}"/>
+                <h:outputText value="#{lostLuggageBB.linkedComplaint.size.localeName}" />
+				<h:outputText value="#{msgs['Label.class']}"/>
+                <h:outputText value="#{lostLuggageBB.linkedComplaint.luggageClass.localeName}"  />
+				<h:outputText value="#{msgs['Label.color']}"/>
+                <h:outputText value="#{lostLuggageBB.linkedComplaint.color.localeName}"  />
+				
+            </h:panelGrid> 
+             
+            <h:outputText value=""/> 
+            <br /> 
+             <h:outputText value="#{msgs['foundLostLuggage.remarks']}"/>
+		     <h:inputTextarea  value="#{lostLuggageBB.linkedComplaint.remarks}"/>
+            <h:commandButton styleClass="bigButtonStyle" action="#{lostLuggageBB.linkLuggageToComplaint}" value="#{msgs['foundLostLuggageWithoutStckr.linkToComplaint']}"/>
+		</h:form>
+	</ui:define>
+</ui:composition>

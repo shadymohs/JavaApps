@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">Haj Limo</ui:define>
+   	<ui:define name="content">
+	
+		<h:form id="hajLimo">
+		 
+		  <h:panelGrid columns="4" styleClass="customTB95" cellpadding="1" border="1"
+				 style="width:100%;text-align:center;" cellspacing="1" >
+				 		        
+		       	 <h:panelGroup>
+                	<h:outputText value="#{msgs['haj.from']}"/>
+                	<h:outputText style="color:red" value="*" />   
+                </h:panelGroup>
+                 <h:selectOneMenu value="#{hajLimoBB.hajLimoDto.fromStationId}" id="fromLocation"
+                 	disabled="#{hajLimoBB.readyToPay or hajLimoBB.readyToPrint}">
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{hajLimoBB.hajLimoDto.fromStations}"/>
+					<a4j:ajax event="change" execute="@form" render="@form" listener="#{hajLimoBB.getToStations}"/>
+				 </h:selectOneMenu>
+				
+             	 <h:panelGroup>
+                	<h:outputText value="#{msgs['haj.to']}"/>
+                	<h:outputText style="color:red" value="*" />   
+                </h:panelGroup>
+                 <h:selectOneMenu value="#{hajLimoBB.hajLimoDto.toStationId}"  id="toLocation"
+                 	disabled="#{hajLimoBB.readyToPay or hajLimoBB.readyToPrint}">
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{hajLimoBB.hajLimoDto.toStations}"/>
+					<a4j:ajax event="change" execute="@form" render="@form"
+						listener="#{hajLimoBB.getvehicls}"/>
+				 </h:selectOneMenu>
+				 
+				 <h:panelGroup>
+                	<h:outputText value="#{msgs['haj.vehicle_type']}"/>
+                	<h:outputText style="color:red" value="*" />   
+                </h:panelGroup>
+                 <h:selectOneMenu value="#{hajLimoBB.hajLimoDto.vehicleTypeId}" id="vehicleType"
+                 	disabled="#{hajLimoBB.readyToPay or hajLimoBB.readyToPrint}">
+					<f:selectItems value="#{hajLimoBB.hajLimoDto.vehicleTypes}"/>
+					<a4j:ajax event="change" execute="@form" render="@form"
+						listener="#{hajLimoBB.getvehicls}"/>
+				 </h:selectOneMenu>
+				
+             	 <h:panelGroup>
+                	<h:outputText value="#{msgs['haj.vehicle']}"/>
+                	<h:outputText style="color:red" value="*" />   
+                </h:panelGroup>
+                 <h:selectOneMenu value="#{hajLimoBB.hajLimoDto.vehicleId}"  id="vehicle"
+                 	disabled="#{hajLimoBB.readyToPay or hajLimoBB.readyToPrint}">
+					<f:selectItem itemLabel="" itemValue=""/>
+					<f:selectItems value="#{hajLimoBB.hajLimoDto.vehicles}"/>
+					<a4j:ajax event="change" execute="@form" render="@form"
+						listener="#{hajLimoBB.allowCalculate}"/>
+				 </h:selectOneMenu>
+				 
+				 <h:panelGroup>
+                	<h:outputText value="#{msgs['haj.paymentMethod']}"/>
+                	<h:outputText style="color:red" value="*" />   
+                </h:panelGroup>
+                 <h:selectOneMenu value="#{hajLimoBB.hajLimoDto.paymentMethodId}" id="paymentMethod">
+					<f:selectItems value="#{hajLimoBB.hajLimoDto.paymentMethods}"/>
+				 </h:selectOneMenu>
+                 
+				 <h:outputText value="#{msgs['haj.office']}"/> 
+                 <h:inputText value="#{hajLimoBB.hajLimoDto.officeNumber}"/>
+				 
+				 <h:panelGroup>
+                	<h:outputText value="#{msgs['haj.driver']}"/> 
+                	<h:outputText style="color:red" value="*" />   
+                </h:panelGroup>
+                 <h:inputText value="#{hajLimoBB.hajLimoDto.driverNumber}"/>
+				 
+				 <h:panelGroup>
+                	<h:outputText value="#{msgs['haj.plate']}"/> 
+                	<h:outputText style="color:red" value="*" />   
+                 </h:panelGroup>
+                 <h:inputText value="#{hajLimoBB.hajLimoDto.vehicleNumber}"/>
+				
+            </h:panelGrid>
+            
+            <rich:dataTable value="#{hajLimoBB.hajLimoDto.etimadList}" var="etimadRow" id="table" rows="20" style="width:100%;text-align:center;">
+				<f:facet name="noData">
+	                #{err['Messages.no_data']}
+	            </f:facet>
+	            <rich:column>
+	                <f:facet name="header">
+                		 <h:outputText value="#{msgs['haj.etimad']}"/>            		
+                	</f:facet>
+                	<h:outputText value="#{etimadRow.etimadNumber}"/>
+                </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+                		 <h:outputText value="#{msgs['haj.adults']}"/>            		
+                	</f:facet>
+                	<h:outputText value="#{etimadRow.adultsCount}"/>
+                </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+                		 <h:outputText value="#{msgs['haj.half']}"/>            		
+                	</f:facet>
+                	<h:outputText value="#{etimadRow.childrenCount}"/>
+                </rich:column>
+                <rich:column>
+                	<h:commandButton value="#{msgs['haj.deleteetimad']}" action="#{hajLimoBB.deleteEtimad}"
+                 		disabled="#{hajLimoBB.readyToPay or hajLimoBB.readyToPrint}"/>
+                </rich:column>
+            </rich:dataTable>
+            
+            <h:panelGrid columns="6" styleClass="customTB95" cellpadding="1" border="1"
+				 style="width:100%;text-align:center;" cellspacing="1" >
+				 
+				<h:outputText value="#{msgs['haj.season']}"/> 
+                <h:selectOneRadio value="#{hajLimoBB.hajLimoDto.season}">
+                	<f:selectItem itemLabel="#{msgs['haj.season1']}" itemValue="1"/>
+                	<f:selectItem itemLabel="#{msgs['haj.season2']}" itemValue="2"/>
+                </h:selectOneRadio>
+                 
+                <h:commandButton value="#{msgs['haj.addEtimad']}" action="#{hajLimoBB.addEtimad}"
+                 	disabled="#{hajLimoBB.readyToPay or hajLimoBB.readyToPrint}"/>
+                 <h:outputText value=""/>
+                 	
+                <h:outputText value="#{msgs['haj.totalEtimad']}"/>
+				<h:outputText value="#{hajLimoBB.hajLimoDto.totalEtimad}"/>
+                 
+                <h:outputText value="#{msgs['haj.etimad']}"/> 
+                <h:inputText value="#{hajLimoBB.hajLimoDto.etimadObj.etimadNumber}"/>
+				                  
+                <h:outputText value="#{msgs['haj.adults']}"/> 
+                <h:inputText value="#{hajLimoBB.hajLimoDto.etimadObj.adultsCount}"/>
+                 
+                <h:outputText value="#{msgs['haj.half']}"/> 
+                <h:inputText value="#{hajLimoBB.hajLimoDto.etimadObj.childrenCount}"/>
+				
+                 	
+			</h:panelGrid>
+            
+            <h:panelGrid columns="6" styleClass="customTB95" cellpadding="1" border="1"
+				 style="width:100%;text-align:center;" cellspacing="1" >
+				
+				<h:outputText value="#{msgs['haj.price']}" rendered="#{hajLimoBB.readyToPay or hajLimoBB.readyToPrint}"/>
+				<h:outputText value="#{hajLimoBB.hajLimoDto.vehiclePrice}" rendered="#{hajLimoBB.readyToPay or hajLimoBB.readyToPrint}"/>
+				
+				<h:outputText value="#{msgs['haj.etimadAmount']}" rendered="#{hajLimoBB.readyToPay or hajLimoBB.readyToPrint}"/>
+				<h:outputText value="#{hajLimoBB.hajLimoDto.totalEtimadAmount}" rendered="#{hajLimoBB.readyToPay or hajLimoBB.readyToPrint}"/>
+				
+				<h:outputText value="#{msgs['haj.remaining']}" rendered="#{hajLimoBB.readyToPay or hajLimoBB.readyToPrint}"/>
+				<h:outputText value="#{hajLimoBB.hajLimoDto.remainingAmount}" rendered="#{hajLimoBB.readyToPay or hajLimoBB.readyToPrint}"/>
+				
+				<h:outputText value="#{msgs['haj.manualPrice']}" rendered="#{baseBB.authorizeChangePrice and (hajLimoBB.readyToPay or hajLimoBB.readyToPrint)}"/> 
+                <h:selectBooleanCheckbox value="#{hajLimoBB.hajLimoDto.isManual}" disabled="#{hajLimoBB.readyToPrint}"
+                	rendered="#{baseBB.authorizeChangePrice and (hajLimoBB.readyToPay or hajLimoBB.readyToPrint)}">
+                	<a4j:ajax event="change" execute="@this" render="manualValue"/>
+                </h:selectBooleanCheckbox>
+                 
+                <h:outputText value="#{msgs['haj.manual']}" rendered="#{baseBB.authorizeChangePrice and (hajLimoBB.readyToPay or hajLimoBB.readyToPrint)}"/> 
+                <h:inputText value="#{hajLimoBB.hajLimoDto.manualAmount}" disabled="#{!hajLimoBB.hajLimoDto.isManual or hajLimoBB.readyToPrint}"
+                	id="manualValue"  rendered="#{baseBB.authorizeChangePrice and (hajLimoBB.readyToPay or hajLimoBB.readyToPrint)}"/>
+				
+				<h:outputText value="#{msgs['haj.ticket']}" rendered="#{hajLimoBB.readyToPrint}"/>
+				<h:outputText value="#{hajLimoBB.hajLimoDto.ticketNumber}" rendered="#{hajLimoBB.readyToPrint}"/>
+			</h:panelGrid>
+          
+			<h:panelGrid id="printGrid" columns="5" cellspacing="0" cellpadding="0" border="0" style="width:100%;text-align:center;">
+				<h:commandButton value="#{msgs['haj.calculate']}" action="#{hajLimoBB.calculatePrice}"
+                 	rendered="#{hajLimoBB.readyToCalculate}"/>
+                <h:commandButton value="#{msgs['haj.pay']}" action="#{hajLimoBB.createTickets}"
+                 	rendered="#{hajLimoBB.readyToPay}"/>
+                <h:commandButton value="#{msgs['haj.reset']}" action="#{hajLimoBB.resetCalculation}"
+                 	rendered="#{hajLimoBB.readyToPay}"/>
+                <h:commandButton value="#{msgs['haj.print']}" action="#{hajLimoBB.viewTicket}"
+                 	rendered="#{hajLimoBB.readyToPrint}"/>
+               	<h:commandButton value="#{msgs['haj.new']}" action="#{hajLimoBB.resetValues}"/>
+			</h:panelGrid>	
+	</h:form>
+		
+	</ui:define>
+</ui:composition>

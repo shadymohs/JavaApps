@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">Privileges</ui:define>
+   	<ui:define name="content">
+   		<h:form id="privilegesForm">
+	            <h:panelGrid columns="2" id="editGrid" styleClass="customTB95" cellspacing="0" cellpadding="0" border="0">
+	            	<f:facet name="header">
+	                	#{msgs.editForm}
+	                </f:facet>
+	                <h:outputText value="#{msgs['ProgramGroup.program']}"/>
+	                <h:panelGroup>
+	                	<h:outputText value="#{programGroupsBB.programGroupsDto.programGroupsObj.label}"/>
+	                	<h:inputHidden value="#{programGroupsBB.programGroupsDto.programGroupsObj.code}"/>
+	                	<h:inputHidden value="#{programGroupsBB.programGroupsDto.programGroupsObj.localeName}"/>
+	                	<h:inputHidden value="#{programGroupsBB.programGroupsDto.programGroupsObj.foreignName}"/>
+		        		<h:inputHidden value="#{programGroupsBB.programGroupsDto.programGroupsObj.id}"/>
+	                </h:panelGroup>
+	                <h:outputText value="#{msgs['Pages.page']}"/>
+	                <h:panelGroup>
+	                	<h:outputText value="#{programGroupsBB.programGroupsDto.menuProgramObj.systemMenu.label}"/>
+	                	<h:inputHidden value="#{programGroupsBB.programGroupsDto.menuProgramObj.systemMenu.code}"/>
+	                	<h:inputHidden value="#{programGroupsBB.programGroupsDto.menuProgramObj.systemMenu.localeName}"/>
+	                	<h:inputHidden value="#{programGroupsBB.programGroupsDto.menuProgramObj.systemMenu.foreignName}"/>
+			        	<h:inputHidden value="#{programGroupsBB.programGroupsDto.menuProgramObj.id}"/>
+	                </h:panelGroup>
+	                <h:outputText value="#{msgs['Pages.permission']}"/>
+	                <h:selectManyCheckbox value="#{programGroupsBB.programGroupsDto.selectedPrivilege}"
+	                	id="privilegesList" layout="pageDirection">
+	                	<f:selectItems binding="#{programGroupsBB.privilegesList}"/>
+	                </h:selectManyCheckbox>
+	            </h:panelGrid>
+                <h:panelGrid id="addEditButtonGrid" columns="2" styleClass="searchactionTB_Bg" cellspacing="0" cellpadding="0" border="0">
+		            <h:commandButton styleClass="Btn_S_Normal" value="#{msgs['Action.save']}" action="#{programGroupsBB.updatePrivilegesListner}"/>
+		            <h:commandButton styleClass="Btn_S_Normal" value="#{msgs['Action.cancel']}"
+		            	action="programGroupPages.xhtml"/>
+		        </h:panelGrid>
+			</h:form>
+	</ui:define>
+</ui:composition>

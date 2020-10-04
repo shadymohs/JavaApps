@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">Trip Daily Report</ui:define>
+   	<ui:define name="content">
+   	
+   <h:form id="intgReportForm">
+			<h:panelGrid columns="4" cellspacing="0" cellpadding="0" border="0" id="searchGrid" style="width:100%;text-align:center;">
+				<h:outputText value="#{msgs['Messages.date_from']}"/>
+				<rich:calendar id="fromDateInput" datePattern="dd-MM-yyyy" required="true" requiredMessage="#{err['Messages.required_fromDate']}"
+		        	enableManualInput="true" showWeeksBar="false" value="#{costAnalysisReportBB.costAnalysisReportDto.fromDate}">
+		        </rich:calendar>
+				
+				<h:outputText value="#{msgs['Messages.date_to']}"/>
+				<rich:calendar id="toDateInput" datePattern="dd-MM-yyyy" required="true" requiredMessage="#{err['Messages.required_toDate']}"
+		        	enableManualInput="true" showWeeksBar="false" value="#{costAnalysisReportBB.costAnalysisReportDto.toDate}">
+		        </rich:calendar>
+               
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.trip_code']}"/>
+                <h:inputText value="#{costAnalysisReportBB.costAnalysisReportDto.tripCode}"/>
+                
+                 <h:outputText value="#{msgs['Label.noOfPassengers']}"/>
+                <h:inputText value="#{costAnalysisReportBB.costAnalysisReportDto.noOfPassengers}"/>
+                
+                <h:outputText  value="#{msgs['Label.goingReturn']}" />
+				 <h:selectOneMenu required="true" styleClass="dropDownStyle" value="#{costAnalysisReportBB.costAnalysisReportDto.goingReturn}">
+             		
+             		 <f:selectItem
+				        itemValue="1"
+				        itemLabel="#{msgs['Label.going']}"/>
+				    <f:selectItem
+				        itemValue="2"
+				        itemLabel="#{msgs['Label.goingReturn']}"/>
+              		
+              	</h:selectOneMenu>
+              	
+                <h:outputText value="#{msgs['Label.isSummary']}"/>
+                <h:selectBooleanCheckbox id="isSummary" value="#{costAnalysisReportBB.costAnalysisReportDto.isSummary}"/>  
+              	
+              	
+              	
+			</h:panelGrid>	
+			<h:panelGrid id="printGrid" columns="2" cellspacing="0" cellpadding="0" border="0" style="width:100%;text-align:center;">
+				
+				<h:commandLink styleClass="no-decor" action="#{costAnalysisReportBB.viewReport}" title="#{msgs['Action.print']}" >  <!-- rendered="#{baseBB.authorizePrint}" -->
+                    <h:graphicImage library="images" name="pdf.png" style="border:none" width="40" height="40"/>
+                </h:commandLink>
+              
+			</h:panelGrid>				   
+		</h:form>
+    
+   	</ui:define>
+</ui:composition>

@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	  
+    <h:head>
+        <title>Login screen</title>
+		<h:outputScript library="javascript" name="DriverAllowance.js"/>
+		<h:outputStylesheet library="css" name="common.css"/>
+		<h:outputStylesheet library="css" name="boilerplat.css"/>
+		<h:outputStylesheet library="css" name="DriverAllowance.css"/>
+		<h:outputStylesheet library="css" name="inside.css"/>
+	</h:head>
+    <h:body class="no-js" dir="#{baseBB.pageDirection}">
+		<f:view locale="#{sessionScope.locale != null ? sessionScope.locale : baseBB.locale}">
+			<h:panelGroup layout="block" id="container-outer" style="height:95%;width:90%;background-color:white;">
+				<h:panelGroup layout="block" id="container-inner">
+					<h:panelGroup layout="block" id="header" class="noPrint"/>
+					<h:panelGroup layout="block" style="height:10px;background-color:gray;color:white;"/>
+					<!--Body-->
+					<h:panelGroup layout="block" id="main" class="clearfix" style="text-align:center;width:100%;">
+						<!--Content-->
+						<h:panelGroup layout="block" id="content-wrapper" class="clearfix" style="text-align:center;width:100%;" align="center">
+							<h1 style="background-color:#d1d1d1;color:black;font-size:120%"><h:outputText value="#{msgs.login_header}"/></h1>
+							<rich:message id="lookupMessages" layout="table" errorClass="error" infoClass="info" ajaxRendered="true"/>
+						    <br/>
+						    <h:form id="loginForm">
+								<h:commandLink styleClass="no-decor" action="#{baseBB.changeLanguage}" immediate="true" value="#{msgs.language}"/>
+								<h:panelGrid columns="2" style="width:30%;margin-left:auto;margin-right:auto;text-align:center;">
+									<h:outputLabel value="#{msgs['Login.userName']}"/>
+									<h:inputText id="loginUserName"
+										value="#{commonBB.commonDto.userBean.userName}"
+										styleClass="userName" required="true" requiredMessage="#{err['Messages.required_valid']}">
+										<f:ajax event="keyup" render="systemMenu branchMenu" execute="@this" listener="#{commonBB.updateUserSystemes}"/>
+										<f:ajax event="blur" render="systemMenu branchMenu" execute="@this" listener="#{commonBB.updateUserSystemes}"/>
+									</h:inputText>
+									<h:outputLabel value="#{msgs['Login.password']}"/>
+									<h:inputSecret id="loginPassword"
+										value="#{commonBB.commonDto.userBean.password}"
+										styleClass="passWord" required="true" requiredMessage="#{err['Messages.required_valid']}"/>
+									<h:outputLabel id="companyLabel" value="#{msgs['company']}" for="companyMenu" />
+									<h:selectOneMenu styleClass="dropDownStyle" id="companyMenu" required="true" 
+										value="#{commonBB.commonDto.userBean.company.id}"
+										requiredMessage="#{err['Messages.required_valid']}">
+										<f:selectItems value="#{commonBB.companiesList}"/>
+										<f:ajax event="change" render="systemMenu branchMenu" execute="@this" listener="#{commonBB.changeCompany}"/>
+									</h:selectOneMenu>
+									<h:outputLabel id="systemLabel" value="#{msgs['system']}" for="systemMenu" />
+									<h:selectOneMenu styleClass="dropDownStyle" id="systemMenu" required="true" 
+										value="#{commonBB.commonDto.userBean.loggedInSystem.id}"
+										requiredMessage="#{err['Messages.required_valid']}">
+										<f:selectItem itemLabel="" itemValue=""/>
+										<f:selectItems value="#{commonBB.systemesList}"/>
+										<f:ajax event="change" render="branchMenu" execute="@this" listener="#{commonBB.updateUserBranches}"/>
+									</h:selectOneMenu>
+									<h:outputLabel id="branchLabel" value="#{msgs['Login.branch']}" for="branchMenu" />
+									<h:selectOneMenu styleClass="dropDownStyle" id="branchMenu" required="true" 
+										value="#{commonBB.commonDto.userBean.loggedInBranch.id}"
+										requiredMessage="#{err['Messages.required_valid']}">
+										<f:selectItems id="fselectbranch" value="#{commonBB.branchesList}"/>
+									</h:selectOneMenu>
+								</h:panelGrid>
+								<h:commandButton styleClass="buttonStyle" action="#{commonBB.login}" value="#{msgs['Login.login']}"/>
+							</h:form>
+							<rich:popupPanel style="border:none" id="statPane" domElementAttachment="parent" autosized="true">
+						        <h:graphicImage library="images" name="loading2.gif"/>
+						    </rich:popupPanel>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
+			<!--Footer-->
+			<h:outputText value="#{msgs.copyright}. #{msgs.version} (SAPTCO #{versionInf.version})" style="background:white;"/>
+		</f:view>
+    </h:body>
+</ui:composition>

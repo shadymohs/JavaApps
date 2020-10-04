@@ -1,0 +1,278 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../common/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+	<ui:define name="title">Other drivers allowances</ui:define>
+   	<ui:define name="content">
+   		<h:form id="searchOtherAllowanceForm">
+			<rich:dataTable value="#{otherAllowancelBB.allowanceDetailDto.driversAllowance}" var="dtl" id="table" rows="20" style="width:100%;text-align:center;">
+				<f:facet name="noData">
+	                #{err['Messages.no_data']}
+	            </f:facet>
+	            <rich:column>
+	                <f:facet name="header">
+                		<h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.barcode']}"/>
+	                	<h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceNumber}"/>
+                	</f:facet>
+	                <h:outputText value="#{dtl.id}" />
+	            </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+                		<h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.trip_code']}"/>
+	                	<h:inputText value="#{otherAllowancelBB.allowanceDetailDto.tripCode}"/>
+                	</f:facet>
+	                <h:outputText value="#{dtl.tripCode}" />
+	            </rich:column>
+	             <rich:column>
+	                <f:facet name="header">
+                		<h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.driver1_number']}"/>
+	                	<h:inputText value="#{otherAllowancelBB.allowanceDetailDto.driverNumber}"/>
+                	</f:facet>
+	                <h:outputText value="#{dtl.driver1Number}" />
+	            </rich:column> 
+	               <rich:column>
+	                <f:facet name="header">
+	                	<h:outputText value="#{msgs['Label.Manag_Allowance.allowance_type']}"/>
+	                	 <h:selectOneMenu styleClass="dropDownStyle" value="#{otherAllowancelBB.allowanceDetailDto.allowanceType}">
+		             		<f:selectItem itemLabel="#{msgs['Messages.selectList']}" itemValue=""/>
+		              		<f:selectItems value="#{otherAllowancelBB.allowanceDetailDto.allowanceTypeList}"/>
+		              	</h:selectOneMenu>
+	              	
+	                	<!-- <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceType}"/> -->
+	                </f:facet>
+	                <h:selectOneMenu styleClass="dropDownStyle" value="#{dtl.allowanceTypeBean.id}" disabled="true">
+		              	<f:selectItems value="#{otherAllowancelBB.allowanceDetailDto.allowanceTypeList}"/>
+		            </h:selectOneMenu>
+	            </rich:column>
+	            <rich:column>
+	                <f:facet name="header">
+                		<h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.trip_date']}"/>
+                		<rich:calendar value="#{otherAllowancelBB.allowanceDetailDto.date}" datePattern="dd-MM-yyyy">
+	                		<f:converter converterId="CalDateStrConveter"/>
+	                	</rich:calendar>
+                	</f:facet>
+	                <h:outputText value="#{dtl.tripDate}" />
+	            </rich:column>
+	             <rich:column>
+	                <f:facet name="header">
+	                	#{msgs['Label.Manag_Allowance.tr_trips.driver1_name']}
+	                </f:facet>
+	                <h:outputText value="#{dtl.driver1Name}" />
+	            </rich:column>
+	            <rich:column>
+	            	<f:facet name="header">
+		            	<h:commandLink styleClass="no-decor" action="#{otherAllowancelBB.search}" title="#{msgs['Action.Search']}" rendered="#{baseBB.authorizeSearchAll}"
+		            		disabled="#{otherAllowancelBB.allowanceDetailDto.isManageMode}">
+		                    <h:graphicImage library="images" name="search.png" style="border:none" width="25" height="25"/>
+		                </h:commandLink>
+	            	</f:facet>
+	                <h:commandLink styleClass="no-decor" rendered="#{baseBB.authorizeUpdate}" action="#{otherAllowancelBB.edit}"
+	                	disabled="#{otherAllowancelBB.allowanceDetailDto.isManageMode || otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.isIntegrated}">
+	                    <h:graphicImage library="images" name="edit2.gif" title="#{msgs['Action.edit']}" style="border:none" />
+	                    <f:setPropertyActionListener target="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean}" value="#{dtl}"/>
+	                </h:commandLink>
+	                
+	                      	
+	                <h:commandLink styleClass="no-decor" rendered="#{baseBB.authorizeDelete and !dtl.isIntegrated}" action="#{otherAllowancelBB.delete}"
+	                	disabled="#{otherAllowancelBB.allowanceDetailDto.isManageMode || otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.isIntegrated}">
+	                	
+	                    <h:graphicImage library="images" name="delete.gif" title="#{msgs['Action.delete']}" style="border:none" width="15" height="15" />
+	                    <f:setPropertyActionListener target="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean}" value="#{dtl}"/>
+	                  
+	                </h:commandLink>
+	            </rich:column>
+	            <f:facet name="footer">
+	            	<h:panelGrid width="100%" style="text-align:center;" columns="2">
+	                	<rich:dataScroller for="table"/>
+	                	<h:commandLink styleClass="no-decor" action="#{otherAllowancelBB.add}" title="#{msgs['Action.add']}" rendered="#{baseBB.authorizeAdd}">
+		                    <h:graphicImage library="images" name="add.jpg" style="border:none" width="25" height="25"/>
+		                     <f:setPropertyActionListener target="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean}" value="#{dtl}"/>
+		                </h:commandLink>
+                	</h:panelGrid>
+	            </f:facet>
+	        </rich:dataTable>
+		</h:form>
+		
+		
+		  <h:form id="manageOtherAllowanceForm" rendered="#{otherAllowancelBB.allowanceDetailDto.isManageMode}">            
+            <h:panelGrid columns="4" id="editGrid" columnClasses="20,30,20,30" cellspacing="0" cellpadding="0" border="0" style="width:100%;text-align:center;">
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.barcode']}"/> 
+                <h:outputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.tripNumber}"/>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.trip_code']}"/> 
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.tripCode}" rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id}"/>
+                <h:outputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.tripCode}" rendered="#{!empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id}"/>
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['Label.Manag_Allowance.allowance_type']}"/>
+                	<h:outputText style="color:red" value="*" />   
+                </h:panelGroup>
+               	 <h:selectOneMenu styleClass="dropDownStyle" value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.allowanceTypeBean.id}"
+               	 	disabled="#{!empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id}" required="true" requiredMessage="#{err['allowance_type_req']}">
+             		<f:selectItem itemLabel="#{msgs['Messages.selectList']}" itemValue=""/>
+              		<f:selectItems value="#{otherAllowancelBB.allowanceDetailDto.allowanceTypeList}"/>
+              	</h:selectOneMenu>
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.trip_date']}"/>
+                	<h:outputText style="color:red" value="*" />   
+                </h:panelGroup>
+                <rich:calendar value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.tripDate}" datePattern="dd-MM-yyyy"
+                	rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id}" required="true" requiredMessage="#{err['date_req']}">
+               		<f:converter converterId="CalDateStrConveter"/>
+               	</rich:calendar>
+                <h:outputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.tripDate}" rendered="#{!empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id}"/>
+              
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.bus_number']}"/>
+                	<h:outputText style="color:red" value="*" />   
+                </h:panelGroup>
+                <h:outputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.busNumber}" rendered="#{!empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id}"/>
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.busNumber}" rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id}"
+                	 required="true" requiredMessage="#{err['bus_req']}">
+                	 <f:ajax event="blur" render="plateNumber" execute="@this" listener="#{otherAllowancelBB.updatePlateNumber}"/>
+                </h:inputText>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.plate_number']}"/> 
+                <h:outputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.plateNumber}" id="plateNumber"/>
+			</h:panelGrid>
+            <h:panelGrid columns="3" columnClasses="30,35,35" cellspacing="0" cellpadding="0" border="0" style="width:100%;text-align:center;">
+                <h:outputLabel value=""/>
+                <h:outputLabel value="#{msgs['Label.Manag_Allowance.tr_trips.driver1']}" style="font-weight: bold;text-decoration: underline;"/>
+                <h:outputLabel value="#{msgs['Label.Manag_Allowance.tr_trips.driver2']}" style="font-weight: bold;text-decoration: underline;"/>
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.driver1_number']}"/> 
+                	<h:outputText style="color:red" value="*" />   
+                </h:panelGroup>
+                <h:outputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver1Number}" rendered="#{!empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id}"/>
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver1Number}" rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id}"
+                	 required="true" requiredMessage="#{err['driver1_req']}">
+                	 <f:ajax event="blur" render="driver1" execute="@this" listener="#{otherAllowancelBB.updateDriver1}"/>
+                </h:inputText>
+               <!--<h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.driver1_number']}"/>  -->
+                <h:outputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" rendered="#{!empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id}"/>
+              
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id}">
+                	 <f:ajax event="blur" render="driver2" execute="@this" listener="#{otherAllowancelBB.updateDriver2}"/>
+                </h:inputText>
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.driver1_name']}"/> 
+                <h:outputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver1Name}" id="driver1"/>
+               <!-- <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.driver1_name']}"/>  -->
+                <h:outputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Name}" id="driver2"/>
+                <h:panelGroup>
+                	<h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.driver1_allowance']}"/>
+                	<h:outputText style="color:red" value="*" />   
+                </h:panelGroup>
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver1Allowance}"  required="true" requiredMessage="#{err['allowance1_req']}"/>
+               <!--<h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.driver1_allowance']}"/>   --> 
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Allowance}" rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="" rendered="#{!empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id and empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}"/>
+                
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.percentage']}"/> 
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.percentage}"/>
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.percentage2}" rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}"/>
+                <h:outputText value="" rendered="#{!empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id and empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}"/>
+               
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.diesel']}"  rendered="false" />
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.diesel}"  rendered="false"/>
+               <!-- <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.diesel']}" rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}"/> -->
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.diesel2}" rendered="false"/> <!-- rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" -->
+                <h:outputText value="" rendered="false"/>
+               
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.housing']}"  rendered="false"/>
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.housing}"  rendered="false"/>
+              <!--<h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.housing']}" rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}"/>  --> 
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.housing2}" rendered="false"/> <!-- rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" -->
+                <h:outputText value="" rendered="false" />
+               
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.staying']}"  rendered="false"/>
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.staying}"  rendered="false"/>
+              <!-- <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.staying']}" rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}"/> --> 
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.staying2}"  rendered="false" /> <!-- rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" -->
+                <h:outputText value=""  rendered="false" /><!-- rendered="#{!empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id and empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" -->
+               
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.visa']}" rendered="false"/>
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.visa}" rendered="false"/>
+             <!-- <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.visa']}" rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}"/> --> 
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.visa2}" rendered="false"/> <!-- rendered="false"rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" -->
+                <h:outputText value="" rendered="false"/> <!-- rendered="#{!empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id and empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" -->
+               
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.borderInsurance']}" rendered="false"/>
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.borderInsurance}" rendered="false"/>
+               <!-- <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.borderInsurance']}" rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}"/> --> 
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.borderInsurance2}" rendered="false" /> <!-- rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" -->
+                <h:outputText value="" rendered="false" /> <!-- rendered="#{!empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id and empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" -->
+               
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.borderStaying']}" rendered="false"/>
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.borderStaying}" rendered="false"/>
+               <!--  <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.borderStaying']}" rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}"/>-->
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.borderStaying2}" rendered="false" /> <!-- rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" -->
+                <h:outputText value="" rendered="false"/>  <!--  rendered="#{!empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id and empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" -->
+               
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.weeklyVacation']}" rendered="false"/>
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.weeklyVacation}" rendered="false" />
+              <!-- <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.weeklyVacation']}" rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}"/> --> 
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.weeklyVacation2}" rendered="false" /> <!-- rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" -->
+                <h:outputText value="" rendered="false" /> <!-- rendered="#{!empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id and empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" -->
+               
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.internalStaying']}" rendered="false"/>
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.internalStaying}" rendered="false"/>
+               <!-- <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.internalStaying']}" rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}"/> -->
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.internalStaying2}" rendered="false" /> <!-- rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" -->
+                <h:outputText value="" rendered="false" /> <!-- rendered="#{!empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id and empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" -->
+               
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.internationalStaying']}" rendered="false"/>
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.internationalStaying}" rendered="false"/>
+             <!-- <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.internationalStaying']}" rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}"/> --> 
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.internationalStaying2}"  rendered="false" /> <!-- rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" -->
+                <h:outputText value="" rendered="false" /> <!-- rendered="#{!empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id and empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" -->
+               
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.eventVacation']}" rendered="false"/>
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.eventVacation}" rendered="false"/>
+                <!-- <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.eventVacation']}" rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}"/> -->
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.eventVacation2}" rendered="false" /> <!-- rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" -->
+                <h:outputText value="" rendered="false" /> <!-- rendered="#{!empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id and empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" -->
+               
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.ramadan']}" rendered="false"/>
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.ramadan}" rendered="false" /> <!-- rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver1IsMuslim}" -->
+                <h:outputText value="" rendered="false" /> <!-- rendered="#{!empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id and !otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver1IsMuslim}" -->
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.ramadan2}" rendered="false" /> <!-- rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or (!empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number and otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2IsMuslim)}" -->
+                <h:outputText value="" rendered="false" /> <!-- rendered="#{!empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id and (!otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2IsMuslim or empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number)}" -->
+                
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.other']}" rendered="false"/>
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.other}" rendered="false"/>
+                <!-- <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.other']}" rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}"/> --> 
+                <h:inputText value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.other2}" rendered="false" /><!-- rendered="#{empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id or !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.driver2Number}" -->
+				
+				<h:outputText value="#{msgs['Label.Manag_Allowance.financial_ele']}"/>
+                <h:selectOneMenu styleClass="dropDownStyle" value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.financialElementBean.id}"
+               	 	disabled="#{!empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id}" required="true" requiredMessage="#{err['allowance_type_req']}">
+             		<f:selectItem itemLabel="#{msgs['Messages.selectList']}" itemValue=""/>
+              		<f:selectItems value="#{tRTripsBB.financialElList}"/>
+              	</h:selectOneMenu>
+				<h:outputText rendered="#{sessionScope.userInf.loggedInSystem.id == 4}" value="#{msgs['Label.Manag_Allowance.tr_trips.trailler']}"/>
+                <h:inputText rendered="#{sessionScope.userInf.loggedInSystem.id == 4}" value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.trailerNumber}"/>
+			</h:panelGrid>
+			<h:panelGrid columns="2" columnClasses="30,70" cellspacing="0" cellpadding="0" border="0" style="width:100%;text-align:center;">
+                <h:outputText value="#{msgs['Label.Manag_Allowance.tr_trips.description']}"/>
+                <h:inputTextarea value="#{otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.description}" style="width:100%;"/>
+			</h:panelGrid>
+            <h:panelGrid columns="4" style="width:100%;text-align:center;">
+            	<h:commandLink styleClass="no-decor" action="#{otherAllowancelBB.save}" title="#{msgs['Action.save']}" rendered="#{!otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.isIntegrated}">
+                    <h:graphicImage library="images" name="save.jpg" style="border:none" width="50" height="50"/>
+                </h:commandLink>
+                <h:commandLink styleClass="no-decor" action="#{otherAllowancelBB.cancel}" title="#{msgs['Action.cancel']}" immediate="true">
+                    <h:graphicImage library="images" name="return.png" style="border:none" width="50" height="50"/>
+                </h:commandLink>
+            	<h:commandButton value="#{msgs['Action.sendToHR']}" action="#{otherAllowancelBB.sendToHR}" styleClass="bigButtonStyle"
+            		rendered="#{baseBB.authorizeSendToHR and !otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.isIntegrated and !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id}"/>
+                <h:commandLink styleClass="no-decor" action="#{otherAllowancelBB.viewReport}" title="#{msgs['Action.print']}"
+                	rendered="#{baseBB.authorizePrint and !empty otherAllowancelBB.allowanceDetailDto.allowanceDetailBean.id}">
+                    <h:graphicImage library="images" name="pdf.png" style="border:none" width="40" height="40"/>
+                </h:commandLink>
+            </h:panelGrid>
+		</h:form> 
+	</ui:define>
+</ui:composition>

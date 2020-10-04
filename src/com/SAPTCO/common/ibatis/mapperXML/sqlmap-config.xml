@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-config.dtd">
+
+<configuration>
+
+	<settings>
+		<setting name="cacheEnabled" value="false"/>
+		<setting name="lazyLoadingEnabled" value="false"/>
+	</settings>
+	
+	<typeAliases>
+		<!--Dto's Alias-->
+		<typeAlias alias="General" type="com.SAPTCO.common.dto.GeneralDto" />
+		<typeAlias alias="Common" type="com.SAPTCO.common.dto.CommonDto" />
+		<typeAlias alias="UsersDto" type="com.SAPTCO.security.dto.UsersDto" />
+		<typeAlias alias="ProgramGroupsDto" type="com.SAPTCO.security.dto.ProgramGroupsDto" />
+		<typeAlias alias="Branches" type="com.SAPTCO.security.dto.BranchesDto"/>
+		<typeAlias alias="ProgramGroups" type="com.SAPTCO.security.dto.ProgramGroupsDto"/>
+		<typeAlias alias="Users" type="com.SAPTCO.security.dto.UsersDto"/>
+		<typeAlias alias="DriversDto" type="com.SAPTCO.security.dto.DriversDto"/>
+		<typeAlias alias="NewAllowanceDto" type="com.SAPTCO.manageAllowance.dto.NewAllowanceDto"/>
+		<typeAlias alias="TRTripsDto" type="com.SAPTCO.manageAllowance.dto.TRTripsDto"/>
+		<typeAlias alias="AllowanceDetailDto" type="com.SAPTCO.manageAllowance.dto.OtherAllowanceDto"/>
+		<typeAlias alias="AllowanceTypeDto" type="com.SAPTCO.manageAllowance.dto.AllowanceTypeDto"/>
+		<typeAlias alias="VehicleLicenceDto" type="com.SAPTCO.security.dto.VehicleLicenceDto" />
+		<typeAlias alias="BaseDto" type="com.SAPTCO.common.dto.BaseDto" />
+		
+		<!--Mapper's Alias-->
+		<typeAlias alias="Branch" type="com.SAPTCO.common.ibatis.mapperBeans.BranchesBean" />
+		<typeAlias alias="System" type="com.SAPTCO.common.ibatis.mapperBeans.SystemBean" />
+		<typeAlias alias="Company" type="com.SAPTCO.common.ibatis.mapperBeans.CompanyBean" />
+		<typeAlias alias="DriversBean" type="com.SAPTCO.common.ibatis.mapperBeans.DriversBean" />
+		<typeAlias alias="Menu" type="com.SAPTCO.common.ibatis.mapperBeans.MenuBean" />
+		<typeAlias alias="Pages" type="com.SAPTCO.common.ibatis.mapperBeans.SystemMenuBean" />
+		<typeAlias alias="Privelege" type="com.SAPTCO.common.ibatis.mapperBeans.PrivilegeBean" />
+		<typeAlias alias="SysCodesBean" type="com.SAPTCO.common.ibatis.mapperBeans.SystemCodesBean" />
+		<typeAlias alias="UserInfMapperBean" type="com.SAPTCO.common.ibatis.mapperBeans.UserInfBean" />
+		<typeAlias alias="SystemTypesBean" type="com.SAPTCO.common.ibatis.mapperBeans.SystemTypesBean" />
+		<typeAlias alias="UserMapperBean" type="com.SAPTCO.common.ibatis.mapperBeans.UserBean" />
+		<typeAlias alias="UserInfMapperBean" type="com.SAPTCO.common.ibatis.mapperBeans.UserInfBean" />
+		<typeAlias alias="UserBranchesMapperBean" type="com.SAPTCO.common.ibatis.mapperBeans.UserBranchesBean" />
+		<typeAlias alias="ProgramGroupsMapperBean" type="com.SAPTCO.common.ibatis.mapperBeans.ProgramGroupsBean" />
+		<typeAlias alias="MenuProgramGroupMapperBean" type="com.SAPTCO.common.ibatis.mapperBeans.MenuProgramGroupBean" />
+		<typeAlias alias="Page" type="com.SAPTCO.common.ibatis.mapperBeans.SystemMenuBean"/>
+		<typeAlias alias="ProgramGroup" type="com.SAPTCO.common.ibatis.mapperBeans.ProgramGroupsBean" />
+		<typeAlias alias="ProgramMenu" type="com.SAPTCO.common.ibatis.mapperBeans.MenuProgramGroupBean"/>
+		<typeAlias alias="User" type="com.SAPTCO.common.ibatis.mapperBeans.UserBean" />
+		<typeAlias alias="UserBranch" type="com.SAPTCO.common.ibatis.mapperBeans.UserBranchesBean"/>
+		<typeAlias alias="UserInf" type="com.SAPTCO.common.ibatis.mapperBeans.UserInfBean" />
+		<typeAlias alias="AllowanceDetail" type="com.SAPTCO.common.ibatis.mapperBeans.AllowanceDetailBean" />
+		<typeAlias alias="AllowanceType" type="com.SAPTCO.common.ibatis.mapperBeans.AllowanceTypeBean" />
+		<typeAlias alias="FinancialElement" type="com.SAPTCO.common.ibatis.mapperBeans.FinancialElementBean" />
+		<typeAlias alias="HrBranch" type="com.SAPTCO.common.ibatis.mapperBeans.HrBranchesBean" />
+		<typeAlias alias="BusType" type="com.SAPTCO.common.ibatis.mapperBeans.BusTypeBean" />
+		<typeAlias alias="Asset" type="com.SAPTCO.common.ibatis.mapperBeans.AssetsBean" />
+		<typeAlias alias="VehicleLicence" type="com.SAPTCO.common.ibatis.mapperBeans.VehicleLicenceBean" />
+		<typeAlias alias="PlateType" type="com.SAPTCO.common.ibatis.mapperBeans.PlateTypeBean" />
+		<typeAlias alias="KAUSTdriver" type="com.SAPTCO.common.ibatis.mapperBeans.KAUSTdriver" />
+		<typeAlias alias="KaustAllowType" type="com.SAPTCO.common.ibatis.mapperBeans.KAUSTAllowanceTypeBean" />
+		<typeAlias alias="KaustAdditionalAllow" type="com.SAPTCO.common.ibatis.mapperBeans.KaustAdditionalAllow" />
+		
+		
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="com/SAPTCO/common/ibatis/mapperXML/SQL_Enums.xml"/>
+		<mapper resource="com/SAPTCO/common/ibatis/mapperXML/General.xml"/>
+		<mapper resource="com/SAPTCO/common/ibatis/mapperXML/Common.xml"/>
+		<mapper resource="com/SAPTCO/common/ibatis/mapperXML/Security.xml"/>
+		<mapper resource="com/SAPTCO/common/ibatis/mapperXML/ManageAllowance.xml"/>
+		<mapper resource="com/SAPTCO/common/ibatis/mapperXML/Assets.xml"/>
+	</mappers>
+
+</configuration>
