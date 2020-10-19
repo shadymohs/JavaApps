@@ -35,7 +35,8 @@ a:hover { color: #773141; text-decoration: underline; }
     color: #fff;
 }
 
-#header {
+#header {	
+    /*background-image: url("#{request.contextPath}/faces/javax.faces.resource/title_test.jpg?ln=images");*/
     background-image: url("#{request.contextPath}/faces/javax.faces.resource/title.jpg?ln=images");
 	background-repeat:no-repeat;
 	background-position:center top;
